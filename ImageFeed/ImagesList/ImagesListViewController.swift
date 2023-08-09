@@ -17,8 +17,10 @@ class ImagesListViewController: UIViewController {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter
-    }()
-
+    }(
+        //dateFormatter.string(from: "09.08.2023")
+    )
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,4 +54,7 @@ extension ImagesListViewController {
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return CGFloat
+//    }
 }
