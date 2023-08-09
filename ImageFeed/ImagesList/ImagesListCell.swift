@@ -9,5 +9,5 @@ import Foundation
 import UIKit
 
 final class ImagesListCell: UITableViewCell {
-    static let imageListID = "ImagesListCell"
+    static let reuseIdentifier = "ImagesListCell"
 }
