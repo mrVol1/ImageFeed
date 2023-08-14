@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var labelNameView: UILabel!
     @IBOutlet private var tagNameView: UILabel!
