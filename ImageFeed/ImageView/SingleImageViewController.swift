@@ -17,14 +17,16 @@ final class SingleImageViewController: UIViewController {
         didSet {
             guard isViewLoaded else { return }
             imageView.image = image
+            rescaleAndCenterImageInScrollView(image: imageView.image ?? image)
         }
     }
         
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView?.minimumZoomScale = 0.1
-        scrollView?.maximumZoomScale = 1.25
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
         imageView.image = image
+        rescaleAndCenterImageInScrollView(image: imageView.image ?? image)
     }
     
     @IBAction private func didTapBackButton() {

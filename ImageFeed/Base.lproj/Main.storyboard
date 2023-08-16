@@ -154,6 +154,7 @@
                     <navigationItem key="navigationItem" id="mLs-6u-i8L"/>
                     <connections>
                         <outlet property="imageView" destination="dpb-Wa-mBT" id="5Yj-c2-6Nq"/>
+                        <outlet property="scrollView" destination="5LT-Da-T2Z" id="Pdq-g2-a4Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FYE-9v-26o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
