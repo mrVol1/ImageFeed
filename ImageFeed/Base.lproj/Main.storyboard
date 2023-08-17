@@ -199,81 +199,10 @@
                     <view key="view" contentMode="scaleToFill" id="u3w-Us-DZq">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Photo" translatesAutoresizingMaskIntoConstraints="NO" id="O0G-WG-mWH">
-                                <rect key="frame" x="16" y="76" width="70" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="70" id="7oq-kt-t6H"/>
-                                </constraints>
-                            </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kbg-NX-0qG">
-                                <rect key="frame" x="16" y="154" width="240" height="28"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="28" id="BJX-Oz-XCc"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Iy-PK-qeh">
-                                <rect key="frame" x="309" y="87" width="68" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="1r0-vF-EmY"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="Exit" title=""/>
-                                <connections>
-                                    <action selector="exitButtonWithSender:" destination="9yr-eT-Wz0" eventType="touchUpInside" id="KUd-IP-54E"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OLK-hi-9tK">
-                                <rect key="frame" x="16" y="190" width="91.333333333333329" height="15.333333333333343"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="15.333333333333343" id="sea-3f-jVf"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
-                                <color key="textColor" red="0.68235294120000001" green="0.68627450980000004" blue="0.70588235290000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yQr-dp-K95">
-                                <rect key="frame" x="16" y="214" width="73" height="16"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="16" id="7px-Re-SPT"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="ExO-LY-cB6"/>
                         <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="ExO-LY-cB6" firstAttribute="bottom" secondItem="9Iy-PK-qeh" secondAttribute="bottom" constant="638" id="7LD-b1-pCO"/>
-                            <constraint firstItem="ExO-LY-cB6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="OLK-hi-9tK" secondAttribute="trailing" symbolic="YES" id="8QA-ju-hBL"/>
-                            <constraint firstItem="Kbg-NX-0qG" firstAttribute="top" secondItem="O0G-WG-mWH" secondAttribute="bottom" constant="8" id="9NO-fo-T71"/>
-                            <constraint firstItem="O0G-WG-mWH" firstAttribute="leading" secondItem="u3w-Us-DZq" secondAttribute="leadingMargin" id="AzT-kv-aoo"/>
-                            <constraint firstItem="OLK-hi-9tK" firstAttribute="leading" secondItem="yQr-dp-K95" secondAttribute="leading" id="Cww-in-nUC"/>
-                            <constraint firstItem="ExO-LY-cB6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Kbg-NX-0qG" secondAttribute="trailing" symbolic="YES" id="Gq1-Xt-GlY"/>
-                            <constraint firstItem="yQr-dp-K95" firstAttribute="top" secondItem="OLK-hi-9tK" secondAttribute="bottom" constant="8.6666666666666572" id="Lth-MV-vkk"/>
-                            <constraint firstItem="Kbg-NX-0qG" firstAttribute="leading" secondItem="OLK-hi-9tK" secondAttribute="leading" id="OMj-oU-chi"/>
-                            <constraint firstItem="OLK-hi-9tK" firstAttribute="top" secondItem="Kbg-NX-0qG" secondAttribute="bottom" constant="8" id="QQW-9L-nMy"/>
-                            <constraint firstItem="O0G-WG-mWH" firstAttribute="top" secondItem="ExO-LY-cB6" secondAttribute="top" constant="17" id="ZXT-8W-Qmz"/>
-                            <constraint firstItem="9Iy-PK-qeh" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="O0G-WG-mWH" secondAttribute="trailing" constant="8" symbolic="YES" id="cRa-HV-ot2"/>
-                            <constraint firstItem="9Iy-PK-qeh" firstAttribute="trailing" secondItem="u3w-Us-DZq" secondAttribute="trailingMargin" id="cow-5i-P6Q"/>
-                            <constraint firstItem="O0G-WG-mWH" firstAttribute="leading" secondItem="Kbg-NX-0qG" secondAttribute="leading" id="duA-QP-4c3"/>
-                            <constraint firstItem="ExO-LY-cB6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="yQr-dp-K95" secondAttribute="trailing" symbolic="YES" id="hUQ-2V-NUy"/>
-                            <constraint firstItem="ExO-LY-cB6" firstAttribute="bottom" secondItem="yQr-dp-K95" secondAttribute="bottom" constant="539" id="ykA-Sd-4dp"/>
-                            <constraint firstItem="9Iy-PK-qeh" firstAttribute="top" secondItem="ExO-LY-cB6" secondAttribute="top" constant="28" id="zyU-3J-T0V"/>
-                        </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_profile_active" id="8Em-Sy-htO"/>
-                    <connections>
-                        <outlet property="discriptionView" destination="yQr-dp-K95" id="n0A-Qs-cYy"/>
-                        <outlet property="exitButton" destination="9Iy-PK-qeh" id="Ab5-Qf-tmU"/>
-                        <outlet property="imageView" destination="O0G-WG-mWH" id="0O6-wb-NDs"/>
-                        <outlet property="labelNameView" destination="Kbg-NX-0qG" id="1mg-ME-ZEb"/>
-                        <outlet property="tagNameView" destination="OLK-hi-9tK" id="nkB-RC-DWq"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="S6E-hA-TLH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -307,8 +236,6 @@
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="Backward" width="24" height="24"/>
-        <image name="Exit" width="44" height="44"/>
-        <image name="Photo" width="280" height="280"/>
         <image name="Sharing" width="51" height="50"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="tab_editorial_active" width="30" height="30"/>

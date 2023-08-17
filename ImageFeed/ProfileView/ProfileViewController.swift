@@ -9,10 +9,57 @@ import Foundation
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet private var labelNameView: UILabel!
-    @IBOutlet private var tagNameView: UILabel!
-    @IBOutlet private var discriptionView: UILabel!
-    @IBOutlet private var exitButton: UIButton!
-    @IBAction private func exitButton(sender: UIButton){}
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let profileImage = UIImage(imageLiteralResourceName: "Photo.png")
+        let imageView = UIImageView(image: profileImage)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        
+        
+        let labelName = UILabel()
+        labelName.text = "Екатерина Новикова"
+        labelName.font = UIFont.systemFont(ofSize: 23, weight: UIFont.Weight.bold)
+        labelName.textColor = .white
+        labelName.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(labelName)
+        labelName.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
+        labelName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
+        
+        let labelTeg = UILabel()
+        labelTeg.text = "@ekaterina_nov"
+        labelTeg.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
+        //labelTeg.textColor = .gray
+        labelTeg.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+        labelTeg.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(labelTeg)
+        labelTeg.leadingAnchor.constraint(equalTo: labelName.leadingAnchor).isActive = true
+        labelTeg.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8).isActive = true
+        
+        let labelDiscription = UILabel()
+        labelDiscription.text = "Hello, world!"
+        labelDiscription.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+        labelDiscription.textColor = .white
+        labelDiscription.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(labelDiscription)
+        labelDiscription.leadingAnchor.constraint(equalTo: labelTeg.leadingAnchor).isActive = true
+        labelDiscription.topAnchor.constraint(equalTo: labelTeg.bottomAnchor, constant: 8).isActive = true
+        
+        let button = UIButton.systemButton(
+            with: UIImage(systemName: "ipad.and.arrow.forward")!,
+            target: self,
+            action: nil
+        )
+        button.tintColor = UIColor(hue: 360, saturation: 0.56, brightness: 0.96, alpha: 1)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(button)
+        button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+    }
 }

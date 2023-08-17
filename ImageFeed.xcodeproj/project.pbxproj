@@ -43,6 +43,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D72399DE2A8EC826009FB605 /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		D7698CF82A7D26950045331E /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +103,7 @@
 				D7A90AE32A767461003B0C0C /* Assets.xcassets */,
 				D7A90AE52A767461003B0C0C /* LaunchScreen.storyboard */,
 				D7A90AE82A767461003B0C0C /* Info.plist */,
+				D72399DE2A8EC826009FB605 /* fonts */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
