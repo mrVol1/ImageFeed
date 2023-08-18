@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Y6W-OH-hqX">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Profile View Controller-->
+        <scene sceneID="s0d-6b-0kx">
+            <objects>
+                <viewController id="Y6W-OH-hqX" customClass="ProfileViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5EZ-qb-Rvc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Photo" translatesAutoresizingMaskIntoConstraints="NO" id="Hwy-nh-vKP">
+                                <rect key="frame" x="16" y="76" width="70" height="70"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZlP-Pv-tRZ">
+                                <rect key="frame" x="16" y="154" width="240" height="28"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Uvl-p3-MyY">
+                                <rect key="frame" x="16" y="190" width="91.333333333333329" height="15.333333333333343"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="0.68235294117647061" green="0.68627450980392157" blue="0.70588235294117641" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rP3-40-eVO">
+                                <rect key="frame" x="16" y="214" width="73" height="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KEv-gr-EXq">
+                                <rect key="frame" x="315" y="89" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="GgO-3q-8Ss"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="Exit" title=""/>
+                                <connections>
+                                    <action selector="exitButtonWithSender:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="0b3-BZ-AZr"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
+                        <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="KEv-gr-EXq" secondAttribute="trailing" constant="34" id="ACo-6D-Kpo"/>
+                            <constraint firstItem="KEv-gr-EXq" firstAttribute="centerY" secondItem="Hwy-nh-vKP" secondAttribute="centerY" id="DrP-Gs-WZt"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="Hwy-nh-vKP" secondAttribute="bottom" constant="672" id="FZr-7k-hbI"/>
+                            <constraint firstItem="Hwy-nh-vKP" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leadingMargin" id="HY3-Is-c5W"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="KEv-gr-EXq" secondAttribute="bottom" constant="685" id="Iem-x6-gya"/>
+                            <constraint firstItem="ZlP-Pv-tRZ" firstAttribute="top" secondItem="Hwy-nh-vKP" secondAttribute="bottom" constant="8" id="JB7-Ri-geG"/>
+                            <constraint firstItem="ZlP-Pv-tRZ" firstAttribute="leading" secondItem="Hwy-nh-vKP" secondAttribute="leading" id="L6R-nh-1He"/>
+                            <constraint firstItem="rP3-40-eVO" firstAttribute="leading" secondItem="Uvl-p3-MyY" secondAttribute="leading" id="TtK-jd-hYs"/>
+                            <constraint firstItem="rP3-40-eVO" firstAttribute="top" secondItem="Uvl-p3-MyY" secondAttribute="bottom" constant="8.6666666666666572" id="XIO-sB-YUp"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="Hwy-nh-vKP" secondAttribute="trailing" constant="307" id="it4-ee-QJ0"/>
+                            <constraint firstItem="Uvl-p3-MyY" firstAttribute="leading" secondItem="ZlP-Pv-tRZ" secondAttribute="leading" id="itx-Cc-SFg"/>
+                            <constraint firstItem="Uvl-p3-MyY" firstAttribute="top" secondItem="ZlP-Pv-tRZ" secondAttribute="bottom" constant="8" symbolic="YES" id="ohD-xq-Jl6"/>
+                            <constraint firstItem="Hwy-nh-vKP" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" constant="17" id="qLe-1q-KtW"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="discriptionView" destination="rP3-40-eVO" id="E4O-4Z-9n0"/>
+                        <outlet property="exitButton" destination="KEv-gr-EXq" id="A8W-yC-RIs"/>
+                        <outlet property="imageView" destination="Hwy-nh-vKP" id="cm5-eb-ZiB"/>
+                        <outlet property="labelNameView" destination="ZlP-Pv-tRZ" id="SLA-cB-1S0"/>
+                        <outlet property="tagNameView" destination="Uvl-p3-MyY" id="C3B-va-5gU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="110.68702290076335" y="3.5211267605633805"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Exit" width="44" height="44"/>
+        <image name="Photo" width="280" height="280"/>
+    </resources>
+</document>
