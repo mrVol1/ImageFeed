@@ -111,17 +111,16 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5LT-Da-T2Z">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-Wa-mBT">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="393" placeholderIntrinsicHeight="414" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-Wa-mBT">
                                         <rect key="frame" x="0.0" y="0.0" width="393" height="414"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="top" secondItem="5LT-Da-T2Z" secondAttribute="top" id="8I1-6W-IIJ"/>
-                                    <constraint firstAttribute="width" secondItem="dpb-Wa-mBT" secondAttribute="width" id="PmM-mM-7u7"/>
-                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="leading" secondItem="5LT-Da-T2Z" secondAttribute="leading" id="RY3-xZ-AE8"/>
-                                    <constraint firstAttribute="trailing" secondItem="dpb-Wa-mBT" secondAttribute="trailing" id="d1o-G5-MCb"/>
-                                    <constraint firstAttribute="height" secondItem="dpb-Wa-mBT" secondAttribute="height" multiplier="2.05797" id="nmW-KD-vwK"/>
-                                    <constraint firstAttribute="bottom" secondItem="dpb-Wa-mBT" secondAttribute="bottom" id="w5g-tA-XWB"/>
+                                    <constraint firstAttribute="bottom" secondItem="dpb-Wa-mBT" secondAttribute="bottom" id="2Uh-5X-GTa"/>
+                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="leading" secondItem="5LT-Da-T2Z" secondAttribute="leading" id="Esq-Ml-GQf"/>
+                                    <constraint firstAttribute="trailing" secondItem="dpb-Wa-mBT" secondAttribute="trailing" id="VeE-WL-N82"/>
+                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="top" secondItem="5LT-Da-T2Z" secondAttribute="top" id="dS7-Cw-KJ2"/>
+                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="centerX" secondItem="5LT-Da-T2Z" secondAttribute="centerX" id="hG0-2W-xrc"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="xNb-4B-cdL"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="I0r-0i-Ewh"/>
@@ -141,9 +140,8 @@
                                     <action selector="didTapBackButton" destination="5Ze-e4-RKX" eventType="touchUpInside" id="1bG-HP-IyX"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCG-bz-k64">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCG-bz-k64">
                                 <rect key="frame" x="160" y="697" width="75" height="64"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="Sharing" title=""/>
                                 <connections>
@@ -155,9 +153,12 @@
                         <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="5LT-Da-T2Z" firstAttribute="top" secondItem="zBb-j0-f3X" secondAttribute="top" id="1Vb-6c-2rg"/>
+                            <constraint firstItem="zBb-j0-f3X" firstAttribute="trailing" secondItem="uCG-bz-k64" secondAttribute="trailing" constant="158" id="D8R-fh-OaP"/>
                             <constraint firstItem="5LT-Da-T2Z" firstAttribute="leading" secondItem="zBb-j0-f3X" secondAttribute="leading" id="Nki-sd-0eT"/>
                             <constraint firstItem="zBb-j0-f3X" firstAttribute="trailing" secondItem="5LT-Da-T2Z" secondAttribute="trailing" id="Rtg-ki-piQ"/>
+                            <constraint firstItem="uCG-bz-k64" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zBb-j0-f3X" secondAttribute="leading" id="ZWg-GE-XBa"/>
                             <constraint firstItem="5LT-Da-T2Z" firstAttribute="bottom" secondItem="zBb-j0-f3X" secondAttribute="bottom" id="wfe-Ai-xd4"/>
+                            <constraint firstItem="uCG-bz-k64" firstAttribute="top" secondItem="zBb-j0-f3X" secondAttribute="top" constant="697" id="xwM-Cc-YnX"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mLs-6u-i8L"/>
