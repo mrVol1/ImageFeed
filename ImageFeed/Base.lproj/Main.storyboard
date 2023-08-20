@@ -112,15 +112,16 @@
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="393" placeholderIntrinsicHeight="414" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="dpb-Wa-mBT">
-                                        <rect key="frame" x="0.0" y="0.0" width="393" height="414"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                                     </imageView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="dpb-Wa-mBT" secondAttribute="bottom" id="2Uh-5X-GTa"/>
                                     <constraint firstItem="dpb-Wa-mBT" firstAttribute="leading" secondItem="5LT-Da-T2Z" secondAttribute="leading" id="Esq-Ml-GQf"/>
+                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="centerY" secondItem="5LT-Da-T2Z" secondAttribute="centerY" id="Scn-C3-IrS"/>
                                     <constraint firstAttribute="trailing" secondItem="dpb-Wa-mBT" secondAttribute="trailing" id="VeE-WL-N82"/>
+                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="centerX" secondItem="5LT-Da-T2Z" secondAttribute="centerX" id="WrK-Lh-rWU"/>
                                     <constraint firstItem="dpb-Wa-mBT" firstAttribute="top" secondItem="5LT-Da-T2Z" secondAttribute="top" id="dS7-Cw-KJ2"/>
-                                    <constraint firstItem="dpb-Wa-mBT" firstAttribute="centerX" secondItem="5LT-Da-T2Z" secondAttribute="centerX" id="hG0-2W-xrc"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="xNb-4B-cdL"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="I0r-0i-Ewh"/>
