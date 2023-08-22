@@ -141,8 +141,8 @@
                                     <action selector="didTapBackButton" destination="5Ze-e4-RKX" eventType="touchUpInside" id="1bG-HP-IyX"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCG-bz-k64">
-                                <rect key="frame" x="160" y="697" width="75" height="64"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uCG-bz-k64">
+                                <rect key="frame" x="171" y="752" width="50" height="50"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="Sharing" title=""/>
                                 <connections>
@@ -154,12 +154,11 @@
                         <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="5LT-Da-T2Z" firstAttribute="top" secondItem="zBb-j0-f3X" secondAttribute="top" id="1Vb-6c-2rg"/>
-                            <constraint firstItem="zBb-j0-f3X" firstAttribute="trailing" secondItem="uCG-bz-k64" secondAttribute="trailing" constant="158" id="D8R-fh-OaP"/>
+                            <constraint firstItem="zBb-j0-f3X" firstAttribute="trailing" secondItem="uCG-bz-k64" secondAttribute="trailing" constant="172" id="HFX-hv-Ypq"/>
                             <constraint firstItem="5LT-Da-T2Z" firstAttribute="leading" secondItem="zBb-j0-f3X" secondAttribute="leading" id="Nki-sd-0eT"/>
                             <constraint firstItem="zBb-j0-f3X" firstAttribute="trailing" secondItem="5LT-Da-T2Z" secondAttribute="trailing" id="Rtg-ki-piQ"/>
-                            <constraint firstItem="uCG-bz-k64" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zBb-j0-f3X" secondAttribute="leading" id="ZWg-GE-XBa"/>
+                            <constraint firstItem="zBb-j0-f3X" firstAttribute="bottom" secondItem="uCG-bz-k64" secondAttribute="bottom" constant="50" id="boi-EM-RtV"/>
                             <constraint firstItem="5LT-Da-T2Z" firstAttribute="bottom" secondItem="zBb-j0-f3X" secondAttribute="bottom" id="wfe-Ai-xd4"/>
-                            <constraint firstItem="uCG-bz-k64" firstAttribute="top" secondItem="zBb-j0-f3X" secondAttribute="top" constant="697" id="xwM-Cc-YnX"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mLs-6u-i8L"/>
