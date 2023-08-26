@@ -100,6 +100,7 @@
 		D7A90AD92A76745F003B0C0C /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				D7BF4E2F2A9A5CCC0009C0F2 /* WebView */,
 				D7F168EB2A9A199A0054E8C0 /* Auth */,
 				D76EE1272A99555500F8E4A6 /* Constants.swift */,
 				D776C07B2A89FCDB0017EDE4 /* ImageView */,
@@ -112,9 +113,16 @@
 				D7A90AE52A767461003B0C0C /* LaunchScreen.storyboard */,
 				D7A90AE82A767461003B0C0C /* Info.plist */,
 				D72399DE2A8EC826009FB605 /* fonts */,
-				D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */,
 			);
 			path = ImageFeed;
+			sourceTree = "<group>";
+		};
+		D7BF4E2F2A9A5CCC0009C0F2 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 		D7F168EB2A9A199A0054E8C0 /* Auth */ = {

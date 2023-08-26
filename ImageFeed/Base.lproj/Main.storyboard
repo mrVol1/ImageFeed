@@ -181,37 +181,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PQx-GE-TL8">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PQx-GE-TL8">
                                 <rect key="frame" x="25" y="680" width="343" height="48"/>
-                                <color key="backgroundColor" red="0.13333332540000001" green="0.1411764771" blue="0.1725490093" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="rfh-7a-EEh"/>
                                 </constraints>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="SFPro-Bold" family="SF Pro" pointSize="17"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Button">
-                                    <attributedString key="attributedTitle">
-                                        <fragment content="Войти">
-                                            <attributes>
-                                                <color key="NSColor" red="0.13333332540000001" green="0.1411764771" blue="0.1725490093" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <font key="NSFont" size="17" name="SFPro-Bold"/>
-                                            </attributes>
-                                        </fragment>
-                                    </attributedString>
+                                <state key="normal" title="Войти">
+                                    <color key="titleColor" red="0.1058823466" green="0.11372549830000001" blue="0.13725490870000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
-                                <buttonConfiguration key="configuration" style="filled">
-                                    <attributedString key="attributedTitle">
-                                        <fragment content="Войти">
-                                            <attributes>
-                                                <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <color key="NSColor" red="0.1058823466" green="0.11372549830000001" blue="0.13725490870000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <font key="NSFont" size="17" name="SFPro-Bold"/>
-                                            </attributes>
-                                        </fragment>
-                                    </attributedString>
-                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </buttonConfiguration>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="16"/>
