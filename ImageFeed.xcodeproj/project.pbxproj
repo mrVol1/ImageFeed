@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D7698CF72A7D26620045331E /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7698CF62A7D26620045331E /* ImagesListCell.swift */; };
+		D76EE1282A99555500F8E4A6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76EE1272A99555500F8E4A6 /* Constants.swift */; };
 		D776C0772A89E0C30017EDE4 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D776C0762A89E0C30017EDE4 /* ProfileViewController.swift */; };
 		D776C07D2A89FCF40017EDE4 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D776C07C2A89FCF40017EDE4 /* SingleImageViewController.swift */; };
 		D7A90ADB2A76745F003B0C0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A90ADA2A76745F003B0C0C /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		D7698CF62A7D26620045331E /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		D76EE1272A99555500F8E4A6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D776C0762A89E0C30017EDE4 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D776C07C2A89FCF40017EDE4 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		D7A90AD72A76745F003B0C0C /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -94,6 +96,7 @@
 		D7A90AD92A76745F003B0C0C /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				D76EE1272A99555500F8E4A6 /* Constants.swift */,
 				D776C07B2A89FCDB0017EDE4 /* ImageView */,
 				D776C07A2A89FCC50017EDE4 /* ProfileView */,
 				D7698CF82A7D26950045331E /* ImagesList */,
@@ -181,6 +184,7 @@
 			files = (
 				D7A90ADF2A76745F003B0C0C /* ImagesListViewController.swift in Sources */,
 				D7698CF72A7D26620045331E /* ImagesListCell.swift in Sources */,
+				D76EE1282A99555500F8E4A6 /* Constants.swift in Sources */,
 				D776C0772A89E0C30017EDE4 /* ProfileViewController.swift in Sources */,
 				D7A90ADB2A76745F003B0C0C /* AppDelegate.swift in Sources */,
 				D776C07D2A89FCF40017EDE4 /* SingleImageViewController.swift in Sources */,
