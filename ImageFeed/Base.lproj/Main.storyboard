@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="mO6-bh-SsI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hdd-pa-YfZ">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="myr-PG-FEw">
-                                <rect key="frame" x="0.0" y="103" width="393" height="749"/>
+                                <rect key="frame" x="0.0" y="44" width="393" height="808"/>
                                 <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ImagesListCell" rowHeight="224" id="HBh-b0-AKa" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
@@ -171,10 +171,80 @@
             </objects>
             <point key="canvasLocation" x="1919.8473282442746" y="3.5211267605633805"/>
         </scene>
+        <!--Images List View Controller-->
+        <scene sceneID="JCY-b0-nVq">
+            <objects>
+                <viewController id="hdd-pa-YfZ" customClass="ImagesListViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gaQ-rW-RDg">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo_of_Unsplash" translatesAutoresizingMaskIntoConstraints="NO" id="S9A-2r-nD4">
+                                <rect key="frame" x="166" y="396" width="61" height="60"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PQx-GE-TL8">
+                                <rect key="frame" x="25" y="680" width="343" height="48"/>
+                                <color key="backgroundColor" red="0.13333332540000001" green="0.1411764771" blue="0.1725490093" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="RwD-V2-X8s"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Button">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Войти">
+                                            <attributes>
+                                                <color key="NSColor" red="0.13333332540000001" green="0.1411764771" blue="0.1725490093" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <font key="NSFont" size="17" name="SFPro-Bold"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                </state>
+                                <buttonConfiguration key="configuration" style="filled">
+                                    <attributedString key="attributedTitle">
+                                        <fragment content="Войти">
+                                            <attributes>
+                                                <color key="NSBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <color key="NSColor" red="0.1058823466" green="0.11372549830000001" blue="0.13725490870000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <font key="NSFont" size="17" name="SFPro-Bold"/>
+                                            </attributes>
+                                        </fragment>
+                                    </attributedString>
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </buttonConfiguration>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="mO6-bh-SsI" kind="presentation" identifier="ShowTableList" modalPresentationStyle="fullScreen" id="IVK-Nb-Sop"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Uh6-L9-vf1"/>
+                        <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="PQx-GE-TL8" firstAttribute="leading" secondItem="Uh6-L9-vf1" secondAttribute="leading" constant="25" id="4Du-ZZ-aOm"/>
+                            <constraint firstItem="S9A-2r-nD4" firstAttribute="leading" secondItem="Uh6-L9-vf1" secondAttribute="leading" constant="166" id="4mr-M5-hyg"/>
+                            <constraint firstItem="S9A-2r-nD4" firstAttribute="top" secondItem="Uh6-L9-vf1" secondAttribute="top" constant="337" id="A1Y-8Y-jSd"/>
+                            <constraint firstItem="Uh6-L9-vf1" firstAttribute="bottom" secondItem="PQx-GE-TL8" secondAttribute="bottom" constant="90" id="BCd-na-laA"/>
+                            <constraint firstItem="PQx-GE-TL8" firstAttribute="centerX" secondItem="S9A-2r-nD4" secondAttribute="centerX" id="IIL-zT-NAC"/>
+                            <constraint firstItem="PQx-GE-TL8" firstAttribute="centerX" secondItem="gaQ-rW-RDg" secondAttribute="centerX" id="WfN-bB-nF9"/>
+                            <constraint firstItem="S9A-2r-nD4" firstAttribute="centerY" secondItem="gaQ-rW-RDg" secondAttribute="centerY" id="qUH-3V-NjY"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="488-Je-Lbo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1785" y="232"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="kaJ-pz-82w">
             <objects>
                 <tabBarController id="mO6-bh-SsI" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="l27-kb-DGz"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6Nk-ZT-gaa">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -216,7 +286,7 @@
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="Po8-gh-C2c"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="vrc-1z-sFd">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -237,6 +307,7 @@
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="Backward" width="24" height="24"/>
+        <image name="Logo_of_Unsplash" width="240" height="240"/>
         <image name="Sharing" width="51" height="50"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="tab_editorial_active" width="30" height="30"/>

@@ -9,6 +9,8 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
+    private let ShowTableListSegueIdentifier = "ShowTableList"
+    
     @IBOutlet private var tableView: UITableView!
     
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
@@ -23,7 +25,7 @@ final class ImagesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView?.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -75,8 +77,9 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
     }
+    
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return 0
         }
@@ -86,5 +89,11 @@ extension ImagesListViewController: UITableViewDelegate {
         let scale = imageViewWidth / imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
+    }
+}
+
+extension ImagesListViewController: UIPageViewControllerDelegate {
+    func tableViewList(_ tableViewList: UIPageViewControllerDelegate, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: ShowTableListSegueIdentifier, sender: indexPath)
     }
 }
