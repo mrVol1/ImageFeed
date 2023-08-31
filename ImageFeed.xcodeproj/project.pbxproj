@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D749EE432AA10D0D00E8459F /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D749EE422AA10D0D00E8459F /* SplashViewController.swift */; };
 		D7698CF72A7D26620045331E /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7698CF62A7D26620045331E /* ImagesListCell.swift */; };
 		D76EE1282A99555500F8E4A6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76EE1272A99555500F8E4A6 /* Constants.swift */; };
 		D77092682A9C9EFB0080512B /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77092672A9C9EFB0080512B /* OAuth2Service.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D749EE422AA10D0D00E8459F /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D7698CF62A7D26620045331E /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		D76EE1272A99555500F8E4A6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D77092672A9C9EFB0080512B /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
@@ -58,6 +60,14 @@
 			children = (
 			);
 			path = fonts;
+			sourceTree = "<group>";
+		};
+		D749EE442AA11A6B00E8459F /* SplashView */ = {
+			isa = PBXGroup;
+			children = (
+				D749EE422AA10D0D00E8459F /* SplashViewController.swift */,
+			);
+			path = SplashView;
 			sourceTree = "<group>";
 		};
 		D7698CF82A7D26950045331E /* ImagesList */ = {
@@ -104,6 +114,7 @@
 		D7A90AD92A76745F003B0C0C /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
+				D749EE442AA11A6B00E8459F /* SplashView */,
 				D7BF4E2F2A9A5CCC0009C0F2 /* WebView */,
 				D7F168EB2A9A199A0054E8C0 /* Auth */,
 				D76EE1272A99555500F8E4A6 /* Constants.swift */,
@@ -213,6 +224,7 @@
 				D7A90ADF2A76745F003B0C0C /* ImagesListViewController.swift in Sources */,
 				D7698CF72A7D26620045331E /* ImagesListCell.swift in Sources */,
 				D76EE1282A99555500F8E4A6 /* Constants.swift in Sources */,
+				D749EE432AA10D0D00E8459F /* SplashViewController.swift in Sources */,
 				D776C0772A89E0C30017EDE4 /* ProfileViewController.swift in Sources */,
 				D770926A2A9CA49F0080512B /* OAuth2TokenStorage.swift in Sources */,
 				D7F168ED2A9A19A70054E8C0 /* AuthViewController.swift in Sources */,
