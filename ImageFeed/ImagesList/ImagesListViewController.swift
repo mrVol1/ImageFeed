@@ -9,7 +9,6 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
-    private let ShowTableListSegueIdentifier = "ShowTableList"
     
     @IBOutlet private var tableView: UITableView!
     
@@ -89,11 +88,5 @@ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->
         let scale = imageViewWidth / imageWidth
         let cellHeight = image.size.height * scale + imageInsets.top + imageInsets.bottom
         return cellHeight
-    }
-}
-
-extension ImagesListViewController: UIPageViewControllerDelegate {
-    func tableViewList(_ tableViewList: UIPageViewControllerDelegate, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: ShowTableListSegueIdentifier, sender: indexPath)
     }
 }
