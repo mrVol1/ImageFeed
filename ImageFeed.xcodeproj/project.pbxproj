@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D749EE432AA10D0D00E8459F /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D749EE422AA10D0D00E8459F /* SplashViewController.swift */; };
+		D75CD8052AB0A27C00FA218A /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75CD8042AB0A27C00FA218A /* UIBlockingProgressHUD.swift */; };
 		D7698CF72A7D26620045331E /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7698CF62A7D26620045331E /* ImagesListCell.swift */; };
 		D76EE1282A99555500F8E4A6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76EE1272A99555500F8E4A6 /* Constants.swift */; };
 		D77092682A9C9EFB0080512B /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77092672A9C9EFB0080512B /* OAuth2Service.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		D749EE422AA10D0D00E8459F /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		D75CD8042AB0A27C00FA218A /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		D7698CF62A7D26620045331E /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
 		D76EE1272A99555500F8E4A6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		D77092672A9C9EFB0080512B /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				D7A90AE52A767461003B0C0C /* LaunchScreen.storyboard */,
 				D7A90AE82A767461003B0C0C /* Info.plist */,
 				D72399DE2A8EC826009FB605 /* fonts */,
+				D75CD8042AB0A27C00FA218A /* UIBlockingProgressHUD.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 				D749EE432AA10D0D00E8459F /* SplashViewController.swift in Sources */,
 				D776C0772A89E0C30017EDE4 /* ProfileViewController.swift in Sources */,
 				D770926A2A9CA49F0080512B /* OAuth2TokenStorage.swift in Sources */,
+				D75CD8052AB0A27C00FA218A /* UIBlockingProgressHUD.swift in Sources */,
 				D7F168ED2A9A19A70054E8C0 /* AuthViewController.swift in Sources */,
 				D7A90ADB2A76745F003B0C0C /* AppDelegate.swift in Sources */,
 				D776C07D2A89FCF40017EDE4 /* SingleImageViewController.swift in Sources */,
