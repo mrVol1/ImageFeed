@@ -9,9 +9,17 @@ import Foundation
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    private let profileService = ProfileService.shared
+    private let nameLabel = UILabel()
+    private let loginNameLabel = UILabel()
+    private let descriptionLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(nameLabel)
+        view.addSubview(loginNameLabel)
+        view.addSubview(descriptionLabel)
         
         let profileImage = UIImage(imageLiteralResourceName: "Photo.png")
         let imageView = UIImageView(image: profileImage)
@@ -61,5 +69,37 @@ final class ProfileViewController: UIViewController {
         view.addSubview(button)
         button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
         button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        
+        // nameLabel
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
+        nameLabel.textColor = .white
+        nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
+        
+        // loginNameLabel
+        loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        loginNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        loginNameLabel.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
+        loginNameLabel.leadingAnchor.constraint(equalTo: labelName.leadingAnchor).isActive = true
+        loginNameLabel.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8).isActive = true
+        
+        // descriptionLabel
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        descriptionLabel.textColor = .white
+        descriptionLabel.leadingAnchor.constraint(equalTo: labelTeg.leadingAnchor).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: labelTeg.bottomAnchor, constant: 8).isActive = true
+        
+        profileService.fetchProfile(AccessKey) { result in
+            switch result {
+            case .success(let profile):
+                self.nameLabel.text = profile.name
+                self.loginNameLabel.text = profile.loginName
+                self.descriptionLabel.text = profile.bio
+            case .failure(let error):
+                print("Ошибка при получении профиля: \(error)")
+            }
+        }
     }
 }

@@ -23,6 +23,7 @@
 		D7A90AE72A767461003B0C0C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7A90AE52A767461003B0C0C /* LaunchScreen.storyboard */; };
 		D7BD25232AABCE5900F6F3A7 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = D7BD25222AABCE5900F6F3A7 /* ProgressHUD */; };
 		D7BF4E2E2A9A1D650009C0F2 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */; };
+		D7E276182AB480CA006B9A9F /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E276172AB480CA006B9A9F /* ProfileService.swift */; };
 		D7F168ED2A9A19A70054E8C0 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F168EC2A9A19A70054E8C0 /* AuthViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		D7A90AE62A767461003B0C0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D7A90AE82A767461003B0C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		D7E276172AB480CA006B9A9F /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		D7F168EC2A9A19A70054E8C0 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				D776C0762A89E0C30017EDE4 /* ProfileViewController.swift */,
+				D7E276172AB480CA006B9A9F /* ProfileService.swift */,
 			);
 			path = ProfileView;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 				D7BF4E2E2A9A1D650009C0F2 /* WebViewViewController.swift in Sources */,
 				D77092682A9C9EFB0080512B /* OAuth2Service.swift in Sources */,
 				D7A90ADD2A76745F003B0C0C /* SceneDelegate.swift in Sources */,
+				D7E276182AB480CA006B9A9F /* ProfileService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

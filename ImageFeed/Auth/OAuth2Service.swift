@@ -31,7 +31,7 @@ final class OAuth2Service {
             let request = makeRequest(code: code)
             let task = urlSession.dataTask(with: request) { data, response, error in
                 DispatchQueue.main.async {
-                    completion(.success(self.authToken!))
+                    completion(.success(self.authToken ?? ""))
                     self.task = nil
                     if error != nil {
                         self.lastCode = nil
