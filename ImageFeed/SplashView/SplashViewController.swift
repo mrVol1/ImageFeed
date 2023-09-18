@@ -70,16 +70,38 @@ extension SplashViewController: AuthViewControllerDelegate {
     }
     private func fetchProfile(token: String) {
         profileService.fetchProfile(token) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success:
-                    UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch result {
+            case .success(let profile):
+                let username = profile.username
+                
+                ProfileImageService.shared.fetchProfileImageURL(username: username) { _ in
                     self.switchToTabBarController()
-                case .failure:
                     UIBlockingProgressHUD.dismiss()
-                    break
                 }
+                
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
             }
         }
+    }
+    
+    func showErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        
+        let okAction = UIAlertAction(
+            title: "Ок",
+            style: .default,
+            handler: nil
+        )
+        
+        alertController.addAction(okAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
 }
 

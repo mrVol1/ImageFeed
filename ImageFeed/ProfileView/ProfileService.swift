@@ -20,10 +20,9 @@ final class ProfileService {
         let first_name: String
         let last_name: String
         let bio: String
-        let profile_image: String
     }
     
-    struct Profile {
+    struct Profile: Codable {
         let username: String
         let name: String
         let loginName: String
@@ -51,38 +50,21 @@ final class ProfileService {
         lastToken = token
         let request = makeRequestToken(token: token)
         
-        let task = urlSession.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    completion(.failure(error))
-                    self.lastToken = nil
-                    return
-                }
-                
-                guard let data = data else {
-                    let error = NSError(domain: "Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "No data received"])
-                    completion(.failure(error))
-                    self.lastToken = nil
-                    return
-                }
-                
-                do {
-                    let decoder = JSONDecoder()
-                    let profileResult = try decoder.decode(ProfileResult.self, from: data)
-                    let username = profileResult.username
-                    let name = self.name(first_name: profileResult.first_name, last_name: profileResult.last_name)
-                    let loginName = self.loginName(name: name)
-                    let bio = profileResult.bio
-                    
+        let task = urlSession.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
+            switch result {
+            case .success(let profileResult):
+                let username = profileResult.username
+                let name = self.name(first_name: profileResult.first_name, last_name: profileResult.last_name)
+                let loginName = self.loginName(name: name)
+                let bio = profileResult.bio
+                ProfileImageService.shared.fetchProfileImageURL(username: username) { _ in
                     let profile = Profile(username: username, name: name, loginName: loginName, bio: bio)
-                    
                     completion(.success(profile))
-                } catch {
-                    completion(.failure(error))
                 }
-                
-                self.lastToken = nil
+            case .failure(let error):
+                completion(.failure(error))
             }
+            self.lastToken = nil
         }
         
         self.task = task
@@ -95,5 +77,4 @@ final class ProfileService {
         request.httpMethod = "POST"
         return request
     }
-    
 }

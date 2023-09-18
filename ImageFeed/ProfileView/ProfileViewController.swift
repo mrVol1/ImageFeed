@@ -13,6 +13,10 @@ final class ProfileViewController: UIViewController {
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private var imageView = UIImageView()
+    private var labelName = UILabel()
+    private var labelTeg = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,52 +27,10 @@ final class ProfileViewController: UIViewController {
         
         let profileImage = UIImage(imageLiteralResourceName: "Photo.png")
         let imageView = UIImageView(image: profileImage)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
-        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
-        
         let labelName = UILabel()
-        labelName.text = "Екатерина Новикова"
-        labelName.font = UIFont.systemFont(ofSize: 23, weight: UIFont.Weight.bold)
-        labelName.textColor = .white
-        labelName.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(labelName)
-        labelName.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
-        labelName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
-        
         let labelTeg = UILabel()
-        labelTeg.text = "@ekaterina_nov"
-        labelTeg.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
-        //labelTeg.textColor = .gray
-        labelTeg.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
-        labelTeg.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(labelTeg)
-        labelTeg.leadingAnchor.constraint(equalTo: labelName.leadingAnchor).isActive = true
-        labelTeg.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8).isActive = true
         
-        let labelDiscription = UILabel()
-        labelDiscription.text = "Hello, world!"
-        labelDiscription.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
-        labelDiscription.textColor = .white
-        labelDiscription.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(labelDiscription)
-        labelDiscription.leadingAnchor.constraint(equalTo: labelTeg.leadingAnchor).isActive = true
-        labelDiscription.topAnchor.constraint(equalTo: labelTeg.bottomAnchor, constant: 8).isActive = true
-        
-        let button = UIButton.systemButton(
-            with: UIImage(systemName: "ipad.and.arrow.forward")!,
-            target: self,
-            action: nil
-        )
-        button.tintColor = UIColor(hue: 360, saturation: 0.56, brightness: 0.96, alpha: 1)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(button)
-        button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
-        button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         
         // nameLabel
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -91,6 +53,10 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.leadingAnchor.constraint(equalTo: labelTeg.leadingAnchor).isActive = true
         descriptionLabel.topAnchor.constraint(equalTo: labelTeg.bottomAnchor, constant: 8).isActive = true
         
+        self.imageView = imageView
+        self.labelName = labelName
+        self.labelTeg = labelTeg
+        
         profileService.fetchProfile(AccessKey) { result in
             switch result {
             case .success(let profile):
@@ -101,5 +67,73 @@ final class ProfileViewController: UIViewController {
                 print("Ошибка при получении профиля: \(error)")
             }
         }
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let _ = URL(string: profileImageURL)
+        else { return }
+        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+    }
+    
+    //    let profileImage = UIImage(imageLiteralResourceName: "Photo.png")
+    //    let imageView = UIImageView(image: profileImage)
+    //    imageView.translatesAutoresizingMaskIntoConstraints = false
+    //    view.addSubview(imageView)
+    //    imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+    //    imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+    //    imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+    //    imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+    //
+    //
+    //    let labelName = UILabel()
+    //    labelName.text = "Екатерина Новикова"
+    //    labelName.font = UIFont.systemFont(ofSize: 23, weight: UIFont.Weight.bold)
+    //    labelName.textColor = .white
+    //    labelName.translatesAutoresizingMaskIntoConstraints = false
+    //    view.addSubview(labelName)
+    //    labelName.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
+    //    labelName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
+    //
+    //    let labelTeg = UILabel()
+    //    labelTeg.text = "@ekaterina_nov"
+    //    labelTeg.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
+    //    //labelTeg.textColor = .gray
+    //    labelTeg.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+    //    labelTeg.translatesAutoresizingMaskIntoConstraints = false
+    //    view.addSubview(labelTeg)
+    //    labelTeg.leadingAnchor.constraint(equalTo: labelName.leadingAnchor).isActive = true
+    //    labelTeg.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8).isActive = true
+    //
+    //    let labelDiscription = UILabel()
+    //    labelDiscription.text = "Hello, world!"
+    //    labelDiscription.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+    //    labelDiscription.textColor = .white
+    //    labelDiscription.translatesAutoresizingMaskIntoConstraints = false
+    //    view.addSubview(labelDiscription)
+    //    labelDiscription.leadingAnchor.constraint(equalTo: labelTeg.leadingAnchor).isActive = true
+    //    labelDiscription.topAnchor.constraint(equalTo: labelTeg.bottomAnchor, constant: 8).isActive = true
+    //
+    //    let button = UIButton.systemButton(
+    //        with: UIImage(systemName: "ipad.and.arrow.forward")!,
+    //        target: self,
+    //        action: nil
+    //    )
+    //    button.tintColor = UIColor(hue: 360, saturation: 0.56, brightness: 0.96, alpha: 1)
+    //    button.translatesAutoresizingMaskIntoConstraints = false
+    //    view.addSubview(button)
+    //    button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+    //    button.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
 }
