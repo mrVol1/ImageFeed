@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import WebKit
-import Combine
 
 fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
 
@@ -27,7 +26,6 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Убедимся, что webView имеет значение перед установкой наблюдения
         guard let webView = webView else {
             fatalError("webView is not set")
         }

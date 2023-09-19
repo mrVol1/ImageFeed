@@ -21,6 +21,20 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let token = OAuth2TokenStorage().token {
+            ProfileService.shared.fetchProfile(token) { result in
+                switch result {
+                case .success(let profile):
+                    self.nameLabel.text = profile.name
+                    self.loginNameLabel.text = profile.loginName
+                    self.descriptionLabel.text = profile.bio
+                case .failure(let error):
+                    // Обработка ошибки загрузки профиля
+                    print("Error fetching profile: \(error)")
+                }
+            }
+        }
+        
         view.addSubview(nameLabel)
         view.addSubview(loginNameLabel)
         view.addSubview(descriptionLabel)

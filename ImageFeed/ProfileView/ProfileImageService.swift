@@ -23,8 +23,10 @@ final class ProfileImageService {
     
     private (set) var avatarURL: String?
     
+    private let username = "@mrVol1"
+    
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        let apiUrl = URL(string: "https://api.unsplash.com/users/\(username)")!
+        let apiUrl = URL(string: "https://unsplash.com/users/\(username)")!
         
         let tokenStorage = OAuth2TokenStorage()
         guard let token = tokenStorage.token else {

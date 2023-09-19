@@ -29,26 +29,12 @@ final class ProfileService {
         let bio: String
     }
     
-    private func name(first_name: String, last_name: String) -> String {
-        var user_name: String
-        if first_name != "" && last_name != "" {
-            user_name = first_name + last_name
-        } else {
-            user_name = first_name
-        }
-        return user_name
-    }
-    
-    private func loginName (name: String) -> String {
-        return "@" + name
-    }
-    
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         assert(Thread.isMainThread)
         if lastToken == token { return }
         task?.cancel()
         lastToken = token
-        let request = makeRequestToken(token: token)
+        let request = makeRequest(token: token)
         
         let task = urlSession.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
             switch result {
@@ -57,10 +43,8 @@ final class ProfileService {
                 let name = self.name(first_name: profileResult.first_name, last_name: profileResult.last_name)
                 let loginName = self.loginName(name: name)
                 let bio = profileResult.bio
-                ProfileImageService.shared.fetchProfileImageURL(username: username) { _ in
-                    let profile = Profile(username: username, name: name, loginName: loginName, bio: bio)
-                    completion(.success(profile))
-                }
+                let profile = Profile(username: username, name: name, loginName: loginName, bio: bio)
+                completion(.success(profile))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -71,10 +55,28 @@ final class ProfileService {
         task.resume()
     }
     
-    private func makeRequestToken(token: String) -> URLRequest {
-        guard let url = URL(string: "...\(token)") else { fatalError("Failed to create URL") }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+    private func makeRequest(token: String) -> URLRequest {
+        let baseURL = DefaultBaseURL
+        let meURL = baseURL.appendingPathComponent("/mrVol1")
+        
+        var request = URLRequest(url: meURL)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
         return request
+    }
+    
+    private func name(first_name: String, last_name: String) -> String {
+        var user_name: String
+        if first_name != "" && last_name != "" {
+            user_name = first_name + " " + last_name
+        } else {
+            user_name = first_name
+        }
+        return user_name
+    }
+    
+    private func loginName (name: String) -> String {
+        return "@" + name.replacingOccurrences(of: " ", with: "")
     }
 }

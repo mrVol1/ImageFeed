@@ -31,23 +31,28 @@ final class OAuth2Service {
             let request = makeRequest(code: code)
             
             let task = urlSession.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
+                
+                if case .success(let tokenResponse) = result {
+                        print("Server response: \(tokenResponse)")
+                    }
+                
                 switch result {
                 case .success(let tokenResponse):
                     self.authToken = tokenResponse.accessToken
                     completion(.success(self.authToken ?? ""))
                 case .failure(let error):
+                    print("Error: \(error)")
                     completion(.failure(error))
                 }
                 self.task = nil
                 self.lastCode = nil
             }
-            
             self.task = task
             task.resume()
         }
-    
+        
     private func makeRequest(code: String) -> URLRequest {
-        guard let url = URL(string: "...\(code)") else { fatalError("Failed to create URL") }
+        guard let url = URL(string: "https://unsplash.com/oauth/authorize") else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
