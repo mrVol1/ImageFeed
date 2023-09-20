@@ -34,10 +34,10 @@ final class OAuth2Service {
                 DispatchQueue.main.async {
                     guard let self = self else { return }
                     switch result {
-                    case .success(let body):
-                        let authToken = body.accessToken
+                    case .success(let tokenResponse):
+                        let authToken = tokenResponse.accessToken
                         self.authToken = authToken
-                        completion(.success(body))
+                        completion(.success(tokenResponse))
                         self.task = nil
                     case .failure(let error):
                         completion(.failure(error))
