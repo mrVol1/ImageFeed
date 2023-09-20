@@ -8,14 +8,24 @@
 import Foundation
 
 final class OAuth2TokenStorage {
-    private let tokenKey = "BearerToken"
-    
+    private let userDefaults = UserDefaults.standard
+    private enum Keys: String {
+        case token
+    }
     var token: String? {
         get {
-            return UserDefaults.standard.string(forKey: tokenKey)
+            guard let data = userDefaults.data(forKey: Keys.token.rawValue),
+                  let record = try? JSONDecoder().decode(String.self, from: data) else {
+                return nil
+            }
+            return record
         }
+        
         set {
-            UserDefaults.standard.set(newValue, forKey: tokenKey)
+            guard let data = try? JSONEncoder().encode(newValue) else {
+                return
+            }
+            userDefaults.set(data, forKey: Keys.token.rawValue)
         }
     }
 }

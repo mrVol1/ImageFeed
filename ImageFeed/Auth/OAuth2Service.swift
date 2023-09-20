@@ -23,34 +23,36 @@ final class OAuth2Service {
     
     func fetchOAuthToken(
         _ code: String,
-        completion: @escaping (Result<String, Error>) -> Void) {
+        completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) {
             assert(Thread.isMainThread)
             if lastCode == code { return }
             task?.cancel()
             lastCode = code
-            let request = makeRequest(code: code)
+            let request = authTokenRequest(code: code)
             
-            let task = urlSession.objectTask(for: request) { (result: Result<OAuthTokenResponseBody, Error>) in
-                
-                if case .success(let tokenResponse) = result {
-                        print("Server response: \(tokenResponse)")
+            let fulfillCompletionOnMainThread: (Result<OAuthTokenResponseBody, Error>) -> Void = { [weak self] result in
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    switch result {
+                    case .success(let body):
+                        let authToken = body.accessToken
+                        self.authToken = authToken
+                        completion(.success(body))
+                        self.task = nil
+                    case .failure(let error):
+                        completion(.failure(error))
+                        self.task = nil
+                        self.lastCode = nil
                     }
-                
-                switch result {
-                case .success(let tokenResponse):
-                    self.authToken = tokenResponse.accessToken
-                    completion(.success(self.authToken ?? ""))
-                case .failure(let error):
-                    print("Error: \(error)")
-                    completion(.failure(error))
                 }
-                self.task = nil
-                self.lastCode = nil
             }
+            
+            let task = urlSession.objectTask(for: request, completion: fulfillCompletionOnMainThread)
+            
             self.task = task
             task.resume()
         }
-        
+    
     private func makeRequest(code: String) -> URLRequest {
         guard let url = URL(string: "https://unsplash.com/oauth/authorize") else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
@@ -72,7 +74,7 @@ extension OAuth2Service {
             baseURL: URL(string: "https://unsplash.com")!
         )
     }
-    private struct OAuthTokenResponseBody: Decodable {
+    struct OAuthTokenResponseBody: Decodable {
         let accessToken: String
         let tokenType: String
         let scope: String
@@ -135,6 +137,13 @@ extension URLSession {
                     }
                 }
             } else {
+                // Обработка ошибки и вывод веб-контента
+                if let errorMessage = String(data: data, encoding: .utf8) {
+                    print("Error Response Data: \(errorMessage)")
+                } else {
+                    print("Failed to decode error response data.")
+                }
+                
                 DispatchQueue.main.async {
                     completion(.failure(NetworkError.httpStatusCode(response.statusCode)))
                 }

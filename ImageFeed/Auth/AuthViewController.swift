@@ -39,3 +39,4 @@ extension AuthViewController: WebViewViewControllerDelegate {
         dismiss(animated: true)
     }
 }
+
