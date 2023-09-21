@@ -32,40 +32,31 @@ final class ProfileService {
     private init() {}
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-            let baseURL = DefaultBaseURL
-            let meURL = baseURL.appendingPathComponent("/me")
-            
-            var request = URLRequest(url: meURL)
-            request.httpMethod = "GET"
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            
-            let task = urlSession.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
-                switch result {
-                case .success(let profileResult):
-                    let username = profileResult.username
-                    let name = self.name(first_name: profileResult.first_name, last_name: profileResult.last_name)
-                    let loginName = self.loginName(name: name)
-                    let bio = profileResult.bio ?? ""
-                    let profile = Profile(username: username, name: name, loginName: loginName, bio: bio)
-                    completion(.success(profile))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
+        let baseURL = DefaultBaseURL
+        let meURL = baseURL.appendingPathComponent("/me")
+        
+        var request = URLRequest(url: meURL)
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = urlSession.objectTask(for: request) { (result: Result<ProfileResult, Error>) in
+            switch result {
+            case .success(let profileResult):
+                let username = profileResult.username
+                let name = self.name(first_name: profileResult.first_name, last_name: profileResult.last_name)
+                let loginName = self.loginName(name: name)
+                let bio = profileResult.bio ?? ""
+                let profile = Profile(username: username, name: name, loginName: loginName, bio: bio)
+                completion(.success(profile))
+                ProfileImageService.shared.fetchProfileImageURL(username: username) { _ in }
+            case .failure(let error):
+                completion(.failure(error))
             }
-            
-            task.resume()
         }
-    
-//    private func makeRequest(token: String) -> URLRequest {
-//        let baseURL = DefaultBaseURL
-//        let meURL = baseURL.appendingPathComponent("/mrVol1")
-//        
-//        var request = URLRequest(url: meURL)
-//        request.httpMethod = "GET"
-//        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-//        
-//        return request
-//    }
+        
+        task.resume()
+    }
+
     
     private func name(first_name: String, last_name: String) -> String {
         var user_name: String

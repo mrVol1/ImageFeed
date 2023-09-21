@@ -12,7 +12,7 @@ final class ProfileImageService {
     static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     struct UserResult: Codable {
-        let profileImage: ProfileImage
+        let profile_image: ProfileImage
     }
     
     struct ProfileImage: Codable {
@@ -23,10 +23,9 @@ final class ProfileImageService {
     
     private (set) var avatarURL: String?
     
-    private let username = "@mrVol1"
-    
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        let apiUrl = URL(string: "https://unsplash.com/users/\(username)")!
+        let username = "mrVol1"
+        let apiUrl = URL(string: "https://api.unsplash.com/users/\(username)")!
         
         let tokenStorage = OAuth2TokenStorage()
         guard let token = tokenStorage.token else {
@@ -42,7 +41,7 @@ final class ProfileImageService {
         let dataTask = session.objectTask(for: request) { (result: Result<UserResult, Error>) in
             switch result {
             case .success(let userResult):
-                let profileImageURL = userResult.profileImage.small
+                let profileImageURL = userResult.profile_image.small
                 self.avatarURL = profileImageURL
                 completion(.success(profileImageURL))
                 NotificationCenter.default.post(
@@ -50,6 +49,7 @@ final class ProfileImageService {
                     object: self,
                     userInfo: ["URL": profileImageURL])
             case .failure(let error):
+                print("Ошибка при выполнении запроса: \(error)")
                 completion(.failure(error))
             }
         }

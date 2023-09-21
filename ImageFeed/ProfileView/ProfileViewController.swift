@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
@@ -22,43 +23,43 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         if let token = OAuth2TokenStorage().token {
-                ProfileService.shared.fetchProfile(token) { [weak self] result in
-                    guard let self = self else { return }
-                    switch result {
-                    case .success(let profile):
-                        self.nameLabel.text = profile.name
-                        self.loginNameLabel.text = profile.loginName
-                        self.descriptionLabel.text = profile.bio
-                    case .failure(let error):
-                        print("Error fetching profile: \(error)")
-                    }
+            ProfileService.shared.fetchProfile(token) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let profile):
+                    self.nameLabel.text = profile.name
+                    self.loginNameLabel.text = profile.loginName
+                    self.descriptionLabel.text = profile.bio
+                case .failure(let error):
+                    print("Error fetching profile: \(error)")
                 }
             }
+        }
         
         view.addSubview(imageView)
         view.addSubview(nameLabel)
         view.addSubview(loginNameLabel)
         view.addSubview(descriptionLabel)
         
-        let profileImage = UIImage(imageLiteralResourceName: "Photo.png")
-        imageView = UIImageView(image: profileImage)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
+        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        imageView.clipsToBounds = true 
+        imageView.layer.cornerRadius = 35
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         nameLabel.textColor = .white
-        view.addSubview(nameLabel)
         
         loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         loginNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         loginNameLabel.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
-        view.addSubview(loginNameLabel)
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.textColor = .white
-        view.addSubview(descriptionLabel)
         
         //Устанавливаем ограничения
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -104,9 +105,8 @@ final class ProfileViewController: UIViewController {
     private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
-            let _ = URL(string: profileImageURL)
+            let url = URL(string: profileImageURL)
         else { return }
-        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+        imageView.kf.setImage(with: url)
     }
-    
 }
