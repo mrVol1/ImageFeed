@@ -6,26 +6,24 @@
 //
 
 import Foundation
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
-    private let userDefaults = UserDefaults.standard
-    private enum Keys: String {
-        case token
-    }
+    private let keychain = KeychainWrapper.standard
+    
+    private let tokenKey = "jdsurUUes2!"
+    
     var token: String? {
         get {
-            guard let data = userDefaults.data(forKey: Keys.token.rawValue),
-                  let record = try? JSONDecoder().decode(String.self, from: data) else {
-                return nil
-            }
-            return record
+            return keychain.string(forKey: tokenKey)
         }
         
         set {
-            guard let data = try? JSONEncoder().encode(newValue) else {
-                return
+            if let newValue = newValue {
+                keychain.set(newValue, forKey: tokenKey)
+            } else {
+                keychain.removeObject(forKey: tokenKey)
             }
-            userDefaults.set(data, forKey: Keys.token.rawValue)
         }
     }
 }
