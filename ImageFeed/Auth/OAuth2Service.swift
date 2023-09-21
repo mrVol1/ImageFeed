@@ -46,9 +46,7 @@ final class OAuth2Service {
                     }
                 }
             }
-            
             let task = urlSession.objectTask(for: request, completion: fulfillCompletionOnMainThread)
-            
             self.task = task
             task.resume()
         }
