@@ -25,19 +25,20 @@ final class WebViewViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        guard let webView = webView else {
-            fatalError("webView is not set")
-        }
-        
-        estimatedProgressObservation = webView.observe(
-            \.estimatedProgress,
-             options: [],
-             changeHandler: { [weak self] _, _ in
-                 guard let self = self else { return }
-                 self.updateProgress()
-             })
-        
+
+        // Создание WKWebView
+        let webView = WKWebView()
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(webView)
+
+        // Установка констрейтов
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
         var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
         urlComponents.queryItems = [
             URLQueryItem(name: "client_id", value: AccessKey),
@@ -56,7 +57,7 @@ final class WebViewViewController: UIViewController {
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
     }
     
-    @IBAction func didTapBackButton(_ sender: Any?) {
+    @IBAction private func didTapBackButton(_ sender: Any?) {
         delegate?.webViewViewControllerDidCancel(self)
     }
 }
@@ -67,6 +68,7 @@ extension WebViewViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+        // Обработка навигации по веб-странице
         if let code = code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)

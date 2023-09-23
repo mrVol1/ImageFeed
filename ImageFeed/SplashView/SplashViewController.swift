@@ -16,31 +16,38 @@ final class SplashViewController: UIViewController {
     private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
     override func viewDidLoad() {
-            super.viewDidLoad()
-            
-            let imageView = UIImageView(image: UIImage(named: "Vector"))
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(imageView)
-            
-            NSLayoutConstraint.activate([
-                imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            ])
-        }
+        super.viewDidLoad()
+        
+        // Установка цвета фона экрана
+        view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+        
+        let imageView = UIImageView(image: UIImage(named: "Vector"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        // Размеры лого
+        imageView.widthAnchor.constraint(equalToConstant: 74).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: 76).isActive = true
+    }
     
     override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            
-            if OAuth2TokenStorage().token != nil {
-                switchToTabBarController()
-            } else {
-                let authViewController = AuthViewController()
-                authViewController.delegate = self
-                authViewController.modalPresentationStyle = .fullScreen
-                present(authViewController, animated: true, completion: nil)
-                print("success")
-            }
+        super.viewDidAppear(animated)
+        
+        if OAuth2TokenStorage().token != nil {
+            switchToTabBarController()
+        } else {
+            let authViewController = AuthViewController()
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true, completion: nil)
+            print("success")
         }
+    }
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
