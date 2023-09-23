@@ -18,7 +18,7 @@ final class SplashViewController: UIViewController {
     override func viewDidLoad() {
             super.viewDidLoad()
             
-            let imageView = UIImageView(image: UIImage(named: "splash_screen_logo"))
+            let imageView = UIImageView(image: UIImage(named: "Vector"))
             imageView.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(imageView)
             
@@ -38,6 +38,7 @@ final class SplashViewController: UIViewController {
                 authViewController.delegate = self
                 authViewController.modalPresentationStyle = .fullScreen
                 present(authViewController, animated: true, completion: nil)
+                print("success")
             }
         }
     
@@ -50,20 +51,6 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
     }
 }
-
-//extension SplashViewController {
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == ShowAuthenticationScreenSegueIdentifier {
-//            guard
-//                let navigationController = segue.destination as? UINavigationController,
-//                let viewController = navigationController.viewControllers[0] as? AuthViewController
-//            else { fatalError("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)") }
-//            viewController.delegate = self
-//        } else {
-//            super.prepare(for: segue, sender: sender)
-//        }
-//    }
-//}
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
@@ -96,7 +83,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
             case .failure:
                 UIBlockingProgressHUD.dismiss()
-                // TODO [Sprint 11] Показать ошибку
+                self.showErrorAlert()
                 break
             }
         }
