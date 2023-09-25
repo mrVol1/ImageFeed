@@ -52,7 +52,7 @@ final class OAuth2Service {
         }
     
     private func makeRequest(code: String) -> URLRequest {
-        guard let url = URL(string: "https://unsplash.com/oauth/authorize") else { fatalError("Failed to create URL") }
+        guard let url = AuthURL else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
@@ -69,7 +69,7 @@ extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
+            baseURL: BaseURL!
         )
     }
     struct OAuthTokenResponseBody: Decodable {

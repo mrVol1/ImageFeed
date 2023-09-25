@@ -31,6 +31,10 @@ final class ProfileViewController: UIViewController {
                     self.loginNameLabel.text = profile.loginName
                     self.descriptionLabel.text = profile.bio
                 case .failure(let error):
+                    let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка в приложении.", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    present(alertController, animated: true, completion: nil)
                     print("Error fetching profile: \(error)")
                 }
             }

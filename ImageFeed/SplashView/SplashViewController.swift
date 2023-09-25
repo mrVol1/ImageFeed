@@ -14,6 +14,8 @@ final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
+    private let hideProgressHUD: () = UIBlockingProgressHUD.dismiss()
+    private let showProgressHUD: () = UIBlockingProgressHUD.show()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +47,6 @@ final class SplashViewController: UIViewController {
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
             present(authViewController, animated: true, completion: nil)
-            print("success")
         }
     }
     
@@ -61,7 +62,7 @@ final class SplashViewController: UIViewController {
 
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        UIBlockingProgressHUD.show()
+        showProgressHUD
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.fetchOAuthToken(code)
@@ -74,9 +75,9 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success:
                 self.switchToTabBarController()
-                UIBlockingProgressHUD.dismiss()
+                hideProgressHUD
             case .failure:
-                UIBlockingProgressHUD.dismiss()
+                hideProgressHUD
                 break
             }
         }
@@ -86,10 +87,10 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success:
-                UIBlockingProgressHUD.dismiss()
+                hideProgressHUD
                 self.switchToTabBarController()
             case .failure:
-                UIBlockingProgressHUD.dismiss()
+                hideProgressHUD
                 self.showErrorAlert()
                 break
             }
