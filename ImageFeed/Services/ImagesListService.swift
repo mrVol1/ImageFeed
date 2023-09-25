@@ -8,7 +8,13 @@
 import Foundation
 
 final class ImagesListService {
-    private (set) var photos: [PhotoData] = []
+    private (set) var photos: [Photo] = [] {
+        didSet {
+            NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
+        }
+    }
+    
+    static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     
     private var lastLoadedPage: Int?
     
@@ -30,7 +36,7 @@ final class ImagesListService {
             if let data = data {
                 do {
                     let decoder = JSONDecoder()
-                    let photos = try decoder.decode([PhotoData].self, from: data)
+                    let photos = try decoder.decode([Photo].self, from: data)
                     
                     self.photos.append(contentsOf: photos)
                     
