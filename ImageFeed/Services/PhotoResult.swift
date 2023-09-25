@@ -8,29 +8,24 @@
 import Foundation
 
 struct PhotoResult: Codable {
-    let photos: [Photo]
+    let id: String
+    let createdAt: String
+    let updatedAt: String
+    let width: Int
+    let height: Int
+    let color: String
+    let blurHash: String
+    let likes: Int
+    let likedByUser: Bool
+    let description: String?
+    let urls: UrlsResult
     
-    enum CodingKeys: String, CodingKey {
-        case photos = "results" 
+    struct UrlsResult: Codable {
+        let raw: String
+        let full: String
+        let regular: String
+        let small: String
+        let thumb: String
     }
 }
 
-struct Photo: Codable {
-    let id: String
-    let width: Int
-    let height: Int
-    let color: String?
-    let user: User
-    
-    enum CodingKeys: String, CodingKey {
-            case id
-            case width
-            case height
-            case color
-            case user
-        }
-}
-
-struct User {
-    
-}

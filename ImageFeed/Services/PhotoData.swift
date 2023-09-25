@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PhotoData {
+struct PhotoData: Codable {
     let id: String
     let size: CGSize
     let createdAt: Date?
