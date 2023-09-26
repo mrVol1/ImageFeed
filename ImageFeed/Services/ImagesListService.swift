@@ -19,6 +19,7 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     
     func fetchPhotosNextPage() {
+        let nextPage = (lastLoadedPage ?? 0) + 1
         guard let url = PhotoListURL else {
             return
         }
@@ -40,7 +41,7 @@ final class ImagesListService {
                     
                     self.photos.append(contentsOf: photos)
                     
-                    self.lastLoadedPage = self.lastLoadedPage ?? 0 + 1
+                    self.lastLoadedPage = nextPage
                     
                 } catch {
                     print("Ошибка декодирования JSON: \(error.localizedDescription)")
