@@ -17,10 +17,18 @@ final class ImagesListService {
     static let DidChangeNotification = Notification.Name("ImagesListServiceDidChange")
     
     private var lastLoadedPage: Int?
+    private var isLoading = false
     
     func fetchPhotosNextPage() {
+        guard !isLoading else {
+            return // Если загрузка уже выполняется, не выполняем новый запрос
+        }
+        
+        isLoading = true
+        
         let nextPage = (lastLoadedPage ?? 0) + 1
         guard let url = PhotoListURL else {
+            isLoading = false
             return
         }
         
@@ -30,21 +38,29 @@ final class ImagesListService {
             guard let self = self else { return }
             
             if let error = error {
-                print("Ошибка загрузки данных: \(error.localizedDescription)")
+                print("Ошибка загрузки данных для URL: \(url)\nОшибка: \(error.localizedDescription)")
+                self.isLoading = false
                 return
             }
             
             if let data = data {
-                do {
-                    let decoder = JSONDecoder()
-                    let photos = try decoder.decode([Photo].self, from: data)
+                DispatchQueue.main.async {
+                    do {
+                        let decoder = JSONDecoder()
+                        let photos = try decoder.decode([Photo].self, from: data)
+                        
+                        if photos.isEmpty {
+                            print("Получен пустой массив фотографий.")
+                        } else {
+                            self.photos.append(contentsOf: photos)
+                            self.lastLoadedPage = nextPage
+                        }
+                        
+                    } catch {
+                        print("Ошибка декодирования JSON: \(error.localizedDescription)")
+                    }
                     
-                    self.photos.append(contentsOf: photos)
-                    
-                    self.lastLoadedPage = nextPage
-                    
-                } catch {
-                    print("Ошибка декодирования JSON: \(error.localizedDescription)")
+                    self.isLoading = false
                 }
             }
         }
@@ -52,4 +68,3 @@ final class ImagesListService {
         task.resume()
     }
 }
-
