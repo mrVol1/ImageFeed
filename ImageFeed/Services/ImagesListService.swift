@@ -53,6 +53,7 @@ final class ImagesListService {
                 DispatchQueue.main.async {
                     do {
                         let decoder = JSONDecoder()
+                        decoder.dateDecodingStrategy = .iso8601
                         let photos = try decoder.decode([Photo].self, from: data)
                         
                         if photos.isEmpty {
@@ -67,7 +68,7 @@ final class ImagesListService {
                         
                     } catch {
                         print("Ошибка декодирования JSON: \(error.localizedDescription)")
-                        //print("JSON data: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
+                        print("JSON data: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
                     }
                     
                     self.isLoading = false
