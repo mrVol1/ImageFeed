@@ -14,4 +14,4 @@ let AccessScope = "public+read_user+write_likes"
 let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
 let AuthURL = URL(string: "https://unsplash.com/oauth/authorize")
 let BaseURL = URL(string: "https://unsplash.com")
-let PhotoListURL = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=1&per_page=10")
+let PhotoListURL = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=10000&per_page=10")

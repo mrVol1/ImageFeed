@@ -25,8 +25,8 @@ struct Photo: Codable {
         case createdAt = "created_at"
         case description
         case urls
-        case thumbImageURL = "thumb"
-        case largeImageURL = "raw"
+        case thumbImageURL = "small"
+        case largeImageURL = "full"
         case isLiked = "liked_by_user"
     }
     
