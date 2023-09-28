@@ -82,4 +82,12 @@ final class ImagesListService {
         
         task.resume()
     }
+    
+    //todo - функционал лайков
+    private var isLike: Bool = false
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        if self.isLike == true {
+            
+        }
+    }
 }

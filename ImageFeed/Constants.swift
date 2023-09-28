@@ -16,3 +16,8 @@ let AuthURL = URL(string: "https://unsplash.com/oauth/authorize")
 let BaseURL = URL(string: "https://unsplash.com")
 private var currentPage = 1000
 let PhotoListURL = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=\(currentPage)&per_page=10")
+
+//ToDo подумать как можно упростить - этот момент
+private var photoId: String?
+let PhotoLikeUrl = URL(string: "https://api.unsplash.com/photos/\(String(describing: photoId))/like")
+let PhotoDislikeUrl = URL(string: "https://api.unsplash.com/photos/\(String(describing: photoId))/dislike")
