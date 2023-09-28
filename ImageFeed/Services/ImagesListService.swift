@@ -54,13 +54,17 @@ final class ImagesListService {
                     do {
                         let decoder = JSONDecoder()
                         decoder.dateDecodingStrategy = .iso8601
+                        // Попробуйте декодировать данные JSON
                         let photos = try decoder.decode([Photo].self, from: data)
                         
                         if photos.isEmpty {
-                            //print("Получен пустой массив фотографий.")
+                            print("Фотографий нет") // вывести алерт можно потом
                         } else {
-                            self.photos.append(contentsOf: photos)
-                            //print("Инициализированный Photo объект: \(photos)")
+                            if nextPage == 1 {
+                                self.photos = photos
+                            } else {
+                                self.photos.append(contentsOf: photos)
+                            }
                             self.lastLoadedPage = nextPage
                         }
                         
