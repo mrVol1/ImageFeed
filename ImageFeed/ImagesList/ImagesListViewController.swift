@@ -26,7 +26,7 @@ final class ImagesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView?.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         imagesListService = ImagesListService()
         imagesListService?.fetchPhotosNextPage()
         NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
