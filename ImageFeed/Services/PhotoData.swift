@@ -7,8 +7,6 @@
 
 import Foundation
 
-import UIKit
-
 struct Photo: Codable {
     let id: String
     let width: Int
@@ -16,8 +14,8 @@ struct Photo: Codable {
     let size: CGSize
     let createdAt: Date?
     let description: String?
-    let thumbImageURL: String?
-    let largeImageURL: String?
+    let thumbImageURL: String
+    let largeImageURL: String
     let isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
@@ -26,6 +24,7 @@ struct Photo: Codable {
         case height
         case createdAt = "created_at"
         case description
+        case urls
         case thumbImageURL = "thumb"
         case largeImageURL = "raw"
         case isLiked = "liked_by_user"
@@ -39,8 +38,22 @@ struct Photo: Codable {
         size = CGSize(width: width, height: height)
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt)
         description = try container.decodeIfPresent(String.self, forKey: .description)
-        thumbImageURL = try container.decodeIfPresent(String.self, forKey: .thumbImageURL)
-        largeImageURL = try container.decodeIfPresent(String.self, forKey: .largeImageURL)
+        let urlsContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .urls)
+        thumbImageURL = try urlsContainer.decode(String.self, forKey: .thumbImageURL)
+        largeImageURL = try urlsContainer.decode(String.self, forKey: .largeImageURL)
         isLiked = try container.decode(Bool.self, forKey: .isLiked)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(width, forKey: .width)
+        try container.encode(height, forKey: .height)
+        try container.encode(createdAt, forKey: .createdAt)
+        try container.encode(description, forKey: .description)
+        var urlsContainer = container.nestedContainer(keyedBy: CodingKeys.self, forKey: .urls)
+        try urlsContainer.encode(thumbImageURL, forKey: .thumbImageURL)
+        try urlsContainer.encode(largeImageURL, forKey: .largeImageURL)
+        try container.encode(isLiked, forKey: .isLiked)
     }
 }

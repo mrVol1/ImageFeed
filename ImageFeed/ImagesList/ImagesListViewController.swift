@@ -77,7 +77,7 @@ extension ImagesListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
         
         guard let imageListCell = cell as? ImagesListCell else {
-            return UITableViewCell()
+            fatalError("Failed to dequeue a cell of type ImagesListCell")
         }
         
         configCell(for: imageListCell, with: indexPath)
@@ -90,13 +90,13 @@ extension ImagesListViewController {
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let photo = photos[indexPath.row]
         
-        if let imageURL = URL(string: photo.thumbImageURL ?? "") {
+        if let imageURL = URL(string: photo.thumbImageURL) {
             cell.cellImage.kf.indicatorType = .activity
             cell.cellImage.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"), completionHandler: { [weak self] (result) in
                 switch result {
                 case .success(_):
                     self?.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    print("Изображение успешно загружено")
+                    //print("Изображение успешно загружено")
                 case .failure(let error):
                     print("Ошибка при загрузке изображения: \(error)")
                     break
@@ -120,7 +120,7 @@ extension ImagesListViewController: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == photos.count + 1 {
+        if indexPath.row == photos.count - 1 {
             imagesListService?.fetchPhotosNextPage()
         }
     }

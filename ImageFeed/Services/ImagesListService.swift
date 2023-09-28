@@ -37,8 +37,8 @@ final class ImagesListService {
         let task = session.dataTask(with: url) { [weak self] (data, response, error) in
             guard let self = self else { return }
             
-            if let error = error {
-                print("Ошибка загрузки данных для URL: \(url)\nОшибка: \(error.localizedDescription)")
+            if error != nil {
+                //print("Ошибка загрузки данных для URL: \(url)\nОшибка: \(error.localizedDescription)")
                 self.isLoading = false
                 return
             }
@@ -47,7 +47,7 @@ final class ImagesListService {
                 if String(data: data, encoding: .utf8) != nil {
                     //print("Полученные данные: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
                 } else {
-                    print("Received data is not a valid UTF-8 string.")
+                    //print("Received data is not a valid UTF-8 string.")
                 }
                 
                 DispatchQueue.main.async {
@@ -57,18 +57,18 @@ final class ImagesListService {
                         let photos = try decoder.decode([Photo].self, from: data)
                         
                         if photos.isEmpty {
-                            print("Получен пустой массив фотографий.")
+                            //print("Получен пустой массив фотографий.")
                         } else {
                             self.photos.append(contentsOf: photos)
-                            print("Инициализированный Photo объект: \(photos)")
+                            //print("Инициализированный Photo объект: \(photos)")
                             self.lastLoadedPage = nextPage
                         }
                         
                         NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
                         
                     } catch {
-                        print("Ошибка декодирования JSON: \(error.localizedDescription)")
-                        print("JSON data: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
+                        //print("Ошибка декодирования JSON: \(error.localizedDescription)")
+                        //print("JSON data: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
                     }
                     
                     self.isLoading = false
