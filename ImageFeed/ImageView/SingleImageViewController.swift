@@ -10,13 +10,6 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     var photo: Photo?
-    var image: UIImage! {
-        didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
     
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -25,10 +18,7 @@ final class SingleImageViewController: UIViewController {
         super.viewDidLoad()
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-        if let image = image {
-            imageView.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }    
+        loadAndDisplayImage()
     }
     
     @IBAction private func didTapBackButton() {
@@ -37,25 +27,45 @@ final class SingleImageViewController: UIViewController {
     
     
     @IBAction func didTapShareButton(_ sender: UIButton) {
-        let sharingImage = UIActivityViewController(activityItems: [image!], applicationActivities: nil)
+        let sharingImage = UIActivityViewController(activityItems: [photo!], applicationActivities: nil)
         present(sharingImage, animated: true)
     }
     
-    private func rescaleAndCenterImageInScrollView(image: UIImage) {
+    private func loadAndDisplayImage() {
+        guard let imageURLString = photo?.largeImageURL, let imageURL = URL(string: imageURLString) else {
+            return
+        }
+        
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"), completionHandler: { [weak self] (result) in
+            switch result {
+            case .success(_):
+                self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
+            case .failure(let error):
+                print("Ошибка при загрузке изображения: \(error)")
+            }
+        })
+    }
+    
+    private func rescaleAndCenterImageInScrollView(image: UIImage?) {
+        guard let image = image else {
+            return
+        }
+        
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale
+        let scale = max(minZoomScale, maxZoomScale)
+        scrollView.setZoomScale(scale, animated: false)
+        scrollView.layoutIfNeeded()
         view.layoutIfNeeded()
         let visibleRectSize = scrollView.bounds.size
         let imageSize = image.size
-        let hScale = visibleRectSize.width / imageSize.width
-        let vScale = visibleRectSize.height / imageSize.height
-        let scale = min(maxZoomScale, max(minZoomScale, max(hScale, vScale)))
-        scrollView.setZoomScale(scale, animated: false)
-        scrollView.layoutIfNeeded()
-        let newContentSize = scrollView.contentSize
-        let x = (newContentSize.width - visibleRectSize.width) / 2
-        let y = (newContentSize.height - visibleRectSize.height) / 2
-        scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+//        let hScale = visibleRectSize.width / imageSize.width
+//        let vScale = visibleRectSize.height / imageSize.height
+//        let newContentSize = scrollView.contentSize
+//        let x = (newContentSize.width - visibleRectSize.width) / 2
+//        let y = (newContentSize.height - visibleRectSize.height) / 2
+//        scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
     }
 }
 
