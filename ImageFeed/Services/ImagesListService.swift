@@ -21,7 +21,7 @@ final class ImagesListService {
     
     func fetchPhotosNextPage() {
         guard !isLoading else {
-            return // Если загрузка уже выполняется, не выполняем новый запрос
+            return
         }
         
         isLoading = true
@@ -44,6 +44,12 @@ final class ImagesListService {
             }
             
             if let data = data {
+                if String(data: data, encoding: .utf8) != nil {
+                    //print("Полученные данные: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
+                } else {
+                    print("Received data is not a valid UTF-8 string.")
+                }
+                
                 DispatchQueue.main.async {
                     do {
                         let decoder = JSONDecoder()
@@ -53,11 +59,15 @@ final class ImagesListService {
                             print("Получен пустой массив фотографий.")
                         } else {
                             self.photos.append(contentsOf: photos)
+                            print("Инициализированный Photo объект: \(photos)")
                             self.lastLoadedPage = nextPage
                         }
                         
+                        NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
+                        
                     } catch {
                         print("Ошибка декодирования JSON: \(error.localizedDescription)")
+                        //print("JSON data: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
                     }
                     
                     self.isLoading = false
