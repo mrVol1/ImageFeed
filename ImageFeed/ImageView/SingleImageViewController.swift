@@ -48,7 +48,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage?) {
-        guard let image = image else {
+        guard image != nil else {
             return
         }
         

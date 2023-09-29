@@ -18,6 +18,7 @@ final class ImagesListService {
     
     private var lastLoadedPage: Int?
     private var isLoading = false
+    private var currentPage = 1
     
     func fetchPhotosNextPage() {
         guard !isLoading else {
@@ -27,10 +28,10 @@ final class ImagesListService {
         isLoading = true
         
         let nextPage = (lastLoadedPage ?? 0) + 1
-        guard let url = PhotoListURL else {
-            isLoading = false
-            return
-        }
+        guard let url = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=\(currentPage)&per_page=10") else {
+                isLoading = false
+                return
+            }
         
         let session = URLSession.shared
         
@@ -66,6 +67,7 @@ final class ImagesListService {
                                 self.photos.append(contentsOf: photos)
                             }
                             self.lastLoadedPage = nextPage
+                            self.currentPage += 1
                         }
                         
                         NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
@@ -91,3 +93,35 @@ final class ImagesListService {
         }
     }
 }
+
+
+//функционал лайков
+//class LikeService {
+//    private let baseUrl = "https://api.example.com"
+//    
+//    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+//        let endpoint = isLike ? "/photos/\(photoId)/like" : "/photos/\(photoId)/like"
+//        let url = URL(string: baseUrl + endpoint)!
+//        
+//        var request = URLRequest(url: url)
+//        request.httpMethod = isLike ? "POST" : "DELETE"
+//        
+//        // Добавьте необходимые заголовки (например, авторизацию) к запросу, если требуется
+//        
+//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+//            if let error = error {
+//                completion(.failure(error))
+//                return
+//            }
+//            
+//            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
+//                completion(.success(()))
+//            } else {
+//                // Обработка ошибок или неверных статус-кодов
+//                completion(.failure(/* Ваша ошибка */))
+//            }
+//        }
+//        
+//        task.resume()
+//    }
+//}

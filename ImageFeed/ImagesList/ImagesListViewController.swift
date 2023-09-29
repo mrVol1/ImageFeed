@@ -92,21 +92,23 @@ extension ImagesListViewController {
         
         if let imageURL = URL(string: photo.thumbImageURL) {
             cell.cellImage.kf.indicatorType = .activity
+
             cell.cellImage.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"), completionHandler: { [weak self] (result) in
                 guard let self = self else { return }
-                
+
                 switch result {
                 case .success(_):
                     if let indexPaths = self.tableView?.indexPathsForVisibleRows, indexPaths.contains(indexPath) {
                         self.tableView?.reloadRows(at: [indexPath], with: .automatic)
                     }
-                    //print("Изображение успешно загружено")
+                    // Изображение успешно загружено
                 case .failure(let error):
-                    print("Ошибка при загрузке изображения111: \(error)")
-                    break
+                    print("Ошибка при загрузке изображения11: \(error)")
+                    // Обработка ошибки загрузки изображения
                 }
             })
         }
+
 
         
         cell.labelView.text = dateFormatter.string(from: Date())
