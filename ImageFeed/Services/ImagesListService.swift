@@ -28,7 +28,7 @@ final class ImagesListService {
         isLoading = true
         
         let nextPage = (lastLoadedPage ?? 0) + 1
-        guard let url = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=\(currentPage)&per_page=10") else {
+        guard let url = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=\(self.currentPage)&per_page=10") else {
                 isLoading = false
                 return
             }

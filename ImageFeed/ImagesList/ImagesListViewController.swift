@@ -39,7 +39,16 @@ final class ImagesListViewController: UIViewController {
     @objc func handlePhotosDidChange(_ notification: Notification) {
         if let updatedPhotos = imagesListService?.photos {
             photos = updatedPhotos
-            updateTableViewAnimated()
+
+            if Thread.isMainThread {
+                // Если мы уже на главном потоке, то обновляем UITableView прямо здесь
+                tableView.reloadData()
+            } else {
+                // Если не на главном потоке, используем DispatchQueue.main.async
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
         }
     }
     
