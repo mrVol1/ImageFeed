@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
@@ -133,5 +134,17 @@ final class ProfileViewController: UIViewController {
         let initialViewController = AuthViewController()
         
         UIApplication.shared.windows.first?.rootViewController = initialViewController
+        
+        clearCookiesAndWebsiteData()
+    }
+    
+    private func clearCookiesAndWebsiteData() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
 }
