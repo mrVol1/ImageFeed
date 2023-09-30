@@ -16,7 +16,7 @@ struct Photo: Codable {
     let description: String?
     let thumbImageURL: String
     let largeImageURL: String
-    let isLiked: Bool
+    var isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
         case id

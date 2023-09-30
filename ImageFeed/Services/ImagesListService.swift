@@ -39,7 +39,7 @@ final class ImagesListService {
             guard let self = self else { return }
             
             if error != nil {
-                //print("Ошибка загрузки данных для URL: \(url)\nОшибка: \(error.localizedDescription)")
+                print("Ошибка загрузки данных для URL: \(url)\nОшибка: \(error!.localizedDescription)")
                 self.isLoading = false
                 return
             }
@@ -48,14 +48,13 @@ final class ImagesListService {
                 if String(data: data, encoding: .utf8) != nil {
                     //print("Полученные данные: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
                 } else {
-                    //print("Received data is not a valid UTF-8 string.")
+                    print("Received data is not a valid UTF-8 string.")
                 }
                 
                 DispatchQueue.main.async {
                     do {
                         let decoder = JSONDecoder()
                         decoder.dateDecodingStrategy = .iso8601
-                        // Попробуйте декодировать данные JSON
                         let photos = try decoder.decode([Photo].self, from: data)
                         
                         if photos.isEmpty {
@@ -73,8 +72,7 @@ final class ImagesListService {
                         NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
                         
                     } catch {
-                        //print("Ошибка декодирования JSON: \(error.localizedDescription)")
-                        //print("JSON data: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
+                        print("Ошибка декодирования JSON: \(error.localizedDescription)")
                     }
                     
                     self.isLoading = false
@@ -88,40 +86,21 @@ final class ImagesListService {
     //todo - функционал лайков
     private var isLike: Bool = false
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        if self.isLike == true {
-            
+        let url = isLike ? PhotoLikeUrl : PhotoDislikeUrl
+        
+        var request = URLRequest(url: url!)
+        request.httpMethod = isLike ? "POST" : "DELETE"
+        
+        let task = URLSession.shared.dataTask(with: request) {
+            (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
+                completion(.success(()))
+            }
         }
+        task.resume()
     }
 }
-
-
-//функционал лайков
-//class LikeService {
-//    private let baseUrl = "https://api.example.com"
-//    
-//    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
-//        let endpoint = isLike ? "/photos/\(photoId)/like" : "/photos/\(photoId)/like"
-//        let url = URL(string: baseUrl + endpoint)!
-//        
-//        var request = URLRequest(url: url)
-//        request.httpMethod = isLike ? "POST" : "DELETE"
-//        
-//        // Добавьте необходимые заголовки (например, авторизацию) к запросу, если требуется
-//        
-//        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-//            if let error = error {
-//                completion(.failure(error))
-//                return
-//            }
-//            
-//            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
-//                completion(.success(()))
-//            } else {
-//                // Обработка ошибок или неверных статус-кодов
-//                completion(.failure(/* Ваша ошибка */))
-//            }
-//        }
-//        
-//        task.resume()
-//    }
-//}
