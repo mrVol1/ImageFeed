@@ -130,7 +130,7 @@ final class ProfileViewController: UIViewController {
         let tokenStorage = OAuth2TokenStorage()
         tokenStorage.token = nil
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        guard UIApplication.shared.delegate is AppDelegate else { return }
         let initialViewController = AuthViewController()
         
         UIApplication.shared.windows.first?.rootViewController = initialViewController

@@ -60,7 +60,6 @@
 		D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		D7E276172AB480CA006B9A9F /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		D7E276192AB73A34006B9A9F /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
-		D7E321A22AC6EA63005A211D /* ImageFeed.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ImageFeed.entitlements; sourceTree = "<group>"; };
 		D7F168EC2A9A19A70054E8C0 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -151,7 +150,6 @@
 		D7A90AD92A76745F003B0C0C /* ImageFeed */ = {
 			isa = PBXGroup;
 			children = (
-				D7E321A22AC6EA63005A211D /* ImageFeed.entitlements */,
 				D75624BA2AC1BA3A005E65D3 /* Services */,
 				D749EE442AA11A6B00E8459F /* SplashView */,
 				D7BF4E2F2A9A5CCC0009C0F2 /* WebView */,
