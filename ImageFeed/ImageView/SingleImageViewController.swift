@@ -37,16 +37,16 @@ final class SingleImageViewController: UIViewController {
             return
         }
         
-        ProgressHUD.show()
-        
+        UIBlockingProgressHUD.show()
+
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
             switch result {
             case .success(_):
-                ProgressHUD.dismiss()
+                UIBlockingProgressHUD.dismiss()
                 self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
-            case .failure(let error):
-                ProgressHUD.dismiss()
+            case .failure(_):
+                UIBlockingProgressHUD.dismiss()
                 let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Не надо", style: .cancel, handler: nil))
                 alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (_) in
@@ -54,7 +54,6 @@ final class SingleImageViewController: UIViewController {
                 }))
                 
                 self?.present(alert, animated: true, completion: nil)
-                print("Ошибка при загрузке изображения: \(error)")
             }
         })
     }

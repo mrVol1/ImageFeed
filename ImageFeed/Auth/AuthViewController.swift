@@ -51,7 +51,7 @@ final class AuthViewController: UIViewController {
         logoImageView.widthAnchor.constraint(equalToConstant: 60).isActive = true
         logoImageView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
-        // Установите констрейнты для логотипа
+        // установка констрейтов для логотипа
         NSLayoutConstraint.activate([
             logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             logoImageView.bottomAnchor.constraint(equalTo: view.centerYAnchor)

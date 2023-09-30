@@ -16,11 +16,11 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private var profileImageServiceObserver: NSObjectProtocol?
     private var imageView = UIImageView()
-    private var labelName = UILabel()
-    private var labelTeg = UILabel()
+    private var logOut = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         if let token = OAuth2TokenStorage().token {
             ProfileService.shared.fetchProfile(token) { [weak self] result in
@@ -44,6 +44,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(loginNameLabel)
         view.addSubview(descriptionLabel)
+        view.addSubview(logOut)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
@@ -65,11 +66,21 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.textColor = .white
         
+        logOut.translatesAutoresizingMaskIntoConstraints = false
+        logOut.setImage(UIImage(named: "Exit"), for: .normal)
+        logOut.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        logOut.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 65).isActive = true
+        logOut.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        logOut.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        logOut.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+
         //Устанавливаем ограничения
         imageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        logOut.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
@@ -112,5 +123,15 @@ final class ProfileViewController: UIViewController {
             let url = URL(string: profileImageURL)
         else { return }
         imageView.kf.setImage(with: url)
+    }
+    
+    @objc private func logoutButtonTapped() {
+        let tokenStorage = OAuth2TokenStorage()
+        tokenStorage.token = nil
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let initialViewController = AuthViewController()
+        
+        UIApplication.shared.windows.first?.rootViewController = initialViewController
     }
 }
