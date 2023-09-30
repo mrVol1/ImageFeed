@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
     var photo: Photo?
@@ -36,28 +37,53 @@ final class SingleImageViewController: UIViewController {
             return
         }
         
+        ProgressHUD.show()
+        
         imageView.kf.indicatorType = .activity
-        imageView.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"), completionHandler: { [weak self] (result) in
+        imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
             switch result {
             case .success(_):
+                ProgressHUD.dismiss()
                 self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
             case .failure(let error):
+                ProgressHUD.dismiss()
+                let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Не надо", style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (_) in
+                    self?.loadAndDisplayImage()
+                }))
+                
+                self?.present(alert, animated: true, completion: nil)
                 print("Ошибка при загрузке изображения: \(error)")
             }
         })
     }
     
     private func rescaleAndCenterImageInScrollView(image: UIImage?) {
-        guard image != nil else {
+        guard let image = image else {
             return
         }
         
-        let minZoomScale = scrollView.minimumZoomScale
-        let maxZoomScale = scrollView.maximumZoomScale
-        let scale = max(minZoomScale, maxZoomScale)
-        scrollView.setZoomScale(scale, animated: false)
-        scrollView.layoutIfNeeded()
-        view.layoutIfNeeded()
+        let scrollViewSize = scrollView.bounds.size
+        let safeAreaInsets = view.safeAreaInsets
+        let availableWidth = scrollViewSize.width
+        let availableHeight = scrollViewSize.height - safeAreaInsets.top - safeAreaInsets.bottom
+        
+        let imageSize = image.size
+        let widthScale = availableWidth / imageSize.width
+        let heightScale = availableHeight / imageSize.height
+        let scale = max(widthScale, heightScale)
+        
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = max(scale, 3.0)
+        
+        scrollView.zoomScale = scale
+        
+        let xOffset = max(0, (scrollView.contentSize.width * scale - availableWidth) / 2)
+        let yOffset = max(0, (scrollView.contentSize.height * scale - availableHeight) / 2)
+        
+        scrollView.contentInset = UIEdgeInsets(top: safeAreaInsets.top, left: 0, bottom: safeAreaInsets.bottom, right: 0)
+        scrollView.contentOffset = CGPoint(x: xOffset, y: yOffset)
     }
 }
 
