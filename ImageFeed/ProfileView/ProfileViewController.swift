@@ -135,7 +135,7 @@ final class ProfileViewController: UIViewController {
         tokenStorage.token = nil
         
         guard UIApplication.shared.delegate is AppDelegate else { return }
-        let initialViewController = AuthViewController()
+        let initialViewController = SplashViewController()
         
         UIApplication.shared.windows.first?.rootViewController = initialViewController
         
