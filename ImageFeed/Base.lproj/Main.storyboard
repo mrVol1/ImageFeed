@@ -229,13 +229,13 @@
                         <viewLayoutGuide key="safeArea" id="zBb-j0-f3X"/>
                         <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="5LT-Da-T2Z" firstAttribute="top" secondItem="zBb-j0-f3X" secondAttribute="top" id="1Vb-6c-2rg"/>
+                            <constraint firstItem="5LT-Da-T2Z" firstAttribute="top" secondItem="u9P-Zu-Xqt" secondAttribute="top" id="1Vb-6c-2rg"/>
                             <constraint firstItem="uCG-bz-k64" firstAttribute="centerX" secondItem="5LT-Da-T2Z" secondAttribute="centerX" id="Nat-tJ-9yi"/>
-                            <constraint firstItem="5LT-Da-T2Z" firstAttribute="leading" secondItem="zBb-j0-f3X" secondAttribute="leading" id="Nki-sd-0eT"/>
-                            <constraint firstItem="zBb-j0-f3X" firstAttribute="trailing" secondItem="5LT-Da-T2Z" secondAttribute="trailing" id="Rtg-ki-piQ"/>
+                            <constraint firstItem="5LT-Da-T2Z" firstAttribute="leading" secondItem="u9P-Zu-Xqt" secondAttribute="leading" id="Nki-sd-0eT"/>
+                            <constraint firstAttribute="trailing" secondItem="5LT-Da-T2Z" secondAttribute="trailing" id="Rtg-ki-piQ"/>
                             <constraint firstItem="uCG-bz-k64" firstAttribute="leading" secondItem="zBb-j0-f3X" secondAttribute="leading" constant="171" id="c1i-Ud-OvV"/>
                             <constraint firstItem="uCG-bz-k64" firstAttribute="top" secondItem="zBb-j0-f3X" secondAttribute="top" constant="650" id="c2T-zW-rx7"/>
-                            <constraint firstItem="5LT-Da-T2Z" firstAttribute="bottom" secondItem="zBb-j0-f3X" secondAttribute="bottom" id="wfe-Ai-xd4"/>
+                            <constraint firstItem="5LT-Da-T2Z" firstAttribute="bottom" secondItem="u9P-Zu-Xqt" secondAttribute="bottom" id="wfe-Ai-xd4"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mLs-6u-i8L"/>

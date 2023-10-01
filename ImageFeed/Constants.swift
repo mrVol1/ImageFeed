@@ -14,8 +14,3 @@ let AccessScope = "public+read_user+write_likes"
 let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
 let AuthURL = URL(string: "https://unsplash.com/oauth/authorize")
 let BaseURL = URL(string: "https://unsplash.com")
-
-//ToDo подумать как можно упростить - этот момент
-private var photoId = Photo.CodingKeys.id
-let PhotoLikeUrl = URL(string: "https://api.unsplash.com/photos/\(photoId))/like")
-let PhotoDislikeUrl = URL(string: "https://api.unsplash.com/photos/\(photoId))/dislike")

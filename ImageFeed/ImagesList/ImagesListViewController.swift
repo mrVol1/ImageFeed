@@ -92,7 +92,6 @@ extension ImagesListViewController: UITableViewDataSource {
         cell.delegate = self
         
         configCell(for: cell, with: indexPath)
-        print("Cell for row at indexPath: \(indexPath)")
         return cell
     }
     
@@ -141,25 +140,36 @@ extension ImagesListViewController: UITableViewDelegate {
 }
 
 extension ImagesListViewController: ImagesListCellDelegate {
-    func imageListCellDidTapLike(at indexPath: IndexPath) {
-        print("Like button tapped for cell at indexPath: \(indexPath)")
+    func imageListCellDidTapLike(at indexPath: IndexPath, isLike: Bool) {
         
-        let photo = photos[indexPath.row]
-        // Покажем лоадер
-        UIBlockingProgressHUD.show()
-        imagesListService!.changeLike(photoId: photo.id, isLike: !photo.isLiked) { result in
+        var photo = photos[indexPath.row]
+        
+        if let cell = tableView.cellForRow(at: indexPath) as? ImagesListCell {
+            let likeImage = isLike ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+            cell.buttonClick.setImage(likeImage, for: .normal)
+        }
+        
+        photo.isLiked = isLike
+        
+        imagesListService!.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
+            guard let self = self else { return }
+            
             switch result {
             case .success:
-                // Синхронизируем массив картинок с сервисом
-                self.photos = self.imagesListService!.photos
-                // Уберём лоадер
-                UIBlockingProgressHUD.dismiss()
+                DispatchQueue.main.async {
+                    self.tableView.reloadRows(at: [indexPath], with: .none)
+                }
+                
             case .failure:
-                // Уберём лоадер
-                UIBlockingProgressHUD.dismiss()
-                // Покажем, что что-то пошло не так
-                // TODO: Показать ошибку с использованием UIAlertController
-                print("Error while changing like status")
+                DispatchQueue.main.async {
+                    let alertController = UIAlertController(title: "Ошибка", message: "Что-то пошло не так", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                    photo.isLiked = !isLike
+                    self.photos[indexPath.row] = photo
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
             }
         }
     }

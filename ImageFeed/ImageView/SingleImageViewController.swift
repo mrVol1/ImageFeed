@@ -64,13 +64,11 @@ final class SingleImageViewController: UIViewController {
         }
         
         let scrollViewSize = scrollView.bounds.size
-        let safeAreaInsets = view.safeAreaInsets
-        let availableWidth = scrollViewSize.width
-        let availableHeight = scrollViewSize.height - safeAreaInsets.top - safeAreaInsets.bottom
         
         let imageSize = image.size
-        let widthScale = availableWidth / imageSize.width
-        let heightScale = availableHeight / imageSize.height
+        
+        let widthScale = scrollViewSize.width / imageSize.width
+        let heightScale = scrollViewSize.height / imageSize.height
         let scale = max(widthScale, heightScale)
         
         scrollView.minimumZoomScale = 1.0
@@ -78,11 +76,10 @@ final class SingleImageViewController: UIViewController {
         
         scrollView.zoomScale = scale
         
-        let xOffset = max(0, (scrollView.contentSize.width * scale - availableWidth) / 2)
-        let yOffset = max(0, (scrollView.contentSize.height * scale - availableHeight) / 2)
+        let xOffset = max((scrollView.contentSize.width * scale - scrollViewSize.width) * 0.5, 0)
+        let yOffset = max((scrollView.contentSize.height * scale - scrollViewSize.height) * 0.5, 0)
         
-        scrollView.contentInset = UIEdgeInsets(top: safeAreaInsets.top, left: 0, bottom: safeAreaInsets.bottom, right: 0)
-        scrollView.contentOffset = CGPoint(x: xOffset, y: yOffset)
+        scrollView.contentInset = UIEdgeInsets(top: yOffset, left: xOffset, bottom: 0, right: 0)
     }
 }
 

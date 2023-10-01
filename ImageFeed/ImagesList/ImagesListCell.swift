@@ -10,13 +10,14 @@ import UIKit
 import Kingfisher
 
 protocol ImagesListCellDelegate: AnyObject {
-    func imageListCellDidTapLike(at indexPath: IndexPath)
+    func imageListCellDidTapLike(at indexPath: IndexPath, isLike: Bool)
 }
 
 final class ImagesListCell: UITableViewCell {
     weak var delegate: ImagesListCellDelegate?
     var indexPath: IndexPath?
     weak var tableView: UITableView?
+    var isLike: Bool = false
     
     static let reuseIdentifier = "ImagesListCell"
     
@@ -29,18 +30,14 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet weak var buttonClick: UIButton!
     @IBOutlet weak var labelView: UILabel!
     
-    func setIsLiked(_ isLiked: Bool) {
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        buttonClick.setImage(likeImage, for: .normal)
-    }
-    
     // MARK: - lIKE Button
     
     @IBAction private func likeButtonClicked() {
+        isLike = !isLike
         guard let indexPath = indexPath else {
             return
         }
         
-        delegate?.imageListCellDidTapLike(at: indexPath)
+        delegate?.imageListCellDidTapLike(at: indexPath, isLike: isLike)
     }
 }

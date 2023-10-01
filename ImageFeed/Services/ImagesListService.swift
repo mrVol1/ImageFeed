@@ -19,6 +19,8 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private var isLoading = false
     private var currentPage = 1
+    private var photoId = Photo.CodingKeys.id
+    var isLike: Bool = false
     
     func fetchPhotosNextPage() {
         guard !isLoading else {
@@ -29,9 +31,9 @@ final class ImagesListService {
         
         let nextPage = (lastLoadedPage ?? 0) + 1
         guard let url = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=\(self.currentPage)&per_page=10") else {
-                isLoading = false
-                return
-            }
+            isLoading = false
+            return
+        }
         
         let session = URLSession.shared
         
@@ -84,23 +86,38 @@ final class ImagesListService {
     }
     
     //todo - функционал лайков
-    private var isLike: Bool = false
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        let url = isLike ? PhotoLikeUrl : PhotoDislikeUrl
+        let urlString = isLike ? "https://api.unsplash.com/photos/\(photoId)/like" : "https://api.unsplash.com/photos/\(photoId)/like"
         
-        var request = URLRequest(url: url!)
-        request.httpMethod = isLike ? "POST" : "DELETE"
-        
-        let task = URLSession.shared.dataTask(with: request) {
-            (data, response, error) in
-            if let error = error {
-                completion(.failure(error))
-                return
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = isLike ? "POST" : "DELETE"
+            
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.show()
             }
-            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
-                completion(.success(()))
+            
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                defer {
+                    DispatchQueue.main.async {
+                        UIBlockingProgressHUD.dismiss()
+                    }
+                }
+                
+                if let error = error {
+                    completion(.failure(error))
+                    print(error)
+                    return
+                }
+                if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
+                    completion(.success(()))
+                    print(response!)
+                }
             }
+            task.resume()
+        } else {
+            let error = NSError(domain: "Invalid URL", code: 0, userInfo: nil)
+            completion(.failure(error))
         }
-        task.resume()
     }
 }
