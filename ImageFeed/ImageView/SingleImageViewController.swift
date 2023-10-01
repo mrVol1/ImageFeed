@@ -38,7 +38,7 @@ final class SingleImageViewController: UIViewController {
         }
         
         UIBlockingProgressHUD.show()
-
+        
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
             switch result {
