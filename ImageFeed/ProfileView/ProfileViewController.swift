@@ -52,7 +52,7 @@ final class ProfileViewController: UIViewController {
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.clipsToBounds = true 
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 35
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -75,7 +75,7 @@ final class ProfileViewController: UIViewController {
         logOut.heightAnchor.constraint(equalToConstant: 44).isActive = true
         logOut.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         
-
+        
         //Устанавливаем ограничения
         imageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -134,13 +134,20 @@ final class ProfileViewController: UIViewController {
         let tokenStorage = OAuth2TokenStorage()
         tokenStorage.token = nil
         
-        guard UIApplication.shared.delegate is AppDelegate else { return }
-        let initialViewController = SplashViewController()
-        
-        UIApplication.shared.windows.first?.rootViewController = initialViewController
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            if let splashViewController = sceneDelegate.splashViewController {
+                sceneDelegate.window?.rootViewController = splashViewController
+            } else {
+                let newSplashViewController = SplashViewController()
+                sceneDelegate.splashViewController = newSplashViewController
+                sceneDelegate.window?.rootViewController = newSplashViewController
+            }
+        }
         
         clearCookiesAndWebsiteData()
     }
+
+    
     
     private func showLogoutAlert() {
         let alertController = UIAlertController(
