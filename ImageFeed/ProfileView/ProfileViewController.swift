@@ -127,6 +127,10 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc private func logoutButtonTapped() {
+        self.showLogoutAlert()
+    }
+    
+    private func logOutInProduct() {
         let tokenStorage = OAuth2TokenStorage()
         tokenStorage.token = nil
         
@@ -136,6 +140,33 @@ final class ProfileViewController: UIViewController {
         UIApplication.shared.windows.first?.rootViewController = initialViewController
         
         clearCookiesAndWebsiteData()
+    }
+    
+    private func showLogoutAlert() {
+        let alertController = UIAlertController(
+            title: "Вы точно хотите выйти?",
+            message: "Возвращайтесь еще",
+            preferredStyle: .alert
+        )
+        
+        let okAction = UIAlertAction(
+            title: "Да",
+            style: .default,
+            handler: { (_) in
+                self.logOutInProduct()
+            }
+        )
+        
+        let noAction = UIAlertAction(
+            title: "Нет",
+            style: .default,
+            handler: nil
+        )
+        
+        alertController.addAction(okAction)
+        alertController.addAction(noAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
     
     private func clearCookiesAndWebsiteData() {
