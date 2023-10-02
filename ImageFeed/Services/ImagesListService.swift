@@ -41,15 +41,12 @@ final class ImagesListService {
             guard let self = self else { return }
             
             if error != nil {
-                print("Ошибка загрузки данных для URL: \(url)\nОшибка: \(error!.localizedDescription)")
                 self.isLoading = false
                 return
             }
             
             if let data = data {
                 if String(data: data, encoding: .utf8) != nil {
-                } else {
-                    print("Received data is not a valid UTF-8 string.")
                 }
                 
                 DispatchQueue.main.async {
@@ -59,7 +56,7 @@ final class ImagesListService {
                         let photos = try decoder.decode([Photo].self, from: data)
                         
                         if photos.isEmpty {
-                            print("Фотографий нет") // вывести алерт можно потом
+                            
                         } else {
                             if nextPage == 1 {
                                 self.photos = photos
@@ -73,7 +70,6 @@ final class ImagesListService {
                         NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
                         
                     } catch {
-                        print("Ошибка декодирования JSON: \(error.localizedDescription)")
                     }
                     
                     self.isLoading = false
@@ -105,12 +101,10 @@ final class ImagesListService {
                 
                 if let error = error {
                     completion(.failure(error))
-                    print(error)
                     return
                 }
                 if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
                     completion(.success(()))
-                    print(response!)
                 }
             }
             task.resume()

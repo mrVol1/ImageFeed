@@ -31,12 +31,11 @@ final class ProfileViewController: UIViewController {
                     self.nameLabel.text = profile.name
                     self.loginNameLabel.text = profile.loginName
                     self.descriptionLabel.text = profile.bio
-                case .failure(let error):
+                case .failure(_):
                     let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка в приложении.", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
                     alertController.addAction(okAction)
                     present(alertController, animated: true, completion: nil)
-                    print("Error fetching profile: \(error)")
                 }
             }
         }
@@ -133,7 +132,6 @@ final class ProfileViewController: UIViewController {
         }
     }
     
-    
     @objc private func logoutButtonTapped() {
         self.showLogoutAlert()
     }
@@ -154,8 +152,6 @@ final class ProfileViewController: UIViewController {
         
         clearCookiesAndWebsiteData()
     }
-    
-    
     
     private func showLogoutAlert() {
         let alertController = UIAlertController(

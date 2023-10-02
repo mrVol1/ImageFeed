@@ -135,13 +135,6 @@ extension URLSession {
                     }
                 }
             } else {
-                // Обработка ошибки и вывод веб-контента
-                if let errorMessage = String(data: data, encoding: .utf8) {
-                    print("Error Response Data: \(errorMessage)")
-                } else {
-                    print("Failed to decode error response data.")
-                }
-                
                 DispatchQueue.main.async {
                     completion(.failure(NetworkError.httpStatusCode(response.statusCode)))
                 }

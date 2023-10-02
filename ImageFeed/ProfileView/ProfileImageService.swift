@@ -49,7 +49,6 @@ final class ProfileImageService {
                     object: self,
                     userInfo: ["URL": profileImageURL])
             case .failure(let error):
-                print("Ошибка при выполнении запроса: \(error)")
                 completion(.failure(error))
             }
         }
