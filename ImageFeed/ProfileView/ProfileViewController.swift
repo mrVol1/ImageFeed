@@ -19,6 +19,12 @@ final class ProfileViewController: UIViewController {
     private var imageView = UIImageView()
     private var logOut = UIButton()
     
+    private let gradientForAvatar = CAGradientLayer()
+    private let gradientForNameLabel = CAGradientLayer()
+    private let gradientForLoginNameLabel = CAGradientLayer()
+    private let gradientForDescriptionLabel = CAGradientLayer()
+    var animationLayers = Set<CALayer>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -116,15 +122,128 @@ final class ProfileViewController: UIViewController {
                 self.updateAvatar()
             }
         updateAvatar()
+        
+        let gradient = CAGradientLayer()
+        gradient.frame = CGRect(origin: .zero, size: CGSize(width: 70, height: 70))
+        gradient.locations = [0, 0.1, 0.3]
+        gradient.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 0.5).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 0.5).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 0.5).cgColor
+        ]
+        gradient.startPoint = CGPoint(x: 0, y: 0.5)
+        gradient.endPoint = CGPoint(x: 1, y: 0.5)
+        gradient.cornerRadius = 35
+        gradient.masksToBounds = true
+        animationLayers.insert(gradient)
+        
+        let gradientChangeAnimation = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimation.duration = 1.0
+        gradientChangeAnimation.repeatCount = .infinity
+        gradientChangeAnimation.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimation.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimation, forKey: "locationsChange")
+        
+        // Слой градиента и настройте его для nameLabel
+        gradientForNameLabel.frame = nameLabel.bounds
+        gradientForNameLabel.locations = [0, 0.1, 0.3]
+        gradientForNameLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 0.5).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 0.5).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 0.5).cgColor
+        ]
+        gradientForNameLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForNameLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        nameLabel.layer.addSublayer(gradientForNameLabel)
+        
+        // Анимация для слоя градиента nameLabel
+        let gradientChangeAnimationForNameLabel = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimationForNameLabel.duration = 1.0
+        gradientChangeAnimationForNameLabel.repeatCount = .infinity
+        gradientChangeAnimationForNameLabel.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimationForNameLabel.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimationForNameLabel, forKey: "locationsChange")
+        
+        // Слой градиента для loginNameLabel
+        gradientForLoginNameLabel.frame = loginNameLabel.bounds
+        gradientForLoginNameLabel.locations = [0, 0.1, 0.3]
+        gradientForLoginNameLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 0.5).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 0.5).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 0.5).cgColor
+        ]
+        gradientForLoginNameLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForLoginNameLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        loginNameLabel.layer.addSublayer(gradientForLoginNameLabel)
+        
+        // Анимация для слоя градиента loginNameLabel
+        let gradientChangeAnimationForLoginNameLabel = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimationForLoginNameLabel.duration = 1.0
+        gradientChangeAnimationForLoginNameLabel.repeatCount = .infinity
+        gradientChangeAnimationForLoginNameLabel.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimationForLoginNameLabel.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimationForLoginNameLabel, forKey: "locationsChange")
+        
+        // Слой градиента и анимации для descriptionLabel
+        gradientForDescriptionLabel.frame = descriptionLabel.bounds
+        gradientForDescriptionLabel.locations = [0, 0.1, 0.3]
+        gradientForDescriptionLabel.colors = [
+            UIColor(red: 0.682, green: 0.686, blue: 0.706, alpha: 0.5).cgColor,
+            UIColor(red: 0.531, green: 0.533, blue: 0.553, alpha: 0.5).cgColor,
+            UIColor(red: 0.431, green: 0.433, blue: 0.453, alpha: 0.5).cgColor
+        ]
+        gradientForDescriptionLabel.startPoint = CGPoint(x: 0, y: 0.5)
+        gradientForDescriptionLabel.endPoint = CGPoint(x: 1, y: 0.5)
+        descriptionLabel.layer.addSublayer(gradientForDescriptionLabel)
+        
+        // Анимация для descriptionLabel
+        let gradientChangeAnimationForDescriptionLabel = CABasicAnimation(keyPath: "locations")
+        gradientChangeAnimationForDescriptionLabel.duration = 1.0
+        gradientChangeAnimationForDescriptionLabel.repeatCount = .infinity
+        gradientChangeAnimationForDescriptionLabel.fromValue = [0, 0.1, 0.3]
+        gradientChangeAnimationForDescriptionLabel.toValue = [0, 0.8, 1]
+        gradient.add(gradientChangeAnimationForDescriptionLabel, forKey: "locationsChange")
+        
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                if ProfileImageService.shared.avatarURL != nil {
+                    self.imageView.layer.addSublayer(self.gradientForAvatar)
+                    self.nameLabel.layer.addSublayer(self.gradientForNameLabel)
+                    self.loginNameLabel.layer.addSublayer(self.gradientForLoginNameLabel)
+                    self.descriptionLabel.layer.addSublayer(self.gradientForDescriptionLabel)
+                } else {
+                    self.gradientForAvatar.removeFromSuperlayer()
+                    self.gradientForNameLabel.removeFromSuperlayer()
+                    self.gradientForLoginNameLabel.removeFromSuperlayer()
+                    self.gradientForDescriptionLabel.removeFromSuperlayer()
+                }
+            }
     }
     
     private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        imageView.kf.setImage(with: url)
+        imageView.layer.addSublayer(gradientForAvatar)
+        
+        guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
+
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                self.gradientForAvatar.removeFromSuperlayer()
+                
+            case .failure(let error):
+                print("Error loading profile image: \(error)")
+            }
+        }
     }
+
     
     @objc private func logoutButtonTapped() {
         self.showLogoutAlert()
@@ -146,7 +265,7 @@ final class ProfileViewController: UIViewController {
         
         clearCookiesAndWebsiteData()
     }
-
+    
     
     
     private func showLogoutAlert() {

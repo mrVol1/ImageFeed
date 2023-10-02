@@ -10,6 +10,7 @@ import UIKit
 final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private var imagesListService: ImagesListService?
+    private var isAnimationEnabled = true
     
     @IBOutlet private var tableView: UITableView!
     
@@ -42,6 +43,7 @@ final class ImagesListViewController: UIViewController {
             photos = updatedPhotos
             
             if Thread.isMainThread {
+                isAnimationEnabled = false
                 tableView.reloadData()
             } else {
                 DispatchQueue.main.async {
@@ -92,6 +94,7 @@ extension ImagesListViewController: UITableViewDataSource {
         cell.delegate = self
         
         configCell(for: cell, with: indexPath)
+        cell.isAnimationEnabled = isAnimationEnabled
         return cell
     }
     
@@ -101,7 +104,7 @@ extension ImagesListViewController: UITableViewDataSource {
         if let imageURL = URL(string: photo.thumbImageURL) {
             cell.cellImage.kf.indicatorType = .activity
             
-            cell.cellImage.kf.setImage(with: imageURL, placeholder: UIImage(named: "placeholder_image"), completionHandler: { [weak self] (result) in
+            cell.cellImage.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
                 guard let self = self else { return }
                 
                 switch result {
