@@ -48,7 +48,6 @@ final class ImagesListService {
             
             if let data = data {
                 if String(data: data, encoding: .utf8) != nil {
-                    //print("Полученные данные: \(String(data: data, encoding: .utf8) ?? "Невозможно прочитать данные")")
                 } else {
                     print("Received data is not a valid UTF-8 string.")
                 }

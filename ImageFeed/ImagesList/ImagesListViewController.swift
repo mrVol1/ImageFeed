@@ -50,6 +50,7 @@ final class ImagesListViewController: UIViewController {
                     self.tableView.reloadData()
                 }
             }
+            updateTableViewAnimated()
         }
         
         if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
@@ -83,7 +84,7 @@ final class ImagesListViewController: UIViewController {
         }
     }
 }
-
+// MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photos.count
@@ -118,7 +119,12 @@ extension ImagesListViewController: UITableViewDataSource {
             })
         }
         
-        cell.labelView.text = dateFormatter.string(from: photo.createdAt!)
+        if let createdAt = photo.createdAt {
+            cell.labelView.text = dateFormatter.string(from: createdAt)
+        } else {
+            cell.labelView.text = ""
+            cell.labelView.backgroundColor = UIColor(patternImage: UIImage(named: "placeholder_image")!)
+        }
         let isLiked = photo.isLiked
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
         cell.buttonClick.setImage(likeImage, for: .normal)
@@ -129,7 +135,7 @@ extension ImagesListViewController: UITableViewDataSource {
         }
     }
 }
-
+// MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
@@ -141,7 +147,7 @@ extension ImagesListViewController: UITableViewDelegate {
         }
     }
 }
-
+// MARK: - ImagesListCellDelegate
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(at indexPath: IndexPath, isLike: Bool) {
         
@@ -153,6 +159,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
         }
         
         photo.isLiked = isLike
+        photos[indexPath.row] = photo
         
         imagesListService!.changeLike(photoId: photo.id, isLike: isLike) { [weak self] result in
             guard let self = self else { return }

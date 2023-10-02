@@ -28,7 +28,7 @@ final class TabBarController: UITabBarController {
         self.viewControllers = [imagesListViewController, profileViewController]
     }
 }
-
+// MARK: - UIColor
 extension UIColor {
     convenience init(hex: String) {
         var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)

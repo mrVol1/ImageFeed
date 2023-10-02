@@ -28,8 +28,14 @@ final class SingleImageViewController: UIViewController {
     
     
     @IBAction func didTapShareButton(_ sender: UIButton) {
-        let sharingImage = UIActivityViewController(activityItems: [imageView.image!], applicationActivities: nil)
-        present(sharingImage, animated: true)
+        if let imageToShare = imageView.image {
+                let sharingImage = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+                present(sharingImage, animated: true)
+            } else {
+                let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка, повторите попозже", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                present(alertController, animated: true, completion: nil)
+            }
     }
     
     private func loadAndDisplayImage() {
@@ -82,7 +88,7 @@ final class SingleImageViewController: UIViewController {
         scrollView.contentInset = UIEdgeInsets(top: yOffset, left: xOffset, bottom: 0, right: 0)
     }
 }
-
+// MARK: - UIScrollViewDelegate
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView

@@ -59,7 +59,7 @@ final class SplashViewController: UIViewController {
         window.rootViewController = tabBarController
     }
 }
-
+// MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         showProgressHUD
