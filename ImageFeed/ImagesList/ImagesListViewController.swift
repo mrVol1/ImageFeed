@@ -10,79 +10,76 @@ import UIKit
 final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private var imagesListService: ImagesListService?
-    private var isAnimationEnabled = true
     
     @IBOutlet private var tableView: UITableView!
-    
-    var photos: [Photo] = []
-    var activityIndicator: UIActivityIndicatorView!
-    private var photoId = "id"
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
-        tableView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        imagesListService = ImagesListService()
-        imagesListService?.fetchPhotosNextPage()
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func handlePhotosDidChange(_ notification: Notification) {
-        if let updatedPhotos = imagesListService?.photos {
-            photos = updatedPhotos
+        private lazy var dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .long
+            formatter.timeStyle = .none
+            return formatter
+        }()
+        
+        var photos: [Photo] = []
+        private var photoId = "id"
+        
+        override func viewDidLoad() {
+            super.viewDidLoad()
             
-            if Thread.isMainThread {
-                isAnimationEnabled = false
-                tableView.reloadData()
-            } else {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-            updateTableViewAnimated()
+            tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+            imagesListService = ImagesListService()
+            imagesListService?.fetchPhotosNextPage()
+            NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
         }
         
-        if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
-            var updatedPhoto = self.photos[index]
-            updatedPhoto.isLiked = !updatedPhoto.isLiked
-            self.photos[index] = updatedPhoto
+        deinit {
+            NotificationCenter.default.removeObserver(self)
         }
-    }
-    
-    func updateTableViewAnimated() {
-        let oldCount = tableView.numberOfRows(inSection: 0)
-        let newCount = photos.count
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { i in
-                    IndexPath(row: i, section: 0)
+        
+        @objc private func handlePhotosDidChange(_ notification: Notification) {
+            if let updatedPhotos = imagesListService?.photos {
+                photos = updatedPhotos
+                
+                if Thread.isMainThread {
+                    tableView.reloadData()
+                } else {
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
+                updateTableViewAnimated()
+            }
+            
+            if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                var updatedPhoto = self.photos[index]
+                updatedPhoto.isLiked = !updatedPhoto.isLiked
+                self.photos[index] = updatedPhoto
+            }
         }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowSingleImageSegueIdentifier {
-            let viewController = segue.destination as! SingleImageViewController
-            let indexPath = sender as! IndexPath
-            let photo = photos[indexPath.row]
-            viewController.photo = photo
-        } else {
-            super.prepare(for: segue, sender: sender)
+        
+        private func updateTableViewAnimated() {
+            let oldCount = tableView.numberOfRows(inSection: 0)
+            let newCount = photos.count
+            if oldCount != newCount {
+                tableView.performBatchUpdates {
+                    let indexPaths = (oldCount..<newCount).map { i in
+                        IndexPath(row: i, section: 0)
+                    }
+                    tableView.insertRows(at: indexPaths, with: .automatic)
+                } completion: { _ in }
+            }
         }
-    }
+        
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            if segue.identifier == ShowSingleImageSegueIdentifier {
+                let viewController = segue.destination as! SingleImageViewController
+                let indexPath = sender as! IndexPath
+                let photo = photos[indexPath.row]
+                viewController.photo = photo
+            } else {
+                super.prepare(for: segue, sender: sender)
+            }
+        }
 }
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
@@ -95,7 +92,6 @@ extension ImagesListViewController: UITableViewDataSource {
         cell.delegate = self
         
         configCell(for: cell, with: indexPath)
-        cell.isAnimationEnabled = isAnimationEnabled
         return cell
     }
     
