@@ -52,13 +52,13 @@ final class OAuth2Service {
         }
     
     private func makeRequest(code: String) -> URLRequest {
-        guard let url = URL(string: "https://unsplash.com/oauth/authorize") else { fatalError("Failed to create URL") }
+        guard let url = AuthURL else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
     }
 }
-
+// MARK: - OAuth2Service
 extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
@@ -69,7 +69,7 @@ extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
+            baseURL: BaseURL!
         )
     }
     struct OAuthTokenResponseBody: Decodable {
@@ -135,13 +135,6 @@ extension URLSession {
                     }
                 }
             } else {
-                // Обработка ошибки и вывод веб-контента
-                if let errorMessage = String(data: data, encoding: .utf8) {
-                    print("Error Response Data: \(errorMessage)")
-                } else {
-                    print("Failed to decode error response data.")
-                }
-                
                 DispatchQueue.main.async {
                     completion(.failure(NetworkError.httpStatusCode(response.statusCode)))
                 }

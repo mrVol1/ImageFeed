@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Kingfisher
+import WebKit
 
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
@@ -16,11 +17,11 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private var profileImageServiceObserver: NSObjectProtocol?
     private var imageView = UIImageView()
-    private var labelName = UILabel()
-    private var labelTeg = UILabel()
+    private var logOut = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         if let token = OAuth2TokenStorage().token {
             ProfileService.shared.fetchProfile(token) { [weak self] result in
@@ -30,8 +31,11 @@ final class ProfileViewController: UIViewController {
                     self.nameLabel.text = profile.name
                     self.loginNameLabel.text = profile.loginName
                     self.descriptionLabel.text = profile.bio
-                case .failure(let error):
-                    print("Error fetching profile: \(error)")
+                case .failure(_):
+                    let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка в приложении.", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                    alertController.addAction(okAction)
+                    present(alertController, animated: true, completion: nil)
                 }
             }
         }
@@ -40,13 +44,14 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(loginNameLabel)
         view.addSubview(descriptionLabel)
+        view.addSubview(logOut)
         
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
         imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
         imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.clipsToBounds = true 
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 35
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -61,11 +66,21 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.textColor = .white
         
+        logOut.translatesAutoresizingMaskIntoConstraints = false
+        logOut.setImage(UIImage(named: "Exit"), for: .normal)
+        logOut.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        logOut.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 65).isActive = true
+        logOut.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        logOut.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        logOut.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
+        
+        
         //Устанавливаем ограничения
         imageView.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        logOut.translatesAutoresizingMaskIntoConstraints = false
         
         imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
@@ -103,10 +118,75 @@ final class ProfileViewController: UIViewController {
     }
     
     private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        imageView.kf.setImage(with: url)
+        guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
+        
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard self != nil else { return }
+            
+            switch result {
+            case .failure(let error):
+                print("Error loading profile image: \(error)")
+            default:
+                break
+            }
+        }
+    }
+    
+    @objc private func logoutButtonTapped() {
+        self.showLogoutAlert()
+    }
+    
+    private func logOutInProduct() {
+        let tokenStorage = OAuth2TokenStorage()
+        tokenStorage.token = nil
+        
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            if let splashViewController = sceneDelegate.splashViewController {
+                sceneDelegate.window?.rootViewController = splashViewController
+            } else {
+                let newSplashViewController = SplashViewController()
+                sceneDelegate.splashViewController = newSplashViewController
+                sceneDelegate.window?.rootViewController = newSplashViewController
+            }
+        }
+        
+        clearCookiesAndWebsiteData()
+    }
+    
+    private func showLogoutAlert() {
+        let alertController = UIAlertController(
+            title: "Вы точно хотите выйти?",
+            message: "Возвращайтесь еще",
+            preferredStyle: .alert
+        )
+        
+        let okAction = UIAlertAction(
+            title: "Да",
+            style: .default,
+            handler: { (_) in
+                self.logOutInProduct()
+            }
+        )
+        
+        let noAction = UIAlertAction(
+            title: "Нет",
+            style: .default,
+            handler: nil
+        )
+        
+        alertController.addAction(okAction)
+        alertController.addAction(noAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func clearCookiesAndWebsiteData() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
 }
