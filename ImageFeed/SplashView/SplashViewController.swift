@@ -57,6 +57,8 @@ final class SplashViewController: UIViewController {
             .instantiateViewController(withIdentifier: "TabBarViewController")
         
         window.rootViewController = tabBarController
+        
+        print("Switched to TabBarController")
     }
 }
 // MARK: - AuthViewControllerDelegate
@@ -76,8 +78,10 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success:
                 self.switchToTabBarController()
                 hideProgressHUD
-            case .failure:
+                print("OAuth token fetched successfully")
+            case .failure(let error):
                 hideProgressHUD
+                print("OAuth token fetching failed with error: \(error)")
                 break
             }
         }

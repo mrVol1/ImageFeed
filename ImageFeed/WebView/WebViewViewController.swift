@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 public protocol WebViewViewControllerProtocol: AnyObject {
-    var presenter: WebViewPresenterProtocol? {get set}
+    var presenter: WebViewPresenterProtocol? { get set }
     func load(request: URLRequest)
     func setProgressValue(_ newValue: Float)
     func setProgressHidden(_ isHidden: Bool)
@@ -25,26 +25,33 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func load(request: URLRequest) {
         webView.load(request)
     }
+
+    @IBOutlet private var webView: WKWebView!
+    @IBOutlet private var progressView: UIProgressView!
     
     var presenter: WebViewPresenterProtocol?
     private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
-    
-    @IBOutlet private weak var progressView: UIProgressView!
-    @IBOutlet weak var webView: WKWebView!
-    
+    //private var webView: WKWebView
+
+    init(delegate: WebViewViewControllerDelegate) {
+        self.delegate = delegate
+        self.webView = WKWebView()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        print("WebViewViewController: viewDidLoad() called")
+
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
-        //updateProgress()
-        
-        // Создание WKWebView
-        let webView = WKWebView()
-        webView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(webView)
-        
+
         // Установка констрейтов
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -53,7 +60,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
+
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
@@ -61,24 +68,21 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func setProgressHidden(_ isHidden: Bool) {
         progressView.isHidden = isHidden
     }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
             presenter?.didUpdateProgressValue(webView.estimatedProgress)
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
-    } 
-    
-//    private func updateProgress() {
-//        progressView.progress = Float(webView.estimatedProgress)
-//        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
-//    }
-    
+    }
+
     @IBAction private func didTapBackButton(_ sender: Any?) {
+        print("WebViewViewController: didTapBackButton() called")
         delegate?.webViewViewControllerDidCancel(self)
     }
 }
+
 // MARK: - WKNavigationDelegate
 extension WebViewViewController: WKNavigationDelegate {
     func webView(
@@ -86,6 +90,7 @@ extension WebViewViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
+        print("WebViewViewController: decidePolicyFor navigationAction called")
         // Обработка навигации по веб-странице
         if let code = code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
@@ -95,10 +100,18 @@ extension WebViewViewController: WKNavigationDelegate {
         }
     }
     
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("WebViewViewController: didStartProvisionalNavigation called")
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("WebViewViewController: didFinish navigation called")
+    }
+
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url {
             return presenter?.code(from: url)
         }
         return nil
-    } 
+    }
 }

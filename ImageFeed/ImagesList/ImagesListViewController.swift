@@ -77,10 +77,11 @@ final class ImagesListViewController: UIViewController {
             let indexPath = sender as! IndexPath
             let photo = photos[indexPath.row]
             viewController.photo = photo
-            let webViewPresenter = WebViewPresenter()
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
             webViewViewController?.presenter = webViewPresenter
             webViewPresenter.view = webViewViewController
-           // webViewViewController?.delegate = self
+            //webViewViewController?.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }

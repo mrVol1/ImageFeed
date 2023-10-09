@@ -30,6 +30,8 @@ final class OAuth2Service {
             lastCode = code
             let request = authTokenRequest(code: code)
             
+            print("Fetching OAuth token with code: \(code)")
+            
             let fulfillCompletionOnMainThread: (Result<OAuthTokenResponseBody, Error>) -> Void = { [weak self] result in
                 DispatchQueue.main.async {
                     guard let self = self else { return }
@@ -37,9 +39,11 @@ final class OAuth2Service {
                     case .success(let tokenResponse):
                         let authToken = tokenResponse.accessToken
                         self.authToken = authToken
+                        print("OAuth token fetched successfully: \(authToken)")
                         completion(.success(tokenResponse))
                         self.task = nil
                     case .failure(let error):
+                        print("OAuth token fetching failed with error: \(error)")
                         completion(.failure(error))
                         self.task = nil
                         self.lastCode = nil
@@ -52,7 +56,7 @@ final class OAuth2Service {
         }
     
     private func makeRequest(code: String) -> URLRequest {
-        guard let url = AuthURL else { fatalError("Failed to create URL") }
+        guard let url = URL(string: AuthURL) else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
@@ -69,7 +73,7 @@ extension OAuth2Service {
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: BaseURL!
+            baseURL: BaseURL
         )
     }
     struct OAuthTokenResponseBody: Decodable {

@@ -56,7 +56,7 @@
                     </view>
                     <connections>
                         <outlet property="progressView" destination="hhE-PU-4l3" id="dN4-C2-Q2P"/>
-                        <outlet property="webView" destination="Qms-Ah-502" id="QRY-g2-PKd"/>
+                        <outlet property="webView" destination="XeV-Wk-bt4" id="PVY-eZ-N1v"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ffg-CG-pHj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -256,7 +256,7 @@
         <image name="Sharing" width="51" height="50"/>
         <image name="like_button_on" width="42" height="42"/>
         <systemColor name="separatorColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
