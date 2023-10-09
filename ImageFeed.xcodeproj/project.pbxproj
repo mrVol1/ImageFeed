@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D71271022ABC419500CF0A55 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = D71271012ABC419500CF0A55 /* SwiftKeychainWrapper */; };
 		D71271042ABC43D200CF0A55 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71271032ABC43D200CF0A55 /* TabBarController.swift */; };
+		D728F4222AD2CD2E006A793C /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D728F4212AD2CD2E006A793C /* WebViewPresenter.swift */; };
 		D749EE432AA10D0D00E8459F /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D749EE422AA10D0D00E8459F /* SplashViewController.swift */; };
 		D75624B92AC1B9EF005E65D3 /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75624B82AC1B9EF005E65D3 /* ImagesListService.swift */; };
 		D75624BC2AC1BA4C005E65D3 /* PhotoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75624BB2AC1BA4C005E65D3 /* PhotoData.swift */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		D71271032ABC43D200CF0A55 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		D728F4212AD2CD2E006A793C /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
 		D749EE422AA10D0D00E8459F /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D75624B82AC1B9EF005E65D3 /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 		D75624BB2AC1BA4C005E65D3 /* PhotoData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoData.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */,
+				D728F4212AD2CD2E006A793C /* WebViewPresenter.swift */,
 			);
 			path = WebView;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				D776C0772A89E0C30017EDE4 /* ProfileViewController.swift in Sources */,
 				D75624BE2AC1BD83005E65D3 /* PhotoResult.swift in Sources */,
 				D770926A2A9CA49F0080512B /* OAuth2TokenStorage.swift in Sources */,
+				D728F4222AD2CD2E006A793C /* WebViewPresenter.swift in Sources */,
 				D75CD8052AB0A27C00FA218A /* UIBlockingProgressHUD.swift in Sources */,
 				D7F168ED2A9A19A70054E8C0 /* AuthViewController.swift in Sources */,
 				D7A90ADB2A76745F003B0C0C /* AppDelegate.swift in Sources */,
