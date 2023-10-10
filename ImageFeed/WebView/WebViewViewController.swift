@@ -22,27 +22,14 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
-    func load(request: URLRequest) {
-        webView.load(request)
-    }
+    var presenter: WebViewPresenterProtocol?
 
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
-    var presenter: WebViewPresenterProtocol?
-    private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
-    //private var webView: WKWebView
-
-    init(delegate: WebViewViewControllerDelegate) {
-        self.delegate = delegate
-        self.webView = WKWebView()
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    
+    private var estimatedProgressObservation: NSKeyValueObservation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +39,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
 
-        // Установка констрейтов
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -61,6 +47,14 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         ])
     }
 
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            presenter?.didUpdateProgressValue(webView.estimatedProgress)
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+    
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
@@ -68,13 +62,9 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func setProgressHidden(_ isHidden: Bool) {
         progressView.isHidden = isHidden
     }
-
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            presenter?.didUpdateProgressValue(webView.estimatedProgress)
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
+    
+    func load(request: URLRequest) {
+        webView.load(request)
     }
 
     @IBAction private func didTapBackButton(_ sender: Any?) {
@@ -91,7 +81,6 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         print("WebViewViewController: decidePolicyFor navigationAction called")
-        // Обработка навигации по веб-странице
         if let code = code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
