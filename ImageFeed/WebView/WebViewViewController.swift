@@ -23,22 +23,26 @@ protocol WebViewViewControllerDelegate: AnyObject {
 
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
     var presenter: WebViewPresenterProtocol?
-
+    
     @IBOutlet private var webView: WKWebView!
     @IBOutlet private var progressView: UIProgressView!
     
     weak var delegate: WebViewViewControllerDelegate?
     
     private var estimatedProgressObservation: NSKeyValueObservation?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("WebViewViewController: viewDidLoad() called")
-
+        
+        if let presenter = presenter {
+            presenter.didUpdateProgressValue(webView.estimatedProgress)
+        } else {
+            print("presenter is nil")
+        }        
         webView.navigationDelegate = self
-        presenter?.viewDidLoad()
-
+        
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -46,7 +50,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-
+    
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
             presenter?.didUpdateProgressValue(webView.estimatedProgress)
@@ -58,7 +62,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }
-
+    
     func setProgressHidden(_ isHidden: Bool) {
         progressView.isHidden = isHidden
     }
@@ -66,7 +70,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func load(request: URLRequest) {
         webView.load(request)
     }
-
+    
     @IBAction private func didTapBackButton(_ sender: Any?) {
         print("WebViewViewController: didTapBackButton() called")
         delegate?.webViewViewControllerDidCancel(self)
@@ -92,11 +96,11 @@ extension WebViewViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         print("WebViewViewController: didStartProvisionalNavigation called")
     }
-
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("WebViewViewController: didFinish navigation called")
     }
-
+    
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url {
             return presenter?.code(from: url)

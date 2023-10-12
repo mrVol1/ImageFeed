@@ -10,6 +10,7 @@ import UIKit
 import ProgressHUD
 
 final class SplashViewController: UIViewController {
+    private var authHelper = AuthHelper()
     private let profileService = ProfileService.shared
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
@@ -43,7 +44,7 @@ final class SplashViewController: UIViewController {
         if oauth2TokenStorage.token != nil {
             switchToTabBarController()
         } else {
-            let authViewController = AuthViewController()
+            let authViewController = AuthViewController(authHelper: authHelper)
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
             present(authViewController, animated: true, completion: nil)
