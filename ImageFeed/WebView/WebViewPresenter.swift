@@ -15,15 +15,17 @@ public protocol WebViewPresenterProtocol {
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
-    weak var view: WebViewViewControllerProtocol?
-    var authHelper: AuthHelperProtocol
+    weak var view: WebViewViewControllerProtocol? //выполняется геттер переменной из экземпляра класса WebViewViewControllerProtocol
+    var authHelper: AuthHelperProtocol //свойство класса без значения, поэтому ниже выполняется инциализация этого значения
 
     init(authHelper: AuthHelperProtocol) {
         self.authHelper = authHelper
     }
 
     func viewDidLoad() {
+
         let request = authHelper.authRequest()
+        print("hui")
         view?.load(request: request)
         didUpdateProgressValue(0)
     }

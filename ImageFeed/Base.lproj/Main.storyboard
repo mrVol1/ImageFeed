@@ -56,7 +56,7 @@
                     </view>
                     <connections>
                         <outlet property="progressView" destination="hhE-PU-4l3" id="dN4-C2-Q2P"/>
-                        <outlet property="webView" destination="XeV-Wk-bt4" id="PVY-eZ-N1v"/>
+                        <outlet property="webView" destination="Qms-Ah-502" id="N0b-rx-lfh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ffg-CG-pHj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
