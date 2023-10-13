@@ -75,13 +75,10 @@ final class AuthViewController: UIViewController {
     }
     
     @objc private func didTapLoginButton() { //@objc - аннотация, которая может быть с обжект-си кодом
-        let webViewViewController = WebViewViewController()//объект экземпляра класса вебвьювьюконтроллер
-        let authHelper = AuthHelper() //объект класа ауфхелпера
-        let webViewPresenter = WebViewPresenter(authHelper: authHelper) //создаем объект webViewPresenter экземпляра класса вебвьюпрезентер с параметром ауфхелпер
-        webViewViewController.presenter = webViewPresenter //созданный объект webViewPresenter представляется как метод презентора из класса webViewViewController
-        webViewPresenter.view = webViewViewController //вебвьюпрезентор работает с представлением на экране телефона
-        webViewViewController.delegate = self //представление вебвью обрабатывается внутри ауфконтроллера
-        present(webViewViewController, animated: true, completion: nil) //выполнение отображения webViewViewController на экране и после этого никакой код не выполняется так как completion = нул
+        let authHelper = AuthHelper()
+        let webViewViewController = WebViewViewController(authHelper: authHelper)//экземпляр класса с параметрами ауфхелпера
+        webViewViewController.delegate = self
+        present(webViewViewController, animated: true, completion: nil)
     }
 }
 // MARK: - WebViewViewControllerDelegate
