@@ -25,7 +25,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     var presenter: WebViewPresenterProtocol? //используется геттер для переменной презенетер
     var authHelper: AuthHelperProtocol
     
-    init(authHelper: AuthHelperProtocol) {
+    init(authHelper: AuthHelperProtocol) { //инициализация ауфхелпера, так как этот метод из другого класса и контроллеру нужно иметь к нему доступ
         self.authHelper = authHelper
         super.init(nibName: nil, bundle: nil)
     }
@@ -34,27 +34,71 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         fatalError("init(coder:) has not been implemented")
     }
     
-    @IBOutlet private var webView: WKWebView!
-    @IBOutlet private var progressView: UIProgressView!
+    private var estimatedProgressObservation: NSKeyValueObservation?
+    
+    private let webView: WKWebView = { //создание константы webView
+        let webView = WKWebView() //присваивание экземпляру класса WKWebView константу webView
+        return webView //возвращение константы webView
+    }()
+    
+    //Создание кнопки "Назад"
+    private let backButton: UIButton = { //создание константы кнопки с типом UIButton
+        let button = UIButton()
+        let backImage = UIImage(systemName: "chevron.left")
+        button.tintColor = .black
+        button.setImage(backImage, for: .normal)
+        button.addTarget(WebViewViewController.self, action: #selector(didTapBackButton), for: .touchUpInside)
+        return button
+    }()
+    
+    //создание лоудера
+    private let progressView: UIProgressView = { //создание константы лоудера с типом UIProgressView
+        let indicator = UIProgressView()
+        indicator.backgroundColor = .black
+        return indicator
+    }()
     
     weak var delegate: WebViewViewControllerDelegate?//вызов WebViewViewControllerDelegate, когда это надо и выполнение кода внутри WebViewViewControllerDelegate. Веб-вью контроллер подписывается на WebViewViewControllerDelegate
-    
-    private var estimatedProgressObservation: NSKeyValueObservation?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("hui hui")
-        
-        presenter = WebViewPresenter(authHelper: authHelper)
-        presenter?.view = self 
+        //добавление вебвью и установка его делегата
+        webView.navigationDelegate = self
         view.addSubview(webView)
         
+        //установка цвета бэкграунда
+        self.view.backgroundColor = UIColor.white
+        
+        //добалвение кнопки "Назад"
+        view.addSubview(backButton)
+        
+        //добавление лоудера
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(progressView)
+        
+        //настройка констрейтов для кнопки назад
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 21),
+            backButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18)
+        ])
+        
+        // настройка констрейтов для веб-вью
+        webView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: view.topAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        //настройка констрейтов для лоудера
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            progressView.topAnchor.constraint(equalTo: webView.topAnchor),
+            progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
@@ -92,7 +136,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         webView.load(request)
     }
     
-    @IBAction private func didTapBackButton(_ sender: Any?) {
+    @objc private func didTapBackButton(_ sender: Any?) {
         print("WebViewViewController: didTapBackButton() called")
         delegate?.webViewViewControllerDidCancel(self)
     }
@@ -105,21 +149,12 @@ extension WebViewViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        print("WebViewViewController: decidePolicyFor navigationAction called")
         if let code = code(from: navigationAction) {
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)
         }
-    }
-    
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("WebViewViewController: didStartProvisionalNavigation called")
-    }
-    
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("WebViewViewController: didFinish navigation called")
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {

@@ -14,8 +14,8 @@ protocol AuthViewControllerDelegate: AnyObject { //может наследова
 }
 
 final class AuthViewController: UIViewController {
+    var presenter: WebViewPresenterProtocol?
     private var authHelper = AuthHelper()
-//    var webViewViewController: WebViewViewController?
     weak var delegate: AuthViewControllerDelegate? //подписка на AuthViewControllerDelegate и выполнение метода authViewController
     
     init(authHelper: AuthHelper) { //инциализация экземпляра класса AuthViewController и передача туда параметра authHelper
@@ -29,6 +29,7 @@ final class AuthViewController: UIViewController {
     
     override func viewDidLoad() { //метод для определения свойств экрана. Пользователь этого не видит
         super.viewDidLoad() //выполнение метода
+                
         // Установка цвета фона экрана
         view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
         
@@ -75,8 +76,14 @@ final class AuthViewController: UIViewController {
     }
     
     @objc private func didTapLoginButton() { //@objc - аннотация, которая может быть с обжект-си кодом
+//        guard presenter != nil else {
+//            print("3 hui")
+//            return
+//        }
         let authHelper = AuthHelper()
+        let webViewPresenter = WebViewPresenter(authHelper: authHelper)
         let webViewViewController = WebViewViewController(authHelper: authHelper)//экземпляр класса с параметрами ауфхелпера
+        webViewViewController.presenter = webViewPresenter
         webViewViewController.delegate = self
         present(webViewViewController, animated: true, completion: nil)
     }

@@ -14,7 +14,6 @@ final class SplashViewController: UIViewController { //final означает, �
     private let profileService = ProfileService.shared //.shared позволяет дать доступ к единственному экземпляру класса ProfileService
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
-    private let ShowAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
     
     override func viewDidLoad() { // функция, в которой начинается создаваться приложение, определяя его начальный вид и поведение, но не отображается для пользователя
         super.viewDidLoad()//вызов функции viewDidLoad, чтобы настроить первый экран прилы
@@ -121,7 +120,7 @@ extension SplashViewController: AuthViewControllerDelegate { //реализуе�
         }
     }
     
-    func showErrorAlert() { //функция по отображению алерта
+    func showErrorAlert() { //метод по отображению алерта
         let alertController = UIAlertController(
             title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
