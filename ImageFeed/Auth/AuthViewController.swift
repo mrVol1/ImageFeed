@@ -26,7 +26,7 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
         self.authHelper = authHelper //создается переменная authHelper, которая равна параметру authHelper класса AuthViewController
         super.init(nibName: nil, bundle: nil) //выполнение инциализации класса UIViewController
         self.request = authHelper.authRequest()
-
+        
     }
     
     required init?(coder: NSCoder) { //загрузка архивированных данные, в приле не используется, но если удалить его тогда возникает ошибка
@@ -86,20 +86,23 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
         //событие .touchUpInside - сообщает что должно выполнится после того, как пользователь убрал палец с кнопки
     }
     
-    @objc private func didTapLoginButton() { //@objc - аннотация, которая может быть с обжект-си кодом
-        //        guard presenter != nil else {
-        //            print("3 hui")
-        //            return
-        //        }
-        let authHelper = AuthHelper()
+    @objc private func didTapLoginButton() {
+        let authHelper = AuthHelper() // Оставьте создание AuthHelper здесь, если он используется только в этом методе
+
         let webViewPresenter = WebViewPresenter(authHelper: authHelper)
-        let webViewViewController = WebViewViewController(authHelper: authHelper)//экземпляр класса с параметрами ауфхелпера
+        let webViewViewController = WebViewViewController(authHelper: authHelper)
+
         webViewViewController.presenter = webViewPresenter
         webViewViewController.delegate = self
         webViewViewController.modalPresentationStyle = .fullScreen
-        webViewViewController.load(request: request!)
-        self.present(webViewViewController, animated: true, completion: nil)
+
+        // Загрузка URL через WebViewPresenter
+        webViewViewController.setRequest(authHelper.authRequest()) // Устанавливаем запрос в контроллере
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Добавляем задержку в 1 секунду
+            webViewViewController.load()
+        }
         
+        self.present(webViewViewController, animated: true, completion: nil)
     }
 }
 // MARK: - WebViewViewControllerDelegate

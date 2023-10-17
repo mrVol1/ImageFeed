@@ -11,8 +11,8 @@ import WebKit
 
 public protocol WebViewViewControllerProtocol: AnyObject {//AnyObject - это значит что только классы могут подписываться на это протокол, а структуры и перечисления не могут
     var presenter: WebViewPresenterProtocol? { get set } //определяется переменную презентер вебвьюпрезентпротокола с геттером - получение данных переменной и сеттером - возможность переопределения данных в переменной
-    var authRequest: URLRequest? { get set } // Добавьте это свойство
-    func load(request: URLRequest) //функция загрузки с параметром запроса на получение урла
+    func setRequest(_ request: URLRequest)
+    func load() //функция загрузки с параметром запроса на получение урла
     func setProgressValue(_ newValue: Float)
     func setProgressHidden(_ isHidden: Bool)
 } //протокол включает в себя обязательные параметры и методы, которые должны быть выполненны внутри класса, который использует протокол
@@ -26,12 +26,11 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     var presenter: WebViewPresenterProtocol? //используется геттер для переменной презенетер
     var authHelper: AuthHelperProtocol
-    var authRequest: URLRequest?
+    private var currentRequest: URLRequest?
     
     init(authHelper: AuthHelperProtocol) { //инициализация ауфхелпера, так как этот метод из другого класса и контроллеру нужно иметь к нему доступ
         self.authHelper = authHelper
         super.init(nibName: nil, bundle: nil)
-        self.authRequest = authHelper.authRequest() // Инициализируем authRequest здесь
     }
     
     required init?(coder: NSCoder) {
@@ -58,7 +57,8 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     //создание лоудера
     private let progressView: UIProgressView = { //создание константы лоудера с типом UIProgressView
         let indicator = UIProgressView()
-        indicator.backgroundColor = .black
+        indicator.progressViewStyle = .default
+        indicator.progressTintColor = UIColor.black
         return indicator
     }()
     
@@ -79,6 +79,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         
         //добавление лоудера
         view.addSubview(progressView)
+        progressView.progress = 0.0
         
         //настройка констрейтов для кнопки назад
         backButton.translatesAutoresizingMaskIntoConstraints = false
@@ -105,14 +106,17 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         ])
     }
     
-    func load(request: URLRequest) {
-        if let authRequest = authRequest {
-            webView.load(authRequest)
-        } else {
-            // Обработка случая, когда authRequest равно nil
-            // Вы можете выкинуть ошибку, вывести предупреждение и т. д., в зависимости от ваших потребностей.
+    func setRequest(_ request: URLRequest) {
+            currentRequest = request
         }
-    }
+
+        func load() {
+            if let request = currentRequest {
+                webView.load(request)
+            } else {
+                print("error")
+            }
+        }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -160,7 +164,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     }
     
     @objc private func didTapBackButton(_ sender: Any?) {
-        print("WebViewViewController: didTapBackButton() called")
         delegate?.webViewViewControllerDidCancel(self)
     }
 }
