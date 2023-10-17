@@ -11,6 +11,7 @@ public protocol WebViewPresenterProtocol {
     func viewDidLoad()
     func didUpdateProgressValue(_ newValue: Double)
     func code(from url: URL) -> String?
+    func shouldHideProgress(for value: Float) -> Bool
     var view: WebViewViewControllerProtocol? { get set }
 }
 

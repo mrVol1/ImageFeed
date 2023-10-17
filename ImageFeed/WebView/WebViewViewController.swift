@@ -98,32 +98,39 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         
         //настройка констрейтов для лоудера
         progressView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
+        let constraints = [
             progressView.topAnchor.constraint(equalTo: backButton.bottomAnchor),
-            progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
+            progressView.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: webView.trailingAnchor)
+        ]
+        
+        for constraint in constraints {
+            constraint.isActive = true
+        }
     }
     
     func setRequest(_ request: URLRequest) {
-            currentRequest = request
+        currentRequest = request
+    }
+    
+    func load() {
+        if let request = currentRequest {
+            webView.load(request)
+        } else {
+            print("error")
         }
-
-        func load() {
-            if let request = currentRequest {
-                webView.load(request)
-            } else {
-                print("error")
-            }
-        }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-            webView.addObserver(
-                self,
-                forKeyPath: #keyPath(WKWebView.estimatedProgress),
-                options: .new,
-                context: nil)
+        webView.addObserver(
+            self,
+            forKeyPath: #keyPath(WKWebView.estimatedProgress),
+            options: .new,
+            context: nil)
+        
+        setProgressValue(Float(webView.estimatedProgress))
+        setProgressHidden(false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -131,10 +138,21 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        print("observeValue called")
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey: Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
             presenter?.didUpdateProgressValue(webView.estimatedProgress)
+            setProgressValue(Float(webView.estimatedProgress))
+
+            // Вызываем функцию shouldHideProgress на вашем презентере для определения видимости лоудера
+            if let presenter = presenter {
+                let shouldHide = presenter.shouldHideProgress(for: Float(webView.estimatedProgress))
+                setProgressHidden(shouldHide)
+            }
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
