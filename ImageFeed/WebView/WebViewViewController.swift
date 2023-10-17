@@ -102,8 +102,13 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         ])
     }
     
+    func load(request: URLRequest) {
+        let loadRequst = webView.load(request)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("viewDidAppear called")
         webView.addObserver(
             self,
             forKeyPath: #keyPath(WKWebView.estimatedProgress),
@@ -117,6 +122,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        print("observeValue called")
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
             presenter?.didUpdateProgressValue(webView.estimatedProgress)
         } else {
@@ -130,10 +136,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     func setProgressHidden(_ isHidden: Bool) {
         progressView.isHidden = isHidden
-    }
-    
-    func load(request: URLRequest) {
-        webView.load(request)
     }
     
     @objc private func didTapBackButton(_ sender: Any?) {

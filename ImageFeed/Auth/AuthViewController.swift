@@ -13,7 +13,7 @@ protocol AuthViewControllerDelegate: AnyObject { //может наследова
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
-final class AuthViewController: UIViewController {
+final class AuthViewController: UIViewController, WKNavigationDelegate {
     var presenter: WebViewPresenterProtocol?
     private var authHelper = AuthHelper()
     weak var delegate: AuthViewControllerDelegate? //подписка на AuthViewControllerDelegate и выполнение метода authViewController
@@ -27,9 +27,14 @@ final class AuthViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private let webView: WKWebView = {
+            let webView = WKWebView()
+            return webView
+        }()
+    
     override func viewDidLoad() { //метод для определения свойств экрана. Пользователь этого не видит
         super.viewDidLoad() //выполнение метода
-                
+        webView.navigationDelegate = self
         // Установка цвета фона экрана
         view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
         
@@ -86,7 +91,9 @@ final class AuthViewController: UIViewController {
         webViewViewController.presenter = webViewPresenter
         webViewViewController.delegate = self
         webViewViewController.modalPresentationStyle = .fullScreen
-        present(webViewViewController, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.present(webViewViewController, animated: true, completion: nil)
+        }
     }
 }
 // MARK: - WebViewViewControllerDelegate
