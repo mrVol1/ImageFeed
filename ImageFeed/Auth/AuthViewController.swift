@@ -97,10 +97,9 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
         webViewViewController.modalPresentationStyle = .fullScreen
 
         // Загрузка URL через WebViewPresenter
-        webViewViewController.setRequest(authHelper.authRequest()) // Устанавливаем запрос в контроллере
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Добавляем задержку в 1 секунду
-            webViewViewController.load()
-        }
+        webViewViewController.setRequest(authHelper.authRequest())
+        webViewViewController.load()
+        
         
         self.present(webViewViewController, animated: true, completion: nil)
     }

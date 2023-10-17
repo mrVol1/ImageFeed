@@ -50,7 +50,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         let backImage = UIImage(systemName: "chevron.left")
         button.tintColor = .black
         button.setImage(backImage, for: .normal)
-        button.addTarget(WebViewViewController.self, action: #selector(didTapBackButton), for: .touchUpInside)
+        button.addTarget(target, action: #selector(didTapBackButton), for: .touchUpInside)
         return button
     }()
     
@@ -79,7 +79,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         
         //добавление лоудера
         view.addSubview(progressView)
-        progressView.progress = 0.0
         
         //настройка констрейтов для кнопки назад
         backButton.translatesAutoresizingMaskIntoConstraints = false
@@ -120,20 +119,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("viewDidAppear called")
-
-            if webView.isLoading {
-                print("WebView is currently loading a page.")
-            } else {
-                print("WebView is not loading a page.")
-            }
-            
-            if webView.url != nil {
-                print("WebView has a URL: \(webView.url!)")
-            } else {
-                print("WebView does not have a URL.")
-            }
-
             webView.addObserver(
                 self,
                 forKeyPath: #keyPath(WKWebView.estimatedProgress),
@@ -156,10 +141,12 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     }
     
     func setProgressValue(_ newValue: Float) {
+        print("ViewController: setProgressValue(\(newValue))")
         progressView.progress = newValue
     }
     
     func setProgressHidden(_ isHidden: Bool) {
+        print("ViewController: setProgressHidden(\(isHidden))")
         progressView.isHidden = isHidden
     }
     
@@ -188,20 +175,5 @@ extension WebViewViewController: WKNavigationDelegate {
             return presenter?.code(from: url)
         }
         return nil
-    }
-    
-    // Вызывается при начале загрузки
-    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        print("WebView didStartProvisionalNavigation")
-    }
-
-    // Вызывается при завершении загрузки
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("WebView didFinish")
-    }
-
-    // Вызывается при возникновении ошибки
-    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        print("WebView didFailProvisionalNavigation with error: \(error)")
     }
 }
