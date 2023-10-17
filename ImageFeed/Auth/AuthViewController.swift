@@ -11,16 +11,22 @@ import WebKit
 
 protocol AuthViewControllerDelegate: AnyObject { //может наследовать только классы
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+    func fetchOAuthToken(_ code: String)
+    //func fetchProfile(token: String)
+    func showErrorAlert()
 }
 
 final class AuthViewController: UIViewController, WKNavigationDelegate {
     var presenter: WebViewPresenterProtocol?
-    private var authHelper = AuthHelper()
+    var authHelper = AuthHelper()
     weak var delegate: AuthViewControllerDelegate? //подписка на AuthViewControllerDelegate и выполнение метода authViewController
+    var request: URLRequest?
     
     init(authHelper: AuthHelper) { //инциализация экземпляра класса AuthViewController и передача туда параметра authHelper
         self.authHelper = authHelper //создается переменная authHelper, которая равна параметру authHelper класса AuthViewController
         super.init(nibName: nil, bundle: nil) //выполнение инциализации класса UIViewController
+        self.request = authHelper.authRequest()
+
     }
     
     required init?(coder: NSCoder) { //загрузка архивированных данные, в приле не используется, но если удалить его тогда возникает ошибка
@@ -28,9 +34,9 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
     }
     
     private let webView: WKWebView = {
-            let webView = WKWebView()
-            return webView
-        }()
+        let webView = WKWebView()
+        return webView
+    }()
     
     override func viewDidLoad() { //метод для определения свойств экрана. Пользователь этого не видит
         super.viewDidLoad() //выполнение метода
@@ -81,19 +87,19 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
     }
     
     @objc private func didTapLoginButton() { //@objc - аннотация, которая может быть с обжект-си кодом
-//        guard presenter != nil else {
-//            print("3 hui")
-//            return
-//        }
+        //        guard presenter != nil else {
+        //            print("3 hui")
+        //            return
+        //        }
         let authHelper = AuthHelper()
         let webViewPresenter = WebViewPresenter(authHelper: authHelper)
         let webViewViewController = WebViewViewController(authHelper: authHelper)//экземпляр класса с параметрами ауфхелпера
         webViewViewController.presenter = webViewPresenter
         webViewViewController.delegate = self
         webViewViewController.modalPresentationStyle = .fullScreen
-        DispatchQueue.main.async {
-            self.present(webViewViewController, animated: true, completion: nil)
-        }
+        webViewViewController.load(request: request!)
+        self.present(webViewViewController, animated: true, completion: nil)
+        
     }
 }
 // MARK: - WebViewViewControllerDelegate

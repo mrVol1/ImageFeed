@@ -11,6 +11,7 @@ import WebKit
 
 public protocol WebViewViewControllerProtocol: AnyObject {//AnyObject - это значит что только классы могут подписываться на это протокол, а структуры и перечисления не могут
     var presenter: WebViewPresenterProtocol? { get set } //определяется переменную презентер вебвьюпрезентпротокола с геттером - получение данных переменной и сеттером - возможность переопределения данных в переменной
+    var authRequest: URLRequest? { get set } // Добавьте это свойство
     func load(request: URLRequest) //функция загрузки с параметром запроса на получение урла
     func setProgressValue(_ newValue: Float)
     func setProgressHidden(_ isHidden: Bool)
@@ -22,12 +23,15 @@ protocol WebViewViewControllerDelegate: AnyObject {
 }
 
 final class WebViewViewController: UIViewController & WebViewViewControllerProtocol {
+    
     var presenter: WebViewPresenterProtocol? //используется геттер для переменной презенетер
     var authHelper: AuthHelperProtocol
+    var authRequest: URLRequest?
     
     init(authHelper: AuthHelperProtocol) { //инициализация ауфхелпера, так как этот метод из другого класса и контроллеру нужно иметь к нему доступ
         self.authHelper = authHelper
         super.init(nibName: nil, bundle: nil)
+        self.authRequest = authHelper.authRequest() // Инициализируем authRequest здесь
     }
     
     required init?(coder: NSCoder) {
@@ -74,7 +78,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         view.addSubview(backButton)
         
         //добавление лоудера
-        progressView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(progressView)
         
         //настройка констрейтов для кнопки назад
@@ -94,26 +97,44 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
         ])
         
         //настройка констрейтов для лоудера
-        webView.translatesAutoresizingMaskIntoConstraints = false
+        progressView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            progressView.topAnchor.constraint(equalTo: webView.topAnchor),
+            progressView.topAnchor.constraint(equalTo: backButton.bottomAnchor),
             progressView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             progressView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
     
     func load(request: URLRequest) {
-        let loadRequst = webView.load(request)
+        if let authRequest = authRequest {
+            webView.load(authRequest)
+        } else {
+            // Обработка случая, когда authRequest равно nil
+            // Вы можете выкинуть ошибку, вывести предупреждение и т. д., в зависимости от ваших потребностей.
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("viewDidAppear called")
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
+
+            if webView.isLoading {
+                print("WebView is currently loading a page.")
+            } else {
+                print("WebView is not loading a page.")
+            }
+            
+            if webView.url != nil {
+                print("WebView has a URL: \(webView.url!)")
+            } else {
+                print("WebView does not have a URL.")
+            }
+
+            webView.addObserver(
+                self,
+                forKeyPath: #keyPath(WKWebView.estimatedProgress),
+                options: .new,
+                context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -164,5 +185,20 @@ extension WebViewViewController: WKNavigationDelegate {
             return presenter?.code(from: url)
         }
         return nil
+    }
+    
+    // Вызывается при начале загрузки
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        print("WebView didStartProvisionalNavigation")
+    }
+
+    // Вызывается при завершении загрузки
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("WebView didFinish")
+    }
+
+    // Вызывается при возникновении ошибки
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        print("WebView didFailProvisionalNavigation with error: \(error)")
     }
 }
