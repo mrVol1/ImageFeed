@@ -66,6 +66,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("WebViewViewController: viewDidLoad called")
         
         //добавление вебвью и установка его делегата
         webView.navigationDelegate = self

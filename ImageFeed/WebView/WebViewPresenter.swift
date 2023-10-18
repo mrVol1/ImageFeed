@@ -24,7 +24,6 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     }
 
     func viewDidLoad() {
-
         view?.load()
         didUpdateProgressValue(0)
     }

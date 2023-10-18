@@ -16,16 +16,18 @@ final class WebViewTests: XCTestCase {
         let presenter = WebViewPresenterSpy()
         viewController.presenter = presenter
         presenter.view = viewController
+        
         //when
-        _ = viewController.view
+        presenter.viewDidLoad()
         
         //then
+        XCTAssertNotNil(viewController.presenter)
         XCTAssertTrue(presenter.viewDidLoadCalled) //behaviour verification
+        //XCTAssertEqual(viewController.presenter, presenter)
     }
     
     func testProgressVisibleWhenLessThenOne() {
         //given
-        let authHelper = AuthHelper()
         let presenter = WebViewPresenter(authHelper: authHelper)
         let progress: Float = 0.6
         
