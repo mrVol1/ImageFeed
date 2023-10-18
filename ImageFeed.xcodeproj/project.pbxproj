@@ -35,6 +35,7 @@
 		D7BA85EE2ABC401D00601EC1 /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = D7BA85ED2ABC401D00601EC1 /* SwiftKeychainWrapper */; };
 		D7BD25232AABCE5900F6F3A7 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = D7BD25222AABCE5900F6F3A7 /* ProgressHUD */; };
 		D7BF4E2E2A9A1D650009C0F2 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */; };
+		D7D5FA182ADFB9A400D7ADF2 /* WebViewViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7D5FA172ADFB9A400D7ADF2 /* WebViewViewControllerSpy.swift */; };
 		D7E276182AB480CA006B9A9F /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E276172AB480CA006B9A9F /* ProfileService.swift */; };
 		D7E2761A2AB73A34006B9A9F /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7E276192AB73A34006B9A9F /* ProfileImageService.swift */; };
 		D7F168ED2A9A19A70054E8C0 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F168EC2A9A19A70054E8C0 /* AuthViewController.swift */; };
@@ -77,6 +78,7 @@
 		D7A90AE62A767461003B0C0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D7A90AE82A767461003B0C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D7BF4E2D2A9A1D650009C0F2 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
+		D7D5FA172ADFB9A400D7ADF2 /* WebViewViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerSpy.swift; sourceTree = "<group>"; };
 		D7E276172AB480CA006B9A9F /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		D7E276192AB73A34006B9A9F /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		D7F168EC2A9A19A70054E8C0 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				D70FECB22ADF258800DDF023 /* WebViewTests.swift */,
 				D70FECBB2ADF271700DDF023 /* WebViewPresenterSpy.swift */,
+				D7D5FA172ADFB9A400D7ADF2 /* WebViewViewControllerSpy.swift */,
 			);
 			path = ImageFeedTests;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D70FECB32ADF258800DDF023 /* WebViewTests.swift in Sources */,
+				D7D5FA182ADFB9A400D7ADF2 /* WebViewViewControllerSpy.swift in Sources */,
 				D70FECBC2ADF271700DDF023 /* WebViewPresenterSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
