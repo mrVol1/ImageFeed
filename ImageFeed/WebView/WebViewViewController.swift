@@ -41,6 +41,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     private let webView: WKWebView = { //создание константы webView
         let webView = WKWebView() //присваивание экземпляру класса WKWebView константу webView
+        webView.accessibilityIdentifier = "UnsplashWebView"
         return webView //возвращение константы webView
     }()
     

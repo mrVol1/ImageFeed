@@ -73,7 +73,7 @@ final class ProfileViewController: UIViewController {
         logOut.widthAnchor.constraint(equalToConstant: 44).isActive = true
         logOut.heightAnchor.constraint(equalToConstant: 44).isActive = true
         logOut.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
-        
+        logOut.accessibilityIdentifier = "logOut"
         
         //Устанавливаем ограничения
         imageView.translatesAutoresizingMaskIntoConstraints = false

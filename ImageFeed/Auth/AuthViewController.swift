@@ -52,6 +52,7 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
         loginButton.backgroundColor = .white
         loginButton.layer.cornerRadius = 16
         loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.accessibilityIdentifier = "Authenticate"
         view.addSubview(loginButton)
         
         // Создание UIImageView для логотипа

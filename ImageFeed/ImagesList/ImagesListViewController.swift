@@ -81,7 +81,6 @@ final class ImagesListViewController: UIViewController {
             let webViewPresenter = WebViewPresenter(authHelper: authHelper)
             webViewViewController?.presenter = webViewPresenter
             webViewPresenter.view = webViewViewController
-            //webViewViewController?.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
