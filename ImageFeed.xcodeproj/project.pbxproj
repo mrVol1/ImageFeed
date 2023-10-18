@@ -174,6 +174,7 @@
 		D7698CF82A7D26950045331E /* ImagesList */ = {
 			isa = PBXGroup;
 			children = (
+				D71271032ABC43D200CF0A55 /* TabBarController.swift */,
 				D7A90ADE2A76745F003B0C0C /* ImagesListViewController.swift */,
 				D7698CF62A7D26620045331E /* ImagesListCell.swift */,
 			);
@@ -225,8 +226,6 @@
 				D749EE442AA11A6B00E8459F /* SplashView */,
 				D7BF4E2F2A9A5CCC0009C0F2 /* WebView */,
 				D7F168EB2A9A199A0054E8C0 /* Auth */,
-				D76EE1272A99555500F8E4A6 /* AuthConfiguration.swift */,
-				D71271032ABC43D200CF0A55 /* TabBarController.swift */,
 				D776C07B2A89FCDB0017EDE4 /* ImageView */,
 				D776C07A2A89FCC50017EDE4 /* ProfileView */,
 				D7698CF82A7D26950045331E /* ImagesList */,
@@ -267,6 +266,7 @@
 				D7F168EC2A9A19A70054E8C0 /* AuthViewController.swift */,
 				D77092692A9CA49F0080512B /* OAuth2TokenStorage.swift */,
 				D728F4232AD3F483006A793C /* AuthHelper.swift */,
+				D76EE1272A99555500F8E4A6 /* AuthConfiguration.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";

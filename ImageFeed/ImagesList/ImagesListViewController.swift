@@ -114,9 +114,8 @@ extension ImagesListViewController: UITableViewDataSource {
                     if let indexPaths = self.tableView?.indexPathsForVisibleRows, indexPaths.contains(indexPath) {
                         self.tableView?.reloadRows(at: [indexPath], with: .automatic)
                     }
-                case .failure(let error):
-                    print("Ошибка при загрузке изображения: \(error)")
-                }
+                case .failure(_):
+                    break                }
             })
         }
         

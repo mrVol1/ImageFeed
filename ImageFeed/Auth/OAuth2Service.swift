@@ -30,7 +30,6 @@ final class OAuth2Service {
             lastCode = code
             let request = authTokenRequest(code: code)
             
-            print("Fetching OAuth token with code: \(code)")
             
             let fulfillCompletionOnMainThread: (Result<OAuthTokenResponseBody, Error>) -> Void = { [weak self] result in
                 DispatchQueue.main.async {
@@ -39,11 +38,9 @@ final class OAuth2Service {
                     case .success(let tokenResponse):
                         let authToken = tokenResponse.accessToken
                         self.authToken = authToken
-                        print("OAuth token fetched successfully: \(authToken)")
                         completion(.success(tokenResponse))
                         self.task = nil
                     case .failure(let error):
-                        print("OAuth token fetching failed with error: \(error)")
                         completion(.failure(error))
                         self.task = nil
                         self.lastCode = nil

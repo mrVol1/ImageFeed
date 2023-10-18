@@ -38,9 +38,7 @@ final class SplashViewController: UIViewController { //final означает, �
     
     override func viewDidAppear(_ animated: Bool) { //видимая часть экрана для пользователя, внутри можно настроить логику работы, как пользователь с ним взаимодействует
         super.viewDidAppear(animated)
-        
-        print("viewDidAppear is called")
-        
+                
         if oauth2TokenStorage.token != nil {
             switchToTabBarController()
         } else {
@@ -48,7 +46,6 @@ final class SplashViewController: UIViewController { //final означает, �
             authViewController.delegate = self //SplashViewController управляет контроллером ауф с помощью делегата
             authViewController.modalPresentationStyle = .fullScreen //ауф контроллер занимает весь экран
             present(authViewController, animated: true, completion: nil) //отображает ауф контроллер поверх сплешэкрана (потому что делегат юзал)
-            print("AuthViewController presented")
         }
     }
     
@@ -63,23 +60,8 @@ final class SplashViewController: UIViewController { //final означает, �
 
         window.rootViewController = tabBarController
         // далее устанавливает tabBarController как корневой
-        print("Switched to TabBarController")
     }
 }
-
-//extension SplashViewController { //extension добавление новых методов к классу SplashViewController
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) { //нужен для настройки перехода с одного экрана на другой
-//        if segue.identifier == ShowAuthenticationScreenSegueIdentifier { //проверяем имеет ли сегвей идентификатор "ShowAuthenticationScreenSegueIdentifier"
-//            guard //выполнение если segue.identifier == ShowAuthenticationScreenSegueIdentifier
-//                let navigationController = segue.destination as? UINavigationController, //Пытаюсь получить контроллер, на который происходит переход
-//                let viewController = navigationController.viewControllers[0] as? AuthViewController //пытаюсь получить первый навигационный контроллер - это ауф контроллер
-//            else { fatalError("Failed to prepare for \(ShowAuthenticationScreenSegueIdentifier)") } // если нет контроллера, тогда ошибка
-//            viewController.delegate = self //если успешно извлечению ауф контроллер, тогда сплеш контроллер захватывает ауф контроллер и отображается поверх него
-//        } else { //выполнение если segue.identifier != ShowAuthenticationScreenSegueIdentifier
-//            super.prepare(for: segue, sender: sender) //вызывается стандартная логика перехода для метода prepare
-//        }
-//    }
-//}
 // MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate { //реализует расширение SplashViewController, чтобы реализовать протокол AuthViewControllerDelegate. После того как AuthViewController выполнил аутентификацию (получил токен авторизации), тогда SplashViewController выполняется поверх AuthViewController
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) { //реализация метода в протоколе AuthViewControllerDelegate, принимает токен авторизации и экземпляр класса ауфа. Экземпляр класса нужен для того, чтобы закрыть контроллер AuthViewController и отобразить только сплешконтроллер (код с этим ниже)
@@ -97,10 +79,8 @@ extension SplashViewController: AuthViewControllerDelegate { //реализуе�
             case .success: //если кейс успех, тогда выполняется метод switchToTabBarController() в классе сплешконтроллера(поэтому селф)
                 self.switchToTabBarController()
                 UIBlockingProgressHUD.dismiss() //закрывается лоудер
-                print("OAuth token fetched successfully")
-            case .failure(let error): // если кейс не успешный, тогда выходит ошибка
+            case .failure(_): // если кейс не успешный, тогда выходит ошибка
                 UIBlockingProgressHUD.dismiss()
-                print("OAuth token fetching failed with error: \(error)")
                 break
             }
         }

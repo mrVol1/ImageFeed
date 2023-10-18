@@ -67,7 +67,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("WebViewViewController: viewDidLoad called")
         
         //добавление вебвью и установка его делегата
         webView.navigationDelegate = self
@@ -118,8 +117,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     func load() {
         if let request = currentRequest {
             webView.load(request)
-        } else {
-            print("error")
         }
     }
     
@@ -161,12 +158,10 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     }
     
     func setProgressValue(_ newValue: Float) {
-        print("ViewController: setProgressValue(\(newValue))")
         progressView.progress = newValue
     }
     
     func setProgressHidden(_ isHidden: Bool) {
-        print("ViewController: setProgressHidden(\(isHidden))")
         progressView.isHidden = isHidden
     }
     

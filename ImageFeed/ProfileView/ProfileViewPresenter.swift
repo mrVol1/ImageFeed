@@ -65,8 +65,8 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
             guard self != nil else { return }
             
             switch result {
-            case .failure(let error):
-                print("Error loading profile image: \(error)")
+            case .failure(_): 
+                break
             default:
                 break
             }
