@@ -10,14 +10,22 @@ import UIKit
 import Kingfisher
 import WebKit
 
+public protocol ProfileViewPresenterProtocol: AnyObject {
+    func viewDidLoad()
+    func updateAvatar()
+    func logoutButtonTapped()
+    func logOutInProduct()
+    func clearCookiesAndWebsiteData()
+}
+
 final class ProfileViewController: UIViewController {
     private let profileService = ProfileService.shared
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
-    private var profileImageServiceObserver: NSObjectProtocol?
     private var imageView = UIImageView()
     private var logOut = UIButton()
+    var presenter: ProfileViewPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -105,55 +113,33 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.textColor = .white
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.DidChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
-    }
-    
-    private func updateAvatar() {
-        guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
-        
-        imageView.kf.setImage(with: url) { [weak self] result in
-            guard self != nil else { return }
-            
-            switch result {
-            case .failure(let error):
-                print("Error loading profile image: \(error)")
-            default:
-                break
-            }
-        }
+        presenter?.viewDidLoad()
     }
     
     @objc private func logoutButtonTapped() {
-        self.showLogoutAlert()
+        presenter?.logoutButtonTapped()
     }
     
-    private func logOutInProduct() {
-        let tokenStorage = OAuth2TokenStorage()
-        tokenStorage.token = nil
-        
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            if let splashViewController = sceneDelegate.splashViewController {
-                sceneDelegate.window?.rootViewController = splashViewController
-            } else {
-                let newSplashViewController = SplashViewController()
-                sceneDelegate.splashViewController = newSplashViewController
-                sceneDelegate.window?.rootViewController = newSplashViewController
-            }
-        }
-        
-        clearCookiesAndWebsiteData()
+    func updateNameLabel(_ text: String) {
+        nameLabel.text = text
     }
     
-    private func showLogoutAlert() {
+    func updateLoginNameLabel(_ text: String) {
+        loginNameLabel.text = text
+    }
+    
+    func updateDescriptionLabel(_ text: String) {
+        descriptionLabel.text = text
+    }
+    
+    func showErrorAlert() {
+        let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка в приложении.", preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func showLogoutAlert() {
         let alertController = UIAlertController(
             title: "Вы точно хотите выйти?",
             message: "Возвращайтесь еще",
@@ -164,7 +150,7 @@ final class ProfileViewController: UIViewController {
             title: "Да",
             style: .default,
             handler: { (_) in
-                self.logOutInProduct()
+                self.presenter?.logOutInProduct()
             }
         )
         
@@ -178,15 +164,5 @@ final class ProfileViewController: UIViewController {
         alertController.addAction(noAction)
         
         present(alertController, animated: true, completion: nil)
-    }
-    
-    private func clearCookiesAndWebsiteData() {
-        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-            }
-        }
     }
 }

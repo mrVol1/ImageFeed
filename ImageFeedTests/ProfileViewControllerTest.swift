@@ -9,5 +9,11 @@ import XCTest
 @testable import ImageFeed
 
 final class ProfileViewControllerTest: XCTestCase {
-    
+    func testProfileViewControllerCallsViewDidLoad() {
+        //given
+        let profileViewController = ProfileViewController()
+        let presenter = ProfileViewControllerSpy()
+        profileViewController.presenter = presenter
+        presenter.view = profileViewController
+    }
 }

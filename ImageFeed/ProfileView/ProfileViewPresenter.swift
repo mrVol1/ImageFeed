@@ -1,0 +1,96 @@
+//
+//  ProfileViewPresenter.swift
+//  ImageFeed
+//
+//  Created by Eduard Karimov on 18/10/2023.
+//
+
+// ProfileViewPresenter.swift
+
+import Foundation
+import UIKit
+import WebKit
+
+final class ProfileViewPresenter: ProfileViewPresenterProtocol {
+    private weak var view: ProfileViewController?
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private var imageView = UIImageView()
+
+    init(view: ProfileViewController) {
+        self.view = view
+    }
+    
+    func viewDidLoad() {
+        if let token = OAuth2TokenStorage().token {
+            ProfileService.shared.fetchProfile(token) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let profile):
+                    self.view?.updateNameLabel(profile.name)
+                    self.view?.updateLoginNameLabel(profile.loginName)
+                    self.view?.updateDescriptionLabel(profile.bio)
+                case .failure(_):
+                    self.view?.showErrorAlert()
+                }
+            }
+        }
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+        
+    }
+    
+    func updateAvatar() {
+        guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
+        
+        imageView.kf.setImage(with: url) { [weak self] result in
+            guard self != nil else { return }
+            
+            switch result {
+            case .failure(let error):
+                print("Error loading profile image: \(error)")
+            default:
+                break
+            }
+        }
+    }
+    
+    func logoutButtonTapped() {
+        view?.showLogoutAlert()
+    }
+    
+    func logOutInProduct() {
+        let tokenStorage = OAuth2TokenStorage()
+        tokenStorage.token = nil
+        
+        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+            if let splashViewController = sceneDelegate.splashViewController {
+                sceneDelegate.window?.rootViewController = splashViewController
+            } else {
+                let newSplashViewController = SplashViewController()
+                sceneDelegate.splashViewController = newSplashViewController
+                sceneDelegate.window?.rootViewController = newSplashViewController
+            }
+        }
+        
+        clearCookiesAndWebsiteData()
+    }
+    
+    func clearCookiesAndWebsiteData() {
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
+    }
+}
