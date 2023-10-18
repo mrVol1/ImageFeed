@@ -10,15 +10,18 @@ import UIKit
 import Kingfisher
 import WebKit
 
-public protocol ProfileViewPresenterProtocol: AnyObject {
-    func viewDidLoad()
-    func updateAvatar()
-    func logoutButtonTapped()
-    func logOutInProduct()
-    func clearCookiesAndWebsiteData()
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateNameLabel(_ text: String)
+    func updateLoginNameLabel(_ text: String)
+    func updateDescriptionLabel(_ text: String)
+    func updateAvatar(_ image: UIImage)
+    func showErrorAlert()
+    func showLogoutAlert()
 }
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+        
     private let profileService = ProfileService.shared
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
@@ -30,6 +33,9 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let presenter = ProfileViewPresenter(view: self)
+        self.presenter = presenter
+        presenter.viewDidLoad()
         
         if let token = OAuth2TokenStorage().token {
             ProfileService.shared.fetchProfile(token) { [weak self] result in
@@ -113,7 +119,6 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.textColor = .white
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        presenter?.viewDidLoad()
     }
     
     @objc private func logoutButtonTapped() {
@@ -130,6 +135,10 @@ final class ProfileViewController: UIViewController {
     
     func updateDescriptionLabel(_ text: String) {
         descriptionLabel.text = text
+    }
+    
+    func updateAvatar(_ image: UIImage) {
+        imageView.image = image
     }
     
     func showErrorAlert() {

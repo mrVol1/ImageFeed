@@ -22,8 +22,7 @@ final class WebViewTests: XCTestCase {
         
         //then
         XCTAssertNotNil(viewController.presenter)
-        XCTAssertTrue(presenter.viewDidLoadCalled) //behaviour verification
-        //XCTAssertEqual(viewController.presenter, presenter)
+        XCTAssertTrue(presenter.viewDidLoadCalled)
     }
     
     func testProgressVisibleWhenLessThenOne() {

@@ -11,12 +11,22 @@ import Foundation
 import UIKit
 import WebKit
 
+public protocol ProfileViewPresenterProtocol {
+    func viewDidLoad()
+    func updateAvatar()
+    func logoutButtonTapped()
+    func logOutInProduct()
+    func clearCookiesAndWebsiteData()
+    var view: ProfileViewControllerProtocol? { get set }
+}
+
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
-    private weak var view: ProfileViewController?
+    var view: ProfileViewControllerProtocol?
+    
     private var profileImageServiceObserver: NSObjectProtocol?
     private var imageView = UIImageView()
 
-    init(view: ProfileViewController) {
+    init(view: ProfileViewControllerProtocol) {
         self.view = view
     }
     

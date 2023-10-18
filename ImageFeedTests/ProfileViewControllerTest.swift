@@ -12,8 +12,15 @@ final class ProfileViewControllerTest: XCTestCase {
     func testProfileViewControllerCallsViewDidLoad() {
         //given
         let profileViewController = ProfileViewController()
-        let presenter = ProfileViewControllerSpy()
+        let presenter = ProfileViewPresenterSpy()
         profileViewController.presenter = presenter
         presenter.view = profileViewController
+        
+        //when
+        presenter.viewDidLoad()
+        
+        //then
+        XCTAssertNotNil(profileViewController.presenter)
+        XCTAssertTrue(presenter.viewDidLoadCalled)
     }
 }

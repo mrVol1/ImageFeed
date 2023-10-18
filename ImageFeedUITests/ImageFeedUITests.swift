@@ -86,7 +86,7 @@ class ImageFeedUITests: XCTestCase {
         app.tabBars.buttons.element(boundBy: 1).tap()
        
         XCTAssertTrue(app.staticTexts["Eduard Karimov"].exists)
-        XCTAssertTrue(app.staticTexts["mrVol"].exists)
+        XCTAssertTrue(app.staticTexts["EduardKarimov"].exists)
         
         app.buttons["logOut"].tap()
         
