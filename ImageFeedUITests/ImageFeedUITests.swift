@@ -6,7 +6,6 @@
 //
 
 import XCTest
-//@testable import ImageFeed
 
 class ImageFeedUITests: XCTestCase {
     private let app = XCUIApplication() // переменная приложения
@@ -31,14 +30,15 @@ class ImageFeedUITests: XCTestCase {
             loginTextField.tap()
             loginTextField.typeText("eduardkarimov.rb@gmail.com")
             app.buttons["Done"].tap()
+            XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
             let passwordTextField = webView.descendants(matching: .secureTextField).element
             XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
             
             passwordTextField.tap()
-            webView.swipeUp()
             passwordTextField.typeText("A2c2d2c2")
-            
+            XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
+
             let webViewsQuery = webView.webViews
             webViewsQuery.buttons["Login"].tap()
             
@@ -52,15 +52,18 @@ class ImageFeedUITests: XCTestCase {
         let tablesQuery = app.tables
         
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        //app.swipeDown(velocity: .fast)
-        app.swipeUp(velocity: .fast)
+        cell.swipeUp()
         
         sleep(2)
         
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
-        
-        cellToLike.buttons["like_button_on"].tap()
-        cellToLike.buttons["like_button_off"].tap()
+        let likeButton = cellToLike.buttons["buttonClick"]
+
+        if likeButton.isSelected {
+            likeButton.tap()
+        } else {
+            likeButton.tap()
+        }
         
         sleep(2)
         
@@ -74,7 +77,7 @@ class ImageFeedUITests: XCTestCase {
         // Zoom out
         image.pinch(withScale: 0.5, velocity: -1)
         
-        let navBackButtonWhiteButton = app.buttons["buttonClick"]
+        let navBackButtonWhiteButton = app.buttons["didTapBackButton"]
         navBackButtonWhiteButton.tap()
     }
     
@@ -83,7 +86,7 @@ class ImageFeedUITests: XCTestCase {
         app.tabBars.buttons.element(boundBy: 1).tap()
        
         XCTAssertTrue(app.staticTexts["Eduard Karimov"].exists)
-        XCTAssertTrue(app.staticTexts["@mrVol"].exists)
+        XCTAssertTrue(app.staticTexts["mrVol"].exists)
         
         app.buttons["logOut"].tap()
         
