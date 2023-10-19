@@ -5,9 +5,29 @@
 //  Created by Eduard Karimov on 19/10/2023.
 //
 
-@testable import ImageFeed
+import ImageFeed
 import Foundation
 
-final class ImageListViewPresenterSpy {
+final class ImageListViewPresenterSpy: ImageListViewControllerProtocol {
+    var presenter: ImageFeed.ImageListViewPresenterProtocol?
+    var prepareResult: ImageFeed.ImageListViewPresenterProtocol?
     
+    var view: ImageListViewControllerProtocol?
+    var viewDidLoadCalled: Bool = false
+    
+    func viewDidLoad() {
+        viewDidLoadCalled = true
+    }
+    
+    func didUpdateProgressValue(_ newValue: Double) {
+    
+    }
+    
+    func reloadTableView() {
+        
+    }
+    
+    func code(from url: URL) -> String? {
+        return nil
+    }
 }

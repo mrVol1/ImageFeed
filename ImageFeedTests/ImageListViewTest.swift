@@ -11,16 +11,16 @@ import XCTest
 final class ImageListViewTest: XCTestCase {
     func testImageListViewCallsViewDidLoad () {
         //given
-        let profileViewController = ProfileViewController()
-        let presenter = ProfileViewPresenterSpy()
-        profileViewController.presenter = presenter
-        presenter.view = profileViewController
-        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let imageListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+        let presenter = WebViewPresenterSpy()
+        imageListViewController.presenter = presenter as? any ImageListViewPresenterProtocol
+        presenter.view = imageListViewController as? any WebViewViewControllerProtocol
         //when
         presenter.viewDidLoad()
         
         //then
-        XCTAssertNotNil(profileViewController.presenter)
+        XCTAssertNotNil(imageListViewController.presenter)
         XCTAssertTrue(presenter.viewDidLoadCalled)
     }
 }

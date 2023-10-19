@@ -7,14 +7,17 @@
 
 import UIKit
 
-public protocol ImagesListViewProtocol: AnyObject {
-    
+public protocol ImageListViewControllerProtocol: AnyObject {
+    var presenter: ImageListViewPresenterProtocol? { get set }
+    var prepareResult: ImageListViewPresenterProtocol? {get set}
+    func reloadTableView()
 }
 
 final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private var imagesListService: ImagesListService?
-    var webViewViewController: WebViewViewControllerProtocol?
+    var presenter: ImageListViewPresenterProtocol?
+    var prepareResult: ImageListViewPresenterProtocol?
     
     @IBOutlet private var tableView: UITableView!
     
@@ -30,11 +33,11 @@ final class ImagesListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        imagesListService = ImagesListService()
-        imagesListService?.fetchPhotosNextPage()
-        NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
+        print("ImagesListViewController: View did load")
+        presenter?.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+
     }
     
     deinit {
@@ -42,36 +45,22 @@ final class ImagesListViewController: UIViewController {
     }
     
     @objc private func handlePhotosDidChange(_ notification: Notification) {
-        if let updatedPhotos = imagesListService?.photos {
-            photos = updatedPhotos
-            
-            if Thread.isMainThread {
-                tableView.reloadData()
-            } else {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-            updateTableViewAnimated()
-        }
-        
-        if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
-            var updatedPhoto = self.photos[index]
-            updatedPhoto.isLiked = !updatedPhoto.isLiked
-            self.photos[index] = updatedPhoto
+        presenter?.handlePhotosDidChange(notification)
+    }
+    
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+    
+    func performBatchUpdates(for indexPaths: [IndexPath]) {
+        tableView.performBatchUpdates {
+            tableView.insertRows(at: indexPaths, with: .automatic)
         }
     }
     
-    private func updateTableViewAnimated() {
-        let oldCount = tableView.numberOfRows(inSection: 0)
-        let newCount = photos.count
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
-                tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
+    func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath]) {
+        DispatchQueue.main.async {
+            self.performBatchUpdates(for: indexPaths)
         }
     }
     
@@ -81,10 +70,6 @@ final class ImagesListViewController: UIViewController {
             let indexPath = sender as! IndexPath
             let photo = photos[indexPath.row]
             viewController.photo = photo
-            let authHelper = AuthHelper()
-            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
-            webViewViewController?.presenter = webViewPresenter
-            webViewPresenter.view = webViewViewController
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -93,10 +78,12 @@ final class ImagesListViewController: UIViewController {
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("Number of rows in table view: \(photos.count)")
         return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("Configuring cell for row: \(indexPath.row)")
         let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath) as! ImagesListCell
         cell.delegate = self
         
@@ -142,10 +129,12 @@ extension ImagesListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected row: \(indexPath.row)")
         performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("Will display cell for row: \(indexPath.row)")
         if indexPath.row == photos.count - 1 {
             imagesListService?.fetchPhotosNextPage()
         }

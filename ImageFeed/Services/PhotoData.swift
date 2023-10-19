@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Photo: Codable {
+public struct Photo: Codable {
     let id: String
     let width: Int
     let height: Int
@@ -30,7 +30,7 @@ struct Photo: Codable {
         case isLiked = "liked_by_user"
     }
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         width = try container.decode(Int.self, forKey: .width)
@@ -44,7 +44,7 @@ struct Photo: Codable {
         isLiked = try container.decode(Bool.self, forKey: .isLiked)
     }
     
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(width, forKey: .width)
