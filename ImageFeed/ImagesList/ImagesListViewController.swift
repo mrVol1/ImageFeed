@@ -7,6 +7,10 @@
 
 import UIKit
 
+public protocol ImagesListViewProtocol: AnyObject {
+    
+}
+
 final class ImagesListViewController: UIViewController {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private var imagesListService: ImagesListService?
