@@ -17,7 +17,6 @@ public protocol ImageListViewPresenterProtocol {
 }
 
 final class ImageListViewPresenter: ImageListViewPresenterProtocol {
-    
     var view: ImageListViewControllerProtocol?
     var presenter: ImageListViewPresenterProtocol?
     private var imagesListService: ImagesListService?
@@ -30,7 +29,7 @@ final class ImageListViewPresenter: ImageListViewPresenterProtocol {
     func viewDidLoad() {
         
         tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-        
+
         let presenter = ImageListViewPresenter()
         presenter.presenter = self
         
@@ -50,13 +49,6 @@ final class ImageListViewPresenter: ImageListViewPresenterProtocol {
                     self.view?.reloadTableView()
                 }
             }
-            var indexPaths: [IndexPath] = []
-            for (index, _) in updatedPhotos.enumerated() {
-                let indexPath = IndexPath(row: index, section: 0)
-                indexPaths.append(indexPath)
-            }
-            
-            updateTableViewAnimated(withIndexPaths: indexPaths)
         }
         
         if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
@@ -72,19 +64,19 @@ final class ImageListViewPresenter: ImageListViewPresenterProtocol {
         
         if oldCount != newCount {
             tableView.performBatchUpdates {
-                tableView.insertRows(at: indexPaths, with: .automatic)
+            tableView.insertRows(at: indexPaths, with: .automatic)
             }
         }
     }
     
     func prepareResult(for segue: UIStoryboardSegue, sender: Any?) {
-        let viewController = segue.destination as! SingleImageViewController
-        let indexPath = sender as! IndexPath
-        let photo = photos[indexPath.row]
-        viewController.photo = photo
-        let authHelper = AuthHelper()
-        let webViewPresenter = WebViewPresenter(authHelper: authHelper)
-        webViewViewController?.presenter = webViewPresenter
-        webViewPresenter.view = webViewViewController
+            let viewController = segue.destination as! SingleImageViewController
+            let indexPath = sender as! IndexPath
+            let photo = photos[indexPath.row]
+            viewController.photo = photo
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController?.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
     }
 }

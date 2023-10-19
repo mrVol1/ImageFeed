@@ -18,23 +18,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ProgressHUD.animationType = .systemActivityIndicator
         ProgressHUD.colorHUD = .darkGray
         ProgressHUD.colorAnimation = .lightGray
+        
+        let tabBarController = TabBarController()
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = tabBarController
+        window.makeKeyAndVisible()
+
         return true
     }
     
     // MARK: UISceneSession Lifecycle
     
-    func application(
-        _ application: UIApplication,
-        configurationForConnecting connectingSceneSession: UISceneSession,
-        options: UIScene.ConnectionOptions
-    ) -> UISceneConfiguration {
-        let sceneConfiguration = UISceneConfiguration(
-            name: "Main",
-            sessionRole: connectingSceneSession.role
-        )
-        sceneConfiguration.delegateClass = SceneDelegate.self 
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        let sceneConfiguration = UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+
+        sceneConfiguration.delegateClass = nil
+        
         return sceneConfiguration
     }
+
 
 //    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
 //        // Called when a new scene session is being created.
@@ -47,7 +49,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
 }
 

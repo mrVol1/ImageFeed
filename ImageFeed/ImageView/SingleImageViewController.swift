@@ -11,32 +11,68 @@ import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
     var photo: Photo?
-    
-    @IBOutlet private var imageView: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    // Создаем интерфейсные элементы
+    private let imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
+        return scrollView
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Настройка экрана
+        view.backgroundColor = .white
+
+        // Добавляем элементы на экран и настраиваем констрейты
+        view.addSubview(scrollView)
+        scrollView.addSubview(imageView)
+
+        // Настраиваем констрейты
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            imageView.heightAnchor.constraint(equalTo: view.heightAnchor)
+        ])
+
+        let backButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapBackButton))
+        navigationItem.rightBarButtonItem = backButton
+
         loadAndDisplayImage()
     }
     
-    @IBAction private func didTapBackButton() {
-        dismiss(animated: true, completion: nil)
-    }
+        @objc private func didTapBackButton() {
+            dismiss(animated: true, completion: nil)
+        }
     
-    
-    @IBAction func didTapShareButton(_ sender: UIButton) {
-        if let imageToShare = imageView.image {
-                let sharingImage = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
-                present(sharingImage, animated: true)
-            } else {
-                let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка, повторите попозже", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                present(alertController, animated: true, completion: nil)
-            }
-    }
+        func didTapShareButton(_ sender: UIButton) {
+            if let imageToShare = imageView.image {
+                    let sharingImage = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+                    present(sharingImage, animated: true)
+                } else {
+                    let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка, повторите попозже", preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    present(alertController, animated: true, completion: nil)
+                }
+        }
     
     private func loadAndDisplayImage() {
         guard let imageURLString = photo?.largeImageURL, let imageURL = URL(string: imageURLString) else {

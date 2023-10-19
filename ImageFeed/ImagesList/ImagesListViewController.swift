@@ -8,18 +8,23 @@
 import UIKit
 
 public protocol ImageListViewControllerProtocol: AnyObject {
-    var presenter: ImageListViewPresenterProtocol? { get set }
-    var prepareResult: ImageListViewPresenterProtocol? {get set}
+     var presenter: ImageListViewPresenterProtocol? { get set }
+     var prepareResult: ImageListViewPresenterProtocol? {get set}
     func reloadTableView()
-}
+ }
 
-final class ImagesListViewController: UIViewController {
+class ImagesListViewController: UIViewController, ImageListViewControllerProtocol {
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
+
     private var imagesListService: ImagesListService?
     var presenter: ImageListViewPresenterProtocol?
     var prepareResult: ImageListViewPresenterProtocol?
     
-    @IBOutlet private var tableView: UITableView!
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -34,12 +39,34 @@ final class ImagesListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("ImagesListViewController: View did load")
-        presenter?.viewDidLoad()
+        if let presenter = presenter {
+                presenter.viewDidLoad()
+            } else {
+                print("Presenter is nil.")
+            }        
         tableView.dataSource = self
         tableView.delegate = self
+        
+        view.addSubview(tableView)
+        // Отключение автоматического масштабирования для констрейтов
+        tableView.translatesAutoresizingMaskIntoConstraints = false
 
+        // Создание констрейтов для размещения таблицы в представлении
+        let leadingConstraint = tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
+        let trailingConstraint = tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+        let topConstraint = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
+        let bottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
+
+        // Активация констрейтов
+        NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
+
+        // Здесь вы можете добавить настройку интерфейса и других компонентов
+        // Например, добавление таблицы и других элементов интерфейса.
+        
+        // Пример:
+        tableView.register(ImagesListCell.self, forCellReuseIdentifier: "CellIdentifier")
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -75,6 +102,7 @@ final class ImagesListViewController: UIViewController {
         }
     }
 }
+
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -84,10 +112,11 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("Configuring cell for row: \(indexPath.row)")
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath) as! ImagesListCell
-        cell.delegate = self
         
-        configCell(for: cell, with: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! ImagesListCell
+        
+        // Настройте ячейку здесь
+        
         return cell
     }
     
@@ -102,11 +131,12 @@ extension ImagesListViewController: UITableViewDataSource {
                 
                 switch result {
                 case .success(_):
-                    if let indexPaths = self.tableView?.indexPathsForVisibleRows, indexPaths.contains(indexPath) {
-                        self.tableView?.reloadRows(at: [indexPath], with: .automatic)
+                    if let indexPaths = self.tableView.indexPathsForVisibleRows, indexPaths.contains(indexPath) {
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
                 case .failure(_):
-                    break                }
+                    break
+                }
             })
         }
         
@@ -126,6 +156,7 @@ extension ImagesListViewController: UITableViewDataSource {
         }
     }
 }
+
 // MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -140,6 +171,7 @@ extension ImagesListViewController: UITableViewDelegate {
         }
     }
 }
+
 // MARK: - ImagesListCellDelegate
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(at indexPath: IndexPath, isLike: Bool) {

@@ -9,35 +9,30 @@ import Foundation
 import UIKit
 
 final class TabBarController: UITabBarController {
-    private var imagesListViewController: ImagesListViewController?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        if imagesListViewController == nil {
-            let storyboard = UIStoryboard(name: "Main", bundle: .main)
-            imagesListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as? ImagesListViewController
-            imagesListViewController?.tabBarItem = UITabBarItem(
-                title: nil,
-                image: UIImage(named: "tab_editorial_active"),
-                selectedImage: nil
-            )
-        }
-        
+        //  экземпляры контроллеров
+        let imagesListViewController = ImagesListViewController()
         let profileViewController = ProfileViewController()
-        profileViewController.view.backgroundColor = UIColor(hex: "#1A1B22")
+        
+        // Настройка вкладки (TabBarItem)
+        imagesListViewController.tabBarItem = UITabBarItem(
+            title: nil,
+            image: UIImage(named: "tab_editorial_active"),
+            selectedImage: nil
+        )
         profileViewController.tabBarItem = UITabBarItem(
             title: nil,
             image: UIImage(named: "tab_profile_active"),
             selectedImage: nil
         )
         
-        if let imagesListViewController = imagesListViewController {
-            self.viewControllers = [imagesListViewController, profileViewController]
-        }
+        // Устаовка начального контроллера
+        self.viewControllers = [imagesListViewController, profileViewController]
     }
-    
 }
+
 // MARK: - UIColor
 extension UIColor {
     convenience init(hex: String) {
