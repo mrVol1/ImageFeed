@@ -12,7 +12,6 @@ public protocol ImageListViewPresenterProtocol {
     func viewDidLoad()
     func handlePhotosDidChange(_ notification: Notification)
     func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath])
-    func prepareResult(for segue: UIStoryboardSegue, sender: Any?)
     var view: ImageListViewControllerProtocol? { get set }
 }
 
@@ -67,16 +66,5 @@ final class ImageListViewPresenter: ImageListViewPresenterProtocol {
             tableView.insertRows(at: indexPaths, with: .automatic)
             }
         }
-    }
-    
-    func prepareResult(for segue: UIStoryboardSegue, sender: Any?) {
-            let viewController = segue.destination as! SingleImageViewController
-            let indexPath = sender as! IndexPath
-            let photo = photos[indexPath.row]
-            viewController.photo = photo
-            let authHelper = AuthHelper()
-            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
-            webViewViewController?.presenter = webViewPresenter
-            webViewPresenter.view = webViewViewController
     }
 }

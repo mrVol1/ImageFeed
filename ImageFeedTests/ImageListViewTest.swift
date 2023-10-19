@@ -9,17 +9,17 @@ import XCTest
 @testable import ImageFeed
 
 final class ImageListViewTest: XCTestCase {
-    func testImageListViewCallsViewDidLoad () {
-        //given
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let imageListViewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+    func testImageListViewCallsViewDidLoad() {
+        // Given
+        let imageListViewController = ImagesListViewController() // Создайте контроллер вручную
         let presenter = WebViewPresenterSpy()
         imageListViewController.presenter = presenter as? any ImageListViewPresenterProtocol
         presenter.view = imageListViewController as? any WebViewViewControllerProtocol
-        //when
+        
+        // When
         presenter.viewDidLoad()
         
-        //then
+        // Then
         XCTAssertNotNil(imageListViewController.presenter)
         XCTAssertTrue(presenter.viewDidLoadCalled)
     }

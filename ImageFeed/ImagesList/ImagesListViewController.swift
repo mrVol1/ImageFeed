@@ -8,14 +8,13 @@
 import UIKit
 
 public protocol ImageListViewControllerProtocol: AnyObject {
-     var presenter: ImageListViewPresenterProtocol? { get set }
-     var prepareResult: ImageListViewPresenterProtocol? {get set}
+    var presenter: ImageListViewPresenterProtocol? { get set }
+    var prepareResult: ImageListViewPresenterProtocol? {get set}
     func reloadTableView()
- }
+}
 
 class ImagesListViewController: UIViewController, ImageListViewControllerProtocol {
-    private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
-
+    
     private var imagesListService: ImagesListService?
     var presenter: ImageListViewPresenterProtocol?
     var prepareResult: ImageListViewPresenterProtocol?
@@ -40,33 +39,30 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         super.viewDidLoad()
         print("ImagesListViewController: View did load")
         if let presenter = presenter {
-                presenter.viewDidLoad()
-            } else {
-                print("Presenter is nil.")
-            }        
+            presenter.viewDidLoad()
+        } else {
+            print("Presenter is nil.")
+        }
         tableView.dataSource = self
         tableView.delegate = self
         
         view.addSubview(tableView)
-        // Отключение автоматического масштабирования для констрейтов
         tableView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         // Создание констрейтов для размещения таблицы в представлении
         let leadingConstraint = tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
         let trailingConstraint = tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         let topConstraint = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
         let bottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
-
+        
         // Активация констрейтов
         NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
-
+        
         // Здесь вы можете добавить настройку интерфейса и других компонентов
         // Например, добавление таблицы и других элементов интерфейса.
         
-        // Пример:
-        tableView.register(ImagesListCell.self, forCellReuseIdentifier: "CellIdentifier")
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -88,17 +84,6 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
     func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath]) {
         DispatchQueue.main.async {
             self.performBatchUpdates(for: indexPaths)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowSingleImageSegueIdentifier {
-            let viewController = segue.destination as! SingleImageViewController
-            let indexPath = sender as! IndexPath
-            let photo = photos[indexPath.row]
-            viewController.photo = photo
-        } else {
-            super.prepare(for: segue, sender: sender)
         }
     }
 }
@@ -161,7 +146,10 @@ extension ImagesListViewController: UITableViewDataSource {
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row: \(indexPath.row)")
-        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
+            let singleImageViewController = SingleImageViewController()
+            let photo = photos[indexPath.row]
+            singleImageViewController.photo = photo
+            navigationController?.pushViewController(singleImageViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
