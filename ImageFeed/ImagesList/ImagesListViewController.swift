@@ -41,8 +41,6 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         super.viewDidLoad()
         print("ImagesListViewController: View did load")
         
-        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-
         presenter?.view = self
         presenter?.viewDidLoad()
         
@@ -68,7 +66,6 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
         
     }
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

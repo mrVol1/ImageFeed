@@ -8,46 +8,79 @@
 import Foundation
 import UIKit
 
-final class TabBarController: UITabBarController {
+import Foundation
+import UIKit
+
+class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("TabBarController viewDidLoad")
-        //  экземпляры контроллеров
+        
+        // Экземпляры контроллеров
         let imagesListViewController = ImagesListViewController()
         let profileViewController = ProfileViewController()
         
-        // Настройка вкладки (TabBarItem)
+        // Настройка вкладок (TabBarItem) для активной и неактивной иконок
+        let activeImage = UIImage(named: "tab_editorial_active")
+        let inactiveImage = UIImage(named: "tab_editorial_inactive")
+        let alpha: CGFloat = 0.5 // Прозрачность (от 0.0 до 1.0)
+        
+        // Модификация активного изображения
+        let modifiedActiveImage = changeImageColor(image: activeImage, color: .white)
+        
+        // Прозрачность неактивной иконки
+        let transparentInactiveImage = modifyImage(inactiveImage, withAlpha: alpha)
+        
         imagesListViewController.tabBarItem = UITabBarItem(
             title: nil,
-            image: UIImage(named: "tab_editorial_active"),
-            selectedImage: nil
+            image: modifiedActiveImage,
+            selectedImage: transparentInactiveImage
         )
+        
+        let profileActiveImage = UIImage(named: "tab_profile_active")
+        let profileInactiveImage = UIImage(named: "tab_profile_inactive")
+        
+        // Модификация активного изображения
+        let modifiedProfileActiveImage = changeImageColor(image: profileActiveImage, color: .white)
+        
+        // Прозрачность неактивной иконки
+        let transparentProfileInactiveImage = modifyImage(profileInactiveImage, withAlpha: alpha)
+        
         profileViewController.tabBarItem = UITabBarItem(
             title: nil,
-            image: UIImage(named: "tab_profile_active"),
-            selectedImage: nil
+            image: modifiedProfileActiveImage,
+            selectedImage: transparentProfileInactiveImage
         )
         
-        // Устаовка начального контроллера
+        // Установка начальных контроллеров
         self.viewControllers = [imagesListViewController, profileViewController]
+        
+        // Устанавливаем цвет фона таббара
+        tabBar.barTintColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+    }
+    
+    func changeImageColor(image: UIImage?, color: UIColor) -> UIImage? {
+        guard let image = image else { return nil }
+        
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        color.setFill()
+        let bounds = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
+        UIRectFill(bounds)
+        image.draw(at: .zero, blendMode: .destinationIn, alpha: 1.0)
+        let modifiedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return modifiedImage
+    }
+    
+    func modifyImage(_ image: UIImage?, withAlpha alpha: CGFloat) -> UIImage? {
+        guard let image = image else { return nil }
+        
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(at: .zero, blendMode: .normal, alpha: alpha)
+        let modifiedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return modifiedImage
     }
 }
-
-// MARK: - UIColor
-extension UIColor {
-    convenience init(hex: String) {
-        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
-        
-        var rgb: UInt64 = 0
-        
-        Scanner(string: hexSanitized).scanHexInt64(&rgb)
-        
-        let red = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
-        let green = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
-        let blue = CGFloat(rgb & 0x0000FF) / 255.0
-        
-        self.init(red: red, green: green, blue: blue, alpha: 1.0)
-    }
-}
-

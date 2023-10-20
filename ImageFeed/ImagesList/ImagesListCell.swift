@@ -24,6 +24,8 @@ class ImagesListCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        contentView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+        
         // Настройка элементов интерфейса
         cellImage.translatesAutoresizingMaskIntoConstraints = false
         addSubview(cellImage)
@@ -36,23 +38,24 @@ class ImagesListCell: UITableViewCell {
         
         // Настройка констрейтов
         NSLayoutConstraint.activate([
-            cellImage.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            cellImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            cellImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            cellImage.widthAnchor.constraint(equalTo: widthAnchor, constant: -8),
-            
+            cellImage.topAnchor.constraint(equalTo: topAnchor, constant: 4),
+            cellImage.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+            cellImage.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            cellImage.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+
             buttonClick.widthAnchor.constraint(equalToConstant: 44),
             buttonClick.heightAnchor.constraint(equalToConstant: 44),
-            buttonClick.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            buttonClick.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+            buttonClick.trailingAnchor.constraint(equalTo: cellImage.trailingAnchor, constant: 0),
+            buttonClick.topAnchor.constraint(equalTo: cellImage.topAnchor, constant: 0),
             
-            labelView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 8),
-            labelView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -8)
+            labelView.leadingAnchor.constraint(equalTo: cellImage.leadingAnchor, constant: 8),
+            labelView.bottomAnchor.constraint(equalTo: cellImage.bottomAnchor, constant: -8)
         ])
         
         cellImage.layer.cornerRadius = 16
         cellImage.layer.masksToBounds = true
-        
+        cellImage.contentMode = .scaleAspectFill
+
         labelView.textColor = UIColor.white
         labelView.font = UIFont.systemFont(ofSize: 13)
         
