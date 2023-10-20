@@ -85,9 +85,11 @@ final class SingleImageViewController: UIViewController {
         imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
             switch result {
             case .success(_):
+                print("Image loaded successfully")
                 UIBlockingProgressHUD.dismiss()
                 self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
-            case .failure(_):
+            case .failure(let error):
+                print("Image loading failed with error: \(error)")
                 UIBlockingProgressHUD.dismiss()
                 let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Не надо", style: .cancel, handler: nil))

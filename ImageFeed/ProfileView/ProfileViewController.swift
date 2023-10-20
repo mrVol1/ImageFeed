@@ -26,12 +26,14 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     private let nameLabel = UILabel()
     private let loginNameLabel = UILabel()
     private let descriptionLabel = UILabel()
-    private var imageView = UIImageView()
+    private var imageViewProfile = UIImageView()    
     private var logOut = UIButton()
     var presenter: ProfileViewPresenterProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(imageViewProfile)
         
         let presenter = ProfileViewPresenter(view: self)
         self.presenter = presenter
@@ -54,7 +56,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             }
         }
         
-        view.addSubview(imageView)
+        view.addSubview(imageViewProfile)
         view.addSubview(nameLabel)
         view.addSubview(loginNameLabel)
         view.addSubview(descriptionLabel)
@@ -62,25 +64,40 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
         view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
 
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 35
+        imageViewProfile.translatesAutoresizingMaskIntoConstraints = false
+        imageViewProfile.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        imageViewProfile.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        imageViewProfile.widthAnchor.constraint(equalToConstant: 70).isActive = true
+        imageViewProfile.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        imageViewProfile.clipsToBounds = true
+        imageViewProfile.layer.cornerRadius = 35
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         nameLabel.textColor = .white
+        nameLabel.leadingAnchor.constraint(equalTo: imageViewProfile.leadingAnchor).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: imageViewProfile.bottomAnchor, constant: 8).isActive = true
+        nameLabel.font = UIFont.systemFont(ofSize: 23, weight: UIFont.Weight.bold)
+        nameLabel.textColor = .white
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         loginNameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         loginNameLabel.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
+        loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
+        loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
+        loginNameLabel.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
+        loginNameLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+        loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
         
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.textColor = .white
+        descriptionLabel.leadingAnchor.constraint(equalTo: loginNameLabel.leadingAnchor).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8).isActive = true
+        descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+        descriptionLabel.textColor = .white
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         
         logOut.translatesAutoresizingMaskIntoConstraints = false
         logOut.setImage(UIImage(named: "Exit"), for: .normal)
@@ -90,37 +107,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         logOut.heightAnchor.constraint(equalToConstant: 44).isActive = true
         logOut.addTarget(self, action: #selector(logoutButtonTapped), for: .touchUpInside)
         logOut.accessibilityIdentifier = "logOut"
-        
-        //Устанавливаем ограничения
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        logOut.translatesAutoresizingMaskIntoConstraints = false
-        
-        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        
-        nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
-        nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
-        nameLabel.font = UIFont.systemFont(ofSize: 23, weight: UIFont.Weight.bold)
-        nameLabel.textColor = .white
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        loginNameLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
-        loginNameLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
-        loginNameLabel.textColor = UIColor(hue: 230, saturation: 0.03, brightness: 0.7, alpha: 1)
-        loginNameLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
-        loginNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        descriptionLabel.leadingAnchor.constraint(equalTo: loginNameLabel.leadingAnchor).isActive = true
-        descriptionLabel.topAnchor.constraint(equalTo: loginNameLabel.bottomAnchor, constant: 8).isActive = true
-        descriptionLabel.font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
-        descriptionLabel.textColor = .white
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
     @objc private func logoutButtonTapped() {
@@ -140,7 +126,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     }
     
     func updateAvatar(_ image: UIImage) {
-        imageView.image = image
+        print("Update avatar called")
+        imageViewProfile.image = image
     }
     
     func showErrorAlert() {

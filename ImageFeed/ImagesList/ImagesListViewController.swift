@@ -41,6 +41,17 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         super.viewDidLoad()
         print("ImagesListViewController: View did load")
         
+        if let navController = self.navigationController {
+                print("ImagesListViewController находится в навигационном стеке")
+            } else {
+                print("ImagesListViewController не находится в навигационном стеке")
+                if let navigationController = self.navigationController {
+                    print("ImagesListViewController's Navigation Controller: \(navigationController)")
+                } else {
+                    print("ImagesListViewController's Navigation Controller is nil.")
+                }
+            }
+        
         presenter?.view = self
         presenter?.viewDidLoad()
         
@@ -66,6 +77,30 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if let navController = navigationController {
+            print("ImagesListViewController is inside navigation stack:")
+            for viewController in navController.viewControllers {
+                print(" - \(String(describing: type(of: viewController)))")
+            }
+        } else {
+            print("ImagesListViewController is not in a navigation stack")
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("ImagesListViewController: View will disappear")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("ImagesListViewController: View did disappear")
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -153,10 +188,15 @@ extension ImagesListViewController: UITableViewDataSource {
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row: \(indexPath.row)")
-            let singleImageViewController = SingleImageViewController()
-            let photo = photos[indexPath.row]
-            singleImageViewController.photo = photo
-            navigationController?.pushViewController(singleImageViewController, animated: true)
+        let singleImageViewController = SingleImageViewController()
+        let photo = photos[indexPath.row]
+        singleImageViewController.photo = photo
+        print(photo)
+        if let navigationController = navigationController {
+            navigationController.pushViewController(singleImageViewController, animated: true)
+        } else {
+            print("Navigation controller is nil. Unable to push view controller.")
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

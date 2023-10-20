@@ -50,16 +50,9 @@ final class SplashViewController: UIViewController { //final означает, �
     }
     
     private func switchToTabBarController() {
-        guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-        // UIApplication.shared.windows.first - получение доступа к экрану, в данном случае это таб контроллер
-        //guard let window - выполнение условия, если есть окно, тогда выполняется UIApplication.shared.windows.first, если нет то ошибка "Invalid Configuration""
         let tabBarController = TabBarController()
-        window.rootViewController = tabBarController
-        // Если выполняется условие что окно есть, тогда UIStoryboard(name: "Main", bundle: .main) - устанавливает экземпляр класса и происходит обращение к "Main.storyboard"
-        //Далее создает сториборд "TabBarViewController" с помощью             .instantiateViewController(withIdentifier: "TabBarViewController")
-
-        window.rootViewController = tabBarController
-        // далее устанавливает tabBarController как корневой
+        tabBarController.modalPresentationStyle = .fullScreen
+        present(tabBarController, animated: true, completion: nil)
     }
 }
 // MARK: - AuthViewControllerDelegate

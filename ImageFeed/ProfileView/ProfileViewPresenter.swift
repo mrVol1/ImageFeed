@@ -25,7 +25,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     
     private var profileImageServiceObserver: NSObjectProtocol?
     private var imageView = UIImageView()
-
+    
     init(view: ProfileViewControllerProtocol) {
         self.view = view
     }
@@ -59,15 +59,18 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     }
     
     func updateAvatar() {
+        print("Update avatar in presenter called") // Добавим отладочный принт
         guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
-        
+        print("Profile image URL: \(profileImageURL)")
         imageView.kf.setImage(with: url) { [weak self] result in
             guard self != nil else { return }
             
             switch result {
-            case .failure(_): 
+            case .success(_):
+                print("Image loaded successfully") // Отладочный принт в случае успешной загрузки изображения
                 break
-            default:
+            case .failure(let error):
+                print("Image loading failed: \(error)") // Отладочный принт в случае ошибки загрузки изображения
                 break
             }
         }

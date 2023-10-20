@@ -51,13 +51,26 @@ class TabBarController: UITabBarController {
             image: modifiedProfileActiveImage,
             selectedImage: transparentProfileInactiveImage
         )
-        
+        let imagesListNavigationController = UINavigationController(rootViewController: imagesListViewController)
+
+        let profileNavigationController = UINavigationController(rootViewController: profileViewController)
+
         // Установка начальных контроллеров
-        self.viewControllers = [imagesListViewController, profileViewController]
+        self.viewControllers = [imagesListNavigationController, profileNavigationController]
+        print("TabBarController: View controllers are set up.")
         
         // Устанавливаем цвет фона таббара
         tabBar.barTintColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+        
+        if let navController = viewControllers?.first as? UINavigationController {
+            print("Navigation stack for tab 0:")
+            for viewController in navController.viewControllers {
+                print(" - \(String(describing: type(of: viewController)))")
+            }
+        }
+        
     }
+    
     
     func changeImageColor(image: UIImage?, color: UIColor) -> UIImage? {
         guard let image = image else { return nil }
