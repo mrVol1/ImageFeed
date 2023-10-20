@@ -11,7 +11,7 @@ import UIKit
 final class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("TabBarController viewDidLoad")
         //  экземпляры контроллеров
         let imagesListViewController = ImagesListViewController()
         let profileViewController = ProfileViewController()

@@ -11,6 +11,8 @@ public protocol ImageListViewControllerProtocol: AnyObject {
     var presenter: ImageListViewPresenterProtocol? { get set }
     var prepareResult: ImageListViewPresenterProtocol? {get set}
     func reloadTableView()
+    var photos: [Photo] { get set }
+    func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath])
 }
 
 class ImagesListViewController: UIViewController, ImageListViewControllerProtocol {
@@ -38,11 +40,15 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
     override func viewDidLoad() {
         super.viewDidLoad()
         print("ImagesListViewController: View did load")
-        if let presenter = presenter {
-            presenter.viewDidLoad()
-        } else {
-            print("Presenter is nil.")
-        }
+        
+        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
+
+        presenter?.view = self
+        presenter?.viewDidLoad()
+        
+        imagesListService = ImagesListService()
+        imagesListService?.fetchPhotosNextPage()
+        NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
 
         tableView.dataSource = self
         tableView.delegate = self
@@ -61,9 +67,6 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         // Активация констрейтов
         NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
         
-        // Здесь вы можете добавить настройку интерфейса и других компонентов
-        // Например, добавление таблицы и других элементов интерфейса.
-        
     }
     
     deinit {
@@ -71,10 +74,15 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
     }
     
     @objc private func handlePhotosDidChange(_ notification: Notification) {
-        presenter?.handlePhotosDidChange(notification)
+        if let updatedPhotos = imagesListService?.photos {
+                photos = updatedPhotos
+                print("Number of photos: \(photos.count)")
+                reloadTableView()
+            }
     }
     
     func reloadTableView() {
+        print("Reloading table view...")
         tableView.reloadData()
     }
     

@@ -57,3 +57,4 @@ public struct Photo: Codable {
         try container.encode(isLiked, forKey: .isLiked)
     }
 }
+

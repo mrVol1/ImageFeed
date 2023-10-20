@@ -11,60 +11,46 @@ import UIKit
 public protocol ImageListViewPresenterProtocol {
     func viewDidLoad()
     func handlePhotosDidChange(_ notification: Notification)
-    func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath])
+    func setView(_ view: ImageListViewControllerProtocol)
     var view: ImageListViewControllerProtocol? { get set }
 }
 
 final class ImageListViewPresenter: ImageListViewPresenterProtocol {
-    var view: ImageListViewControllerProtocol?
-    var presenter: ImageListViewPresenterProtocol?
-    private var imagesListService: ImagesListService?
-    var webViewViewController: WebViewViewControllerProtocol?
-    var tableView: UITableView!
-    
-    var photos: [Photo] = []
+    private var imagesListService: ImagesListService
     private var photoId = "id"
     
+    init(imagesListService: ImagesListService) {
+        self.imagesListService = imagesListService
+    }
+    
+    public weak var view: ImageListViewControllerProtocol?
+    
+    func setView(_ view: ImageListViewControllerProtocol) {
+        self.view = view
+    }
+    
     func viewDidLoad() {
-        
-        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-
-        let presenter = ImageListViewPresenter()
-        presenter.presenter = self
-        
-        imagesListService = ImagesListService()
-        imagesListService?.fetchPhotosNextPage()
+        // Настройка начальных условий и запрос данных
+        imagesListService.fetchPhotosNextPage()
         NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
     }
     
     @objc func handlePhotosDidChange(_ notification: Notification) {
-        if let updatedPhotos = imagesListService?.photos {
-            photos = updatedPhotos
-            
-            if Thread.isMainThread {
-                view?.reloadTableView()
-            } else {
-                DispatchQueue.main.async {
-                    self.view?.reloadTableView()
-                }
-            }
-        }
+        let updatedPhotos = imagesListService.photos
+        print("Received updated photos.")
+        view?.photos = updatedPhotos // Обновить данные в контроллере
+        view?.reloadTableView()
         
-        if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
-            var updatedPhoto = self.photos[index]
-            updatedPhoto.isLiked = !updatedPhoto.isLiked
-            self.photos[index] = updatedPhoto
+        if let index = view?.photos.firstIndex(where: { $0.id == photoId }) {
+            if var updatedPhoto = view?.photos[index] {
+                updatedPhoto.isLiked = !updatedPhoto.isLiked
+                view?.photos[index] = updatedPhoto
+                print("Photo with ID was updated.")
+            }
         }
     }
-    
+
     func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath]) {
-        let oldCount = tableView.numberOfRows(inSection: 0)
-        let newCount = photos.count
-        
-        if oldCount != newCount {
-            tableView.performBatchUpdates {
-            tableView.insertRows(at: indexPaths, with: .automatic)
-            }
-        }
+        view?.updateTableViewAnimated(withIndexPaths: indexPaths)
     }
 }

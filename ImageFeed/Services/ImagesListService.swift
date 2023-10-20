@@ -24,9 +24,10 @@ final class ImagesListService {
     
     func fetchPhotosNextPage() {
         guard !isLoading else {
+            print("Already loading. Skipping fetchPhotosNextPage.")
             return
         }
-        
+        print("Fetching photos from the server...")
         isLoading = true
         
         let nextPage = (lastLoadedPage ?? 0) + 1
@@ -41,6 +42,7 @@ final class ImagesListService {
             guard let self = self else { return }
             
             if error != nil {
+                print("Error occurred during data task: \(error.debugDescription)")
                 self.isLoading = false
                 return
             }
@@ -48,7 +50,6 @@ final class ImagesListService {
             if let data = data {
                 if String(data: data, encoding: .utf8) != nil {
                 }
-                
                 DispatchQueue.main.async {
                     do {
                         let decoder = JSONDecoder()
@@ -66,12 +67,10 @@ final class ImagesListService {
                             self.lastLoadedPage = nextPage
                             self.currentPage += 1
                         }
-                        
+                       print("Successfully fetched \(photos.count) photos.")
                         NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
-                        
                     } catch {
                     }
-                    
                     self.isLoading = false
                 }
             }
