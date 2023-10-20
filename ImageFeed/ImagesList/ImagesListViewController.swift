@@ -41,7 +41,7 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         super.viewDidLoad()
         print("ImagesListViewController: View did load")
         
-        if let navController = self.navigationController {
+        if self.navigationController != nil {
                 print("ImagesListViewController находится в навигационном стеке")
             } else {
                 print("ImagesListViewController не находится в навигационном стеке")

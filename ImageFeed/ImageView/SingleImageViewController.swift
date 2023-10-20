@@ -8,10 +8,12 @@
 import Foundation
 import UIKit
 import ProgressHUD
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     var photo: Photo?
-
+    let fullSingleImageViewController = FullSingleImageViewController()
+    
     // Создаем интерфейсные элементы
     private let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -19,7 +21,7 @@ final class SingleImageViewController: UIViewController {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-
+    
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -27,52 +29,42 @@ final class SingleImageViewController: UIViewController {
         scrollView.maximumZoomScale = 1.25
         return scrollView
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Настройка экрана
-        view.backgroundColor = .white
-
-        // Добавляем элементы на экран и настраиваем констрейты
-        view.addSubview(scrollView)
-        scrollView.addSubview(imageView)
-
-        // Настраиваем констрейты
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
-            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            imageView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            imageView.heightAnchor.constraint(equalTo: view.heightAnchor)
-        ])
-
-        let backButton = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapBackButton))
-        navigationItem.rightBarButtonItem = backButton
-
+        view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(didTapBackButton))
+        
         loadAndDisplayImage()
     }
     
-        @objc private func didTapBackButton() {
-            dismiss(animated: true, completion: nil)
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.tabBar.isHidden = true
+
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+    }
     
-        func didTapShareButton(_ sender: UIButton) {
-            if let imageToShare = imageView.image {
-                    let sharingImage = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
-                    present(sharingImage, animated: true)
-                } else {
-                    let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка, повторите попозже", preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    present(alertController, animated: true, completion: nil)
-                }
+    @objc private func didTapBackButton() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func didTapShareButton(_ sender: UIButton) {
+        if let imageToShare = imageView.image {
+            let sharingImage = UIActivityViewController(activityItems: [imageToShare], applicationActivities: nil)
+            present(sharingImage, animated: true)
+        } else {
+            let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка, повторите попозже", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alertController, animated: true, completion: nil)
         }
+    }
     
     private func loadAndDisplayImage() {
         guard let imageURLString = photo?.largeImageURL, let imageURL = URL(string: imageURLString) else {
@@ -81,49 +73,36 @@ final class SingleImageViewController: UIViewController {
         
         UIBlockingProgressHUD.show()
         
-        imageView.kf.indicatorType = .activity
-        imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
+        imageView.kf.indicatorType = .none
+        imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result: Result<RetrieveImageResult, KingfisherError>) in
             switch result {
             case .success(_):
                 print("Image loaded successfully")
                 UIBlockingProgressHUD.dismiss()
-                self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
+                print("Image size: \(self?.imageView.image?.size ?? .zero)")
+                print("Before rescale and center")
+                self?.fullSingleImageViewController.rescaleAndCenterImageInScrollView(image: self?.imageView.image ?? UIImage())
+                print("After rescale and center")
+                if let image = self?.imageView.image {
+                    print("Setting the image in fullSingleImageViewController")
+                    self?.fullSingleImageViewController.setImage(image)
+                }
+                if let navigationController = self?.navigationController, let fullSingleImageViewController = self?.fullSingleImageViewController {
+                    navigationController.setViewControllers([fullSingleImageViewController], animated: true)
+                }
             case .failure(let error):
                 print("Image loading failed with error: \(error)")
                 UIBlockingProgressHUD.dismiss()
                 let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "Не надо", style: .cancel, handler: nil))
-                alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (_) in
+                alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] (_) in
                     self?.loadAndDisplayImage()
-                }))
-                
+                })
+                )
                 self?.present(alert, animated: true, completion: nil)
             }
         })
-    }
-    
-    private func rescaleAndCenterImageInScrollView(image: UIImage?) {
-        guard let image = image else {
-            return
-        }
         
-        let scrollViewSize = scrollView.bounds.size
-        
-        let imageSize = image.size
-        
-        let widthScale = scrollViewSize.width / imageSize.width
-        let heightScale = scrollViewSize.height / imageSize.height
-        let scale = max(widthScale, heightScale)
-        
-        scrollView.minimumZoomScale = 1.0
-        scrollView.maximumZoomScale = max(scale, 3.0)
-        
-        scrollView.zoomScale = scale
-        
-        let xOffset = max((scrollView.contentSize.width * scale - scrollViewSize.width) * 0.5, 0)
-        let yOffset = max((scrollView.contentSize.height * scale - scrollViewSize.height) * 0.5, 0)
-        
-        scrollView.contentInset = UIEdgeInsets(top: yOffset, left: xOffset, bottom: 0, right: 0)
     }
 }
 // MARK: - UIScrollViewDelegate
