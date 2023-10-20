@@ -60,6 +60,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         view.addSubview(descriptionLabel)
         view.addSubview(logOut)
         
+        view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true

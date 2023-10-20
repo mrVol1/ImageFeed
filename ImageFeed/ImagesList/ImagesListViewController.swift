@@ -43,17 +43,20 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         } else {
             print("Presenter is nil.")
         }
+
         tableView.dataSource = self
         tableView.delegate = self
         
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
+        tableView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+        
         // Создание констрейтов для размещения таблицы в представлении
-        let leadingConstraint = tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16)
-        let trailingConstraint = tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-        let topConstraint = tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16)
-        let bottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
+        let leadingConstraint = tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        let trailingConstraint = tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        let topConstraint = tableView.topAnchor.constraint(equalTo: view.topAnchor)
+        let bottomConstraint = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         
         // Активация констрейтов
         NSLayoutConstraint.activate([leadingConstraint, trailingConstraint, topConstraint, bottomConstraint])
@@ -98,10 +101,9 @@ extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("Configuring cell for row: \(indexPath.row)")
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellIdentifier", for: indexPath) as! ImagesListCell
-        
-        // Настройте ячейку здесь
-        
+        let cell = ImagesListCell()
+        configCell(for: cell, with: indexPath)
+                
         return cell
     }
     
