@@ -189,6 +189,8 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row: \(indexPath.row)")
         let singleImageViewController = SingleImageViewController()
+        singleImageViewController.modalPresentationStyle = .fullScreen
+        singleImageViewController.modalTransitionStyle = .coverVertical
         let photo = photos[indexPath.row]
         singleImageViewController.photo = photo
         print(photo)
