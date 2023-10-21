@@ -95,11 +95,6 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         super.viewWillDisappear(animated)
         print("ImagesListViewController: View will disappear")
     }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print("ImagesListViewController: View did disappear")
-    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
