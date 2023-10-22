@@ -15,7 +15,7 @@ public protocol ProfileViewControllerProtocol: AnyObject {
     func updateNameLabel(_ text: String)
     func updateLoginNameLabel(_ text: String)
     func updateDescriptionLabel(_ text: String)
-    func updateAvatar(_ image: UIImage)
+    func updateAvatar(_ imageViewProfilePresenter: UIImage)
     func showErrorAlert()
     func showLogoutAlert()
 }
@@ -66,7 +66,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             }
         }
 
-        
         view.addSubview(imageViewProfile)
         view.addSubview(nameLabel)
         view.addSubview(loginNameLabel)
@@ -81,7 +80,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         imageViewProfile.contentMode = .scaleToFill
         imageViewProfile.widthAnchor.constraint(equalToConstant: 70).isActive = true
         imageViewProfile.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageViewProfile.layer.cornerRadius = 32
+        imageViewProfile.layer.cornerRadius = 35
         imageViewProfile.layer.masksToBounds = true
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -121,6 +120,10 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         logOut.accessibilityIdentifier = "logOut"
     }
     
+    func updateAvatar(_ imageViewProfilePresenter: UIImage) {
+        imageViewProfile.image = imageViewProfilePresenter
+    }
+    
     @objc private func logoutButtonTapped() {
         presenter?.logoutButtonTapped()
     }
@@ -136,11 +139,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     func updateDescriptionLabel(_ text: String) {
         descriptionLabel.text = text
     }
-    
-    func updateAvatar(_ image: UIImage) {
-        print("Update avatar called")
-        imageViewProfile.image = image
-    }
+
+
     
     func showErrorAlert() {
         let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка в приложении.", preferredStyle: .alert)

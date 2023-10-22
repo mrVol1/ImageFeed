@@ -9,6 +9,12 @@ import ImageFeed
 import Foundation
 
 final class ImageListViewPresenterSpy: ImageListViewControllerProtocol {
+    var photos: [ImageFeed.Photo] = []
+    
+    func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath]) {
+        
+    }
+    
     var presenter: ImageFeed.ImageListViewPresenterProtocol?
     var prepareResult: ImageFeed.ImageListViewPresenterProtocol?
     

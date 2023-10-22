@@ -12,7 +12,6 @@ import WebKit
 protocol AuthViewControllerDelegate: AnyObject { //может наследовать только классы
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
     func fetchOAuthToken(_ code: String)
-    //func fetchProfile(token: String)
     func showErrorAlert()
 }
 
@@ -101,7 +100,7 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
         webViewViewController.setRequest(authHelper.authRequest())
         webViewViewController.load()
         
-        
+        print("Presenting the web view for login")
         self.present(webViewViewController, animated: true, completion: nil)
     }
 }
@@ -110,6 +109,7 @@ final class AuthViewController: UIViewController, WKNavigationDelegate {
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         //_ vc: WebViewViewController - параметр, который говорит методу что надо обращаться к экземпляру класса вебвьюконтроллера. (этот параметр нужен если в коде есть несколько контроллеров)
+        print("Successfully authenticated with code: \(code)")
         delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
     //метод отмены авторизации в вебвьюконтроллере
