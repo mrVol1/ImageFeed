@@ -44,7 +44,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
                 }
             }
         }
-        
+        print("ViewDidLoad in presenter called")
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.DidChangeNotification,
@@ -52,6 +52,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
+                print("ProfileImageService.DidChangeNotification received")
                 self.updateAvatar()
             }
         updateAvatar()
@@ -59,7 +60,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     }
     
     func updateAvatar() {
-        print("Update avatar in presenter called") // Добавим отладочный принт
+        print("Update avatar in presenter called")
         guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
         print("Profile image URL: \(profileImageURL)")
         imageView.kf.setImage(with: url) { [weak self] result in

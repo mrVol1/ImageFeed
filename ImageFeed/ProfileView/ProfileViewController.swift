@@ -55,6 +55,19 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
                 }
             }
         }
+
+        if let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) {
+            print("Profile image URL: \(profileImageURL)")
+            imageViewProfile.kf.setImage(with: url) { result in
+                switch result {
+                case .success(_):
+                    print("Image loaded successfully")
+                case .failure(let error):
+                    print("Image loading failed: \(error)")
+                }
+            }
+        }
+
         
         view.addSubview(imageViewProfile)
         view.addSubview(nameLabel)
