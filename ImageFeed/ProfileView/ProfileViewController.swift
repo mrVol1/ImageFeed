@@ -33,8 +33,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(imageViewProfile)
-        
         let presenter = ProfileViewPresenter(view: self)
         self.presenter = presenter
         presenter.viewDidLoad()
@@ -80,11 +78,12 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         imageViewProfile.translatesAutoresizingMaskIntoConstraints = false
         imageViewProfile.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageViewProfile.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
+        imageViewProfile.contentMode = .scaleToFill
         imageViewProfile.widthAnchor.constraint(equalToConstant: 70).isActive = true
         imageViewProfile.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageViewProfile.clipsToBounds = true
-        imageViewProfile.layer.cornerRadius = 35
-        
+        imageViewProfile.layer.cornerRadius = 32
+        imageViewProfile.layer.masksToBounds = true
+
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         nameLabel.textColor = .white

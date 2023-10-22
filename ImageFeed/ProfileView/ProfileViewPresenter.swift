@@ -82,28 +82,38 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     }
     
     func logOutInProduct() {
+        print("logOutInProduct called")
+        
         let tokenStorage = OAuth2TokenStorage()
         tokenStorage.token = nil
+        print("Token has been reset to nil") // Добавляем отладочный принт
         
         if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
             if let splashViewController = sceneDelegate.splashViewController {
                 sceneDelegate.window?.rootViewController = splashViewController
+                print("Changed root view controller to SplashViewController") // Добавляем отладочный принт
             } else {
                 let newSplashViewController = SplashViewController()
                 sceneDelegate.splashViewController = newSplashViewController
                 sceneDelegate.window?.rootViewController = newSplashViewController
+                print("Set new SplashViewController as root view controller") // Добавляем отладочный принт
             }
         }
-        
         clearCookiesAndWebsiteData()
     }
+
     
     func clearCookiesAndWebsiteData() {
+        print("Clearing cookies and website data...")
+        
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        print("Removed cookies")
         
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
             records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record]) {
+                    print("Removed website data for record: \(record)")
+                }
             }
         }
     }
