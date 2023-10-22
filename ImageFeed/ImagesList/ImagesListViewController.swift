@@ -160,7 +160,10 @@ extension ImagesListViewController: UITableViewDataSource {
         if let imageURL = URL(string: photo.thumbImageURL) {
             cell.cellImage.kf.indicatorType = .activity
             
-            cell.cellImage.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
+            cell.cellImage.kf.setImage(with: imageURL, 
+                                       placeholder: UIImage(named: "placeholder_image"),
+                                       options: [.transition(.fade(0.2))],
+                                       completionHandler: { [weak self] (result) in
                 guard let self = self else { return }
                 
                 switch result {

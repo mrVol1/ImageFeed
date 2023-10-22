@@ -31,7 +31,7 @@ final class SingleImageViewController: UIViewController {
         navigationItem.hidesBackButton = true
         tabBarController?.tabBar.isHidden = true
         scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
+        scrollView.maximumZoomScale = 3
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -109,7 +109,7 @@ final class SingleImageViewController: UIViewController {
             imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),// Отступ от нижнего края экрана
         ])
-        
+        imageView.contentMode = .scaleAspectFill
         imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
@@ -122,11 +122,13 @@ final class SingleImageViewController: UIViewController {
         UIBlockingProgressHUD.show()
         
         imageView.kf.indicatorType = .activity
+        print(imageURL)
         imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
             switch result {
             case .success(_):
                 UIBlockingProgressHUD.dismiss()
                 self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
+                print ("Image loaded")
             case .failure(_):
                 UIBlockingProgressHUD.dismiss()
                 let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)
