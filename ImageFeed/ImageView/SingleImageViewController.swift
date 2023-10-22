@@ -37,10 +37,10 @@ final class SingleImageViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Скрываем навигационный бар
+       // Скрываем навигационный бар
         navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        // Скрываем таббар
+
+       // Скрываем таббар
         tabBarController?.tabBar.isHidden = true
     }
     
@@ -48,7 +48,6 @@ final class SingleImageViewController: UIViewController {
         view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
         
         view.addSubview(scrollView)
-        
         scrollView.delegate = self
         
         // Добавляем кнопку "Назад" в верхний левый угол
@@ -92,11 +91,16 @@ final class SingleImageViewController: UIViewController {
             shareIcon.heightAnchor.constraint(equalToConstant: 30)
         ])
         
+        // Констрейты для scrollView (привязываем к супервью)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
         
         // Добавляем изображение внутрь scrollView
         scrollView.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-//        imageView.contentMode = .scaleAspectFill
         
         // Констрейты для imageView (изображение занимает весь экран)
         NSLayoutConstraint.activate([
@@ -106,16 +110,8 @@ final class SingleImageViewController: UIViewController {
             imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),// Отступ от нижнего края экрана
         ])
         
-//        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-//                
-        // Констрейты для scrollView (привязываем к супервью)
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        ])
+        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
     private func loadAndDisplayImage() {

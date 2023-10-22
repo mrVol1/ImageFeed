@@ -22,34 +22,21 @@ class TabBarController: UITabBarController {
         
         // Настройка вкладок (TabBarItem) для активной и неактивной иконок
         let activeImage = UIImage(named: "tab_editorial_active")
-        let inactiveImage = UIImage(named: "tab_editorial_inactive")
-        let alpha: CGFloat = 0.5 // Прозрачность (от 0.0 до 1.0)
-        
-        // Модификация активного изображения
-        let modifiedActiveImage = changeImageColor(image: activeImage, color: .white)
-        
-        // Прозрачность неактивной иконки
-        let transparentInactiveImage = modifyImage(inactiveImage, withAlpha: alpha)
+        let inactiveImage = UIImage(named: "no_active_main")
         
         imagesListViewController.tabBarItem = UITabBarItem(
             title: nil,
-            image: modifiedActiveImage,
-            selectedImage: transparentInactiveImage
+            image: inactiveImage,
+            selectedImage: activeImage
         )
         
         let profileActiveImage = UIImage(named: "tab_profile_active")
-        let profileInactiveImage = UIImage(named: "tab_profile_inactive")
-        
-        // Модификация активного изображения
-        let modifiedProfileActiveImage = changeImageColor(image: profileActiveImage, color: .white)
-        
-        // Прозрачность неактивной иконки
-        let transparentProfileInactiveImage = modifyImage(profileInactiveImage, withAlpha: alpha)
-        
+        let profileInactiveImage = UIImage(named: "no_active_profile")
+       
         profileViewController.tabBarItem = UITabBarItem(
             title: nil,
-            image: modifiedProfileActiveImage,
-            selectedImage: transparentProfileInactiveImage
+            image: profileInactiveImage,
+            selectedImage: profileActiveImage
         )
         let imagesListNavigationController = UINavigationController(rootViewController: imagesListViewController)
 

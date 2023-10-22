@@ -66,6 +66,8 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
         tableView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
+
         
         // Создание констрейтов для размещения таблицы в представлении
         let leadingConstraint = tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
@@ -98,6 +100,16 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Показываем навигационный бар
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        // Показываем таббар
+        tabBarController?.tabBar.isHidden = false
     }
     
     @objc private func handlePhotosDidChange(_ notification: Notification) {
