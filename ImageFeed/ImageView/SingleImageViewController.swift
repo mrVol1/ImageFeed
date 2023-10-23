@@ -122,13 +122,11 @@ final class SingleImageViewController: UIViewController {
         UIBlockingProgressHUD.show()
         
         imageView.kf.indicatorType = .activity
-        print(imageURL)
         imageView.kf.setImage(with: imageURL, placeholder: nil, completionHandler: { [weak self] (result) in
             switch result {
             case .success(_):
                 UIBlockingProgressHUD.dismiss()
                 self?.rescaleAndCenterImageInScrollView(image: self?.imageView.image)
-                print ("Image loaded")
             case .failure(_):
                 UIBlockingProgressHUD.dismiss()
                 let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)

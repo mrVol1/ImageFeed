@@ -14,7 +14,6 @@ import UIKit
 class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("TabBarController viewDidLoad")
         
         // Экземпляры контроллеров
         let imagesListViewController = ImagesListViewController()
@@ -44,15 +43,12 @@ class TabBarController: UITabBarController {
 
         // Установка начальных контроллеров
         self.viewControllers = [imagesListNavigationController, profileNavigationController]
-        print("TabBarController: View controllers are set up.")
         
         // Устанавливаем цвет фона таббара
         tabBar.barTintColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
         
         if let navController = viewControllers?.first as? UINavigationController {
-            print("Navigation stack for tab 0:")
-            for viewController in navController.viewControllers {
-                print(" - \(String(describing: type(of: viewController)))")
+            for _ in navController.viewControllers {
             }
         }
         

@@ -55,16 +55,16 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         }
 
         if let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) {
-            print("Profile image URL: \(profileImageURL)")
             imageViewProfile.kf.setImage(with: url) { result in
                 switch result {
-                case .success(_):
-                    print("Image loaded successfully")
+                case .success(let imageResult):
+                    self.imageViewProfile.image = imageResult.image
                 case .failure(let error):
                     print("Image loading failed: \(error)")
                 }
             }
         }
+
 
         view.addSubview(imageViewProfile)
         view.addSubview(nameLabel)
@@ -78,6 +78,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         imageViewProfile.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
         imageViewProfile.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
         imageViewProfile.contentMode = .scaleToFill
+        imageViewProfile.alpha = 1.0
+        imageViewProfile.backgroundColor = .clear
         imageViewProfile.widthAnchor.constraint(equalToConstant: 70).isActive = true
         imageViewProfile.heightAnchor.constraint(equalToConstant: 70).isActive = true
         imageViewProfile.layer.cornerRadius = 35
@@ -125,7 +127,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     }
     
     @objc private func logoutButtonTapped() {
-        presenter?.logoutButtonTapped()
+        showLogoutAlert()
     }
     
     func updateNameLabel(_ text: String) {
@@ -140,8 +142,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         descriptionLabel.text = text
     }
 
-
-    
     func showErrorAlert() {
         let alertController = UIAlertController(title: "Ошибка", message: "Произошла ошибка в приложении.", preferredStyle: .alert)
         let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
@@ -156,22 +156,22 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             preferredStyle: .alert
         )
         
-        let okAction = UIAlertAction(
+        let okActionExit = UIAlertAction(
             title: "Да",
             style: .default,
             handler: { (_) in
-                self.presenter?.logOutInProduct()
+                self.presenter?.logOutInProduct(setAsRoot: true)
             }
         )
         
-        let noAction = UIAlertAction(
+        let noActionExit = UIAlertAction(
             title: "Нет",
             style: .default,
             handler: nil
         )
         
-        alertController.addAction(okAction)
-        alertController.addAction(noAction)
+        alertController.addAction(okActionExit)
+        alertController.addAction(noActionExit)
         
         present(alertController, animated: true, completion: nil)
     }

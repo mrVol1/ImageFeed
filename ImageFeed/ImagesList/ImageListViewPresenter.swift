@@ -37,7 +37,6 @@ final class ImageListViewPresenter: ImageListViewPresenterProtocol {
     
     @objc func handlePhotosDidChange(_ notification: Notification) {
         let updatedPhotos = imagesListService.photos
-        print("Received updated photos.")
         view?.photos = updatedPhotos // Обновить данные в контроллере
         view?.reloadTableView()
         
@@ -45,7 +44,6 @@ final class ImageListViewPresenter: ImageListViewPresenterProtocol {
             if var updatedPhoto = view?.photos[index] {
                 updatedPhoto.isLiked = !updatedPhoto.isLiked
                 view?.photos[index] = updatedPhoto
-                print("Photo with ID was updated.")
             }
         }
     }

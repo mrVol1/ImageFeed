@@ -38,12 +38,9 @@ final class SplashViewController: UIViewController { //final означает, �
     
     override func viewDidAppear(_ animated: Bool) { //видимая часть экрана для пользователя, внутри можно настроить логику работы, как пользователь с ним взаимодействует
         super.viewDidAppear(animated)
-        print("viewDidAppear - Checking for token")
         if oauth2TokenStorage.token != nil {
             switchToTabBarController()
-            print("Token found, switching to TabBarController")
         } else {
-            print("Token not found, showing the login screen")
             let authViewController = AuthViewController(authHelper: authHelper)
             authViewController.delegate = self //SplashViewController управляет контроллером ауф с помощью делегата
             authViewController.modalPresentationStyle = .fullScreen //ауф контроллер занимает весь экран
@@ -68,16 +65,13 @@ extension SplashViewController: AuthViewControllerDelegate { //реализуе�
     }
     
     func fetchOAuthToken(_ code: String) { //выполнение функции с получение токена от OAuth2
-        print("Fetching OAuth token with code: \(code)")
         oauth2Service.fetchOAuthToken(code) { [weak self] result in //вызывается метод fetchOAuthToken из класса oauth2Service и в fetchOAuthToken передается code. { [weak self] result in - выполняется после выполнения запроса fetchOAuthToken(code), токен доступа записывается в result т.е выполняется ассинхронный код
             guard let self = self else { return } //проверка существует ли класс сплешконтроллера(self), Если сплешконтроллер есть, тогда выполняется код ниже, если нет, тогда выполняется ретурн
             switch result { // выполняется обработка результатов от переменной result
             case .success: //если кейс успех, тогда выполняется метод switchToTabBarController() в классе сплешконтроллера(поэтому селф)
-                print("OAuth token fetched successfully.")
                 self.switchToTabBarController()
                 UIBlockingProgressHUD.dismiss() //закрывается лоудер
-            case .failure(let error): // если кейс не успешный, тогда выходит ошибка
-                print("Failed to fetch OAuth token with error: \(error)")
+            case .failure(_): // если кейс не успешный, тогда выходит ошибка
                 UIBlockingProgressHUD.dismiss()
                 break
             }

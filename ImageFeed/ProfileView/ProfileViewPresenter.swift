@@ -14,8 +14,7 @@ import WebKit
 public protocol ProfileViewPresenterProtocol {
     func viewDidLoad()
     func updateAvatar()
-    func logoutButtonTapped()
-    func logOutInProduct()
+    func logOutInProduct(setAsRoot: Bool)
     func clearCookiesAndWebsiteData()
     var view: ProfileViewControllerProtocol? { get set }
 }
@@ -44,7 +43,6 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
                 }
             }
         }
-        print("ViewDidLoad in presenter called")
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.DidChangeNotification,
@@ -52,7 +50,6 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-                print("ProfileImageService.DidChangeNotification received")
                 self.updateAvatar()
             }
         updateAvatar()
@@ -60,58 +57,38 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     }
     
     func updateAvatar() {
-        print("Update avatar in presenter called")
         guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
-        print("Profile image URL: \(profileImageURL)")
         imageViewProfilePresenter.kf.setImage(with: url) { [weak self] result in
             guard self != nil else { return }
             switch result {
             case .success(_):
-                print("Image loaded successfully") // Отладочный принт в случае успешной загрузки изображения
                 break
-            case .failure(let error):
-                print("Image loading failed: \(error)") // Отладочный принт в случае ошибки загрузки изображения
+            case .failure(_):
                 break
             }
         }
     }
+
     
-    func logoutButtonTapped() {
-        view?.showLogoutAlert()
-    }
-    
-    func logOutInProduct() {
-        print("logOutInProduct called")
+    func logOutInProduct(setAsRoot: Bool) {
         
         let tokenStorage = OAuth2TokenStorage()
         tokenStorage.token = nil
-        print("Token has been reset to nil") // Добавляем отладочный принт
         
-        if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-            if let splashViewController = sceneDelegate.splashViewController {
-                sceneDelegate.window?.rootViewController = splashViewController
-                print("Changed root view controller to SplashViewController") // Добавляем отладочный принт
-            } else {
-                let newSplashViewController = SplashViewController()
-                sceneDelegate.splashViewController = newSplashViewController
-                sceneDelegate.window?.rootViewController = newSplashViewController
-                print("Set new SplashViewController as root view controller") // Добавляем отладочный принт
+        if setAsRoot, let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                sceneDelegate.window?.rootViewController = sceneDelegate.splashViewController
             }
-        }
-        clearCookiesAndWebsiteData()
+            clearCookiesAndWebsiteData()
     }
 
     
     func clearCookiesAndWebsiteData() {
-        print("Clearing cookies and website data...")
         
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-        print("Removed cookies")
         
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
             records.forEach { record in
                 WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record]) {
-                    print("Removed website data for record: \(record)")
                 }
             }
         }

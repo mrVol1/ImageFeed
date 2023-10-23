@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        print("AppDelegate didFinishLaunchingWithOptions")
         ProgressHUD.animationType = .systemActivityIndicator
         ProgressHUD.colorHUD = .darkGray
         ProgressHUD.colorAnimation = .lightGray

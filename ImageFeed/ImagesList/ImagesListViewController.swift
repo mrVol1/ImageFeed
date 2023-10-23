@@ -39,18 +39,6 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("ImagesListViewController: View did load")
-        
-        if self.navigationController != nil {
-                print("ImagesListViewController находится в навигационном стеке")
-            } else {
-                print("ImagesListViewController не находится в навигационном стеке")
-                if let navigationController = self.navigationController {
-                    print("ImagesListViewController's Navigation Controller: \(navigationController)")
-                } else {
-                    print("ImagesListViewController's Navigation Controller is nil.")
-                }
-            }
         
         presenter?.view = self
         presenter?.viewDidLoad()
@@ -84,18 +72,13 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
         super.viewDidAppear(animated)
         
         if let navController = navigationController {
-            print("ImagesListViewController is inside navigation stack:")
-            for viewController in navController.viewControllers {
-                print(" - \(String(describing: type(of: viewController)))")
+            for _ in navController.viewControllers {
             }
-        } else {
-            print("ImagesListViewController is not in a navigation stack")
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("ImagesListViewController: View will disappear")
     }
     
     deinit {
@@ -115,13 +98,11 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
     @objc private func handlePhotosDidChange(_ notification: Notification) {
         if let updatedPhotos = imagesListService?.photos {
                 photos = updatedPhotos
-                print("Number of photos: \(photos.count)")
                 reloadTableView()
             }
     }
     
     func reloadTableView() {
-        print("Reloading table view...")
         tableView.reloadData()
     }
     
@@ -141,12 +122,10 @@ class ImagesListViewController: UIViewController, ImageListViewControllerProtoco
 // MARK: - UITableViewDataSource
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Number of rows in table view: \(photos.count)")
         return photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("Configuring cell for row: \(indexPath.row)")
         
         let cell = ImagesListCell()
         configCell(for: cell, with: indexPath)
@@ -197,22 +176,18 @@ extension ImagesListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected row: \(indexPath.row)")
         let singleImageViewController = SingleImageViewController()
         singleImageViewController.modalPresentationStyle = .fullScreen
         singleImageViewController.modalTransitionStyle = .coverVertical
         let photo = photos[indexPath.row]
         singleImageViewController.photo = photo
-        print(photo)
         if let navigationController = navigationController {
             navigationController.pushViewController(singleImageViewController, animated: true)
         } else {
-            print("Navigation controller is nil. Unable to push view controller.")
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("Will display cell for row: \(indexPath.row)")
         if indexPath.row == photos.count - 1 {
             imagesListService?.fetchPhotosNextPage()
         }

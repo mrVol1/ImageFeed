@@ -21,13 +21,11 @@ final class ProfileViewPresenterSpy: ProfileViewPresenterProtocol {
         updateAvatarCalled = true
     }
     
-    func logoutButtonTapped() {
+    
+    func logOutInProduct(setAsRoot: Bool) {
         
     }
     
-    func logOutInProduct() {
-        
-    }
     
     func showLogoutAlert() {
         
