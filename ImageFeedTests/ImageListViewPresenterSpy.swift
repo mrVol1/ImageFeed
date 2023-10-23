@@ -8,7 +8,15 @@
 import ImageFeed
 import Foundation
 
-final class ImageListViewPresenterSpy: ImageListViewControllerProtocol {
+final class ImageListViewPresenterSpy: ImageListViewPresenterProtocol {
+    func handlePhotosDidChange(_ notification: Notification) {
+        
+    }
+    
+    func setView(_ view: ImageFeed.ImageListViewControllerProtocol) {
+        
+    }
+    
     var photos: [ImageFeed.Photo] = []
     
     func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath]) {
