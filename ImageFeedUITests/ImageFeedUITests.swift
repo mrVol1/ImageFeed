@@ -41,7 +41,10 @@ class ImageFeedUITests: XCTestCase {
 
             let webViewsQuery = webView.webViews
             webViewsQuery.buttons["Login"].tap()
-            
+            XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
+
+            app.buttons["Authenticate"].tap()
+
             let tablesQuery = app.tables
             let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
             
@@ -51,19 +54,12 @@ class ImageFeedUITests: XCTestCase {
     func testFeed() throws {
         let tablesQuery = app.tables
         
-        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        cell.swipeUp()
+        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
         
         sleep(2)
         
-        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
-        let likeButton = cellToLike.buttons["buttonClick"]
-
-        if likeButton.isSelected {
-            likeButton.tap()
-        } else {
-            likeButton.tap()
-        }
+        app.buttons["like_button_off"].tap()
+        app.buttons["like_button_on"].tap()
         
         sleep(2)
         

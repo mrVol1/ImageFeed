@@ -15,7 +15,7 @@ public protocol ImageListViewControllerProtocol: AnyObject {
     func updateTableViewAnimated(withIndexPaths indexPaths: [IndexPath])
 }
 
-class ImagesListViewController: UIViewController, ImageListViewControllerProtocol {
+final class ImagesListViewController: UIViewController, ImageListViewControllerProtocol {
     
     private var imagesListService: ImagesListService?
     var presenter: ImageListViewPresenterProtocol?

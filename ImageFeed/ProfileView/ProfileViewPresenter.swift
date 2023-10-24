@@ -60,12 +60,6 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
         guard let profileImageURL = ProfileImageService.shared.avatarURL, let url = URL(string: profileImageURL) else { return }
         imageViewProfilePresenter.kf.setImage(with: url) { [weak self] result in
             guard self != nil else { return }
-            switch result {
-            case .success(_):
-                break
-            case .failure(_):
-                break
-            }
         }
     }
 
