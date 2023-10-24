@@ -46,7 +46,7 @@ final class ImagesListViewController: UIViewController, ImageListViewControllerP
         imagesListService = ImagesListService()
         imagesListService?.fetchPhotosNextPage()
         NotificationCenter.default.addObserver(self, selector: #selector(handlePhotosDidChange(_:)), name: ImagesListService.DidChangeNotification, object: nil)
-
+        
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -55,7 +55,7 @@ final class ImagesListViewController: UIViewController, ImageListViewControllerP
         
         tableView.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
         navigationController?.navigationBar.barTintColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
-
+        
         
         // Создание констрейтов для размещения таблицы в представлении
         let leadingConstraint = tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor)
@@ -97,9 +97,9 @@ final class ImagesListViewController: UIViewController, ImageListViewControllerP
     
     @objc private func handlePhotosDidChange(_ notification: Notification) {
         if let updatedPhotos = imagesListService?.photos {
-                photos = updatedPhotos
-                reloadTableView()
-            }
+            photos = updatedPhotos
+            reloadTableView()
+        }
     }
     
     func reloadTableView() {
@@ -125,11 +125,18 @@ extension ImagesListViewController: UITableViewDataSource {
         return photos.count
     }
     
+    func configureLikeButton(_ button: UIButton, isLiked: Bool, indexPath: IndexPath) {
+        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+        let dislikeButtonIdentifier = "like_button_off_\(indexPath.row)"
+        let likeButtonIdentifier = "like_button_on_\(indexPath.row + 1)"
+        button.setImage(likeImage, for: .normal)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = ImagesListCell()
         configCell(for: cell, with: indexPath)
-                
+        
         return cell
     }
     
@@ -139,7 +146,7 @@ extension ImagesListViewController: UITableViewDataSource {
         if let imageURL = URL(string: photo.thumbImageURL) {
             cell.cellImage.kf.indicatorType = .activity
             
-            cell.cellImage.kf.setImage(with: imageURL, 
+            cell.cellImage.kf.setImage(with: imageURL,
                                        placeholder: UIImage(named: "placeholder_image"),
                                        options: [.transition(.fade(0.2))],
                                        completionHandler: { [weak self] (result) in
@@ -162,9 +169,7 @@ extension ImagesListViewController: UITableViewDataSource {
             cell.labelView.text = ""
             cell.labelView.backgroundColor = UIColor(patternImage: UIImage(named: "placeholder_image")!)
         }
-        let isLiked = photo.isLiked
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        cell.buttonClick.setImage(likeImage, for: .normal)
+        configureLikeButton(cell.buttonClick, isLiked: photo.isLiked, indexPath: indexPath)
         cell.indexPath = indexPath
         
         DispatchQueue.main.async {
@@ -201,8 +206,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
         var photo = photos[indexPath.row]
         
         if let cell = tableView.cellForRow(at: indexPath) as? ImagesListCell {
-            let likeImage = isLike ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-            cell.buttonClick.setImage(likeImage, for: .normal)
+            configureLikeButton(cell.buttonClick, isLiked: photo.isLiked, indexPath: indexPath)
+            cell.indexPath = indexPath
         }
         
         photo.isLiked = isLike

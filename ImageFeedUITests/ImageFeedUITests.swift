@@ -10,6 +10,16 @@ import XCTest
 class ImageFeedUITests: XCTestCase {
     private let app = XCUIApplication() // переменная приложения
     
+    func configureLikeButton(_ button: XCUIElement, isLiked: Bool) {
+        if isLiked {
+            // Если изображение "liked", установите изображение "like_button_on"
+            button.images["like_button_on"].tap()
+        } else {
+            // Иначе установите изображение "like_button_off"
+            button.images["like_button_off"].tap()
+        }
+    }
+    
     override func setUpWithError() throws {
         continueAfterFailure = false // настройка выполнения тестов, которая прекратит выполнения тестов, если в тесте что-то пошло не так
         
@@ -53,13 +63,24 @@ class ImageFeedUITests: XCTestCase {
     
     func testFeed() throws {
         let tablesQuery = app.tables
-        
-        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
+        let indexPath = IndexPath(row: 0, section: 0)
         
         sleep(2)
         
-        app.buttons["like_button_off"].tap()
-        app.buttons["like_button_on"].tap()
+        app.tables.element.swipeUp(velocity: .slow)
+        
+        sleep(2)
+        
+        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: indexPath.row)
+        configureLikeButton(cellToLike.buttons.element, isLiked: true)
+
+        sleep(2)
+        
+        let dislikeButtonIdentifier = "like_button_off_\(indexPath.row)"
+        app.buttons[dislikeButtonIdentifier].tap()
+        
+        let likeButtonIdentifier = "like_button_on_\(indexPath.row + 1)"
+        app.buttons[likeButtonIdentifier].tap()
         
         sleep(2)
         
@@ -76,13 +97,14 @@ class ImageFeedUITests: XCTestCase {
         let navBackButtonWhiteButton = app.buttons["didTapBackButton"]
         navBackButtonWhiteButton.tap()
     }
+
     
     func testProfile() throws {
         sleep(3)
         app.tabBars.buttons.element(boundBy: 1).tap()
-       
+        sleep(2)
         XCTAssertTrue(app.staticTexts["Eduard Karimov"].exists)
-        XCTAssertTrue(app.staticTexts["EduardKarimov"].exists)
+        XCTAssertTrue(app.staticTexts["@EduardKarimov"].exists)
         
         app.buttons["logOut"].tap()
         
