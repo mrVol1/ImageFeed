@@ -205,7 +205,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
         var photo = photos[indexPath.row]
         
         if let cell = tableView.cellForRow(at: indexPath) as? ImagesListCell {
-            configureLikeButton(cell.buttonClick, isLiked: photo.isLiked, indexPath: indexPath)
+            let likeImage = isLike ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
+            cell.buttonClick.setImage(likeImage, for: .normal)
         }
         
         photo.isLiked = isLike

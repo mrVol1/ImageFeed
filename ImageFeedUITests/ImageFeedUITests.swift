@@ -41,8 +41,7 @@ class ImageFeedUITests: XCTestCase {
         
         let webViewsQuery = webView.webViews
         webViewsQuery.buttons["Login"].tap()
-        XCTAssertTrue(webView.waitForExistence(timeout: 5))
-        
+        sleep(4)
         app.buttons["Authenticate"].tap()
         
         let tablesQuery = app.tables
@@ -59,7 +58,7 @@ class ImageFeedUITests: XCTestCase {
         
         sleep(4)
         
-        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
+        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 0)
         
         let likeButtonIdentifier = "likeButton"
         
@@ -69,9 +68,11 @@ class ImageFeedUITests: XCTestCase {
         
         sleep(2)
         
+        sleep(6)
+        
         cellToLike.tap()
         
-        sleep(2)
+        sleep(6)
         
         let image = app.scrollViews.images.element(boundBy: 0)
         // Zoom in
@@ -79,8 +80,8 @@ class ImageFeedUITests: XCTestCase {
         // Zoom out
         image.pinch(withScale: 0.5, velocity: -1)
                 
-        let navBackButtonWhiteButton = app.buttons["backButton"]
-        navBackButtonWhiteButton.tap()
+        let navBackButtonWhiteButton = "backButton"
+        app.buttons[navBackButtonWhiteButton].tap()
     }
     
     func testProfile() throws {
