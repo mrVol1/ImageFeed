@@ -127,8 +127,7 @@ extension ImagesListViewController: UITableViewDataSource {
     
     func configureLikeButton(_ button: UIButton, isLiked: Bool, indexPath: IndexPath) {
         let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        let dislikeButtonIdentifier = "like_button_off_\(indexPath.row)"
-        let likeButtonIdentifier = "like_button_on_\(indexPath.row + 1)"
+        button.accessibilityIdentifier = "likeButton"
         button.setImage(likeImage, for: .normal)
     }
     
@@ -207,7 +206,6 @@ extension ImagesListViewController: ImagesListCellDelegate {
         
         if let cell = tableView.cellForRow(at: indexPath) as? ImagesListCell {
             configureLikeButton(cell.buttonClick, isLiked: photo.isLiked, indexPath: indexPath)
-            cell.indexPath = indexPath
         }
         
         photo.isLiked = isLike

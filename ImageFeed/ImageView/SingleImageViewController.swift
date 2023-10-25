@@ -66,6 +66,7 @@ final class SingleImageViewController: UIViewController {
         
         // Добавляем кнопку "Поделиться" в центр низа экрана
         let shareButton = UIButton(type: .custom)
+        shareButton.accessibilityIdentifier = "backButton"
         shareButton.backgroundColor = .black
         shareButton.layer.cornerRadius = 25 // Радиус делает кнопку круглой
         shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
