@@ -9,17 +9,37 @@ import Foundation
 import UIKit
 import WebKit
 
-protocol AuthViewControllerDelegate: AnyObject {
+protocol AuthViewControllerDelegate: AnyObject { //может наследовать только классы
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+    func fetchOAuthToken(_ code: String)
+    func showErrorAlert()
 }
 
-final class AuthViewController: UIViewController {
-    private let ShowWebViewSegueIdentifier = "ShowWebView"
-    private let oAuth2Service = OAuth2Service()
-    weak var delegate: AuthViewControllerDelegate?
+final class AuthViewController: UIViewController, WKNavigationDelegate {
+    var presenter: WebViewPresenterProtocol?
+    var authHelper = AuthHelper()
+    weak var delegate: AuthViewControllerDelegate? //подписка на AuthViewControllerDelegate и выполнение метода authViewController
+    var request: URLRequest?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    init(authHelper: AuthHelper) { //инциализация экземпляра класса AuthViewController и передача туда параметра authHelper
+        self.authHelper = authHelper //создается переменная authHelper, которая равна параметру authHelper класса AuthViewController
+        super.init(nibName: nil, bundle: nil) //выполнение инциализации класса UIViewController
+        self.request = authHelper.authRequest()
+        
+    }
+    
+    required init?(coder: NSCoder) { //загрузка архивированных данные, в приле не используется, но если удалить его тогда возникает ошибка
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private let webView: WKWebView = {
+        let webView = WKWebView()
+        return webView
+    }()
+    
+    override func viewDidLoad() { //метод для определения свойств экрана. Пользователь этого не видит
+        super.viewDidLoad() //выполнение метода
+        webView.navigationDelegate = self
         // Установка цвета фона экрана
         view.backgroundColor = UIColor(red: 26/255, green: 27/255, blue: 34/255, alpha: 1.0)
         
@@ -31,12 +51,13 @@ final class AuthViewController: UIViewController {
         loginButton.backgroundColor = .white
         loginButton.layer.cornerRadius = 16
         loginButton.translatesAutoresizingMaskIntoConstraints = false
+        loginButton.accessibilityIdentifier = "Authenticate"
         view.addSubview(loginButton)
         
         // Создание UIImageView для логотипа
         let logoImageView = UIImageView(image: UIImage(named: "Logo_of_Unsplash"))
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(logoImageView)
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false //можно в logoImageView задавать свои размеры и констрейты
+        view.addSubview(logoImageView) //добавление во view объект logoImageView
         
         // Установка констрейтов для кнопки
         NSLayoutConstraint.activate([
@@ -59,21 +80,37 @@ final class AuthViewController: UIViewController {
         
         // Действие для кнопки "Войти"
         loginButton.addTarget(self, action: #selector(didTapLoginButton), for: .touchUpInside)
+        //loginButton.addTarget - это обработчик на нажатие кнопки
+        //self - ауф контроллер будет отвечать за это событие (код этого ниже)
+        //#selector(didTapLoginButton) - указывает какая функция должна быть выполнена при нажатии на кнопку
+        //событие .touchUpInside - сообщает что должно выполнится после того, как пользователь убрал палец с кнопки
     }
     
     @objc private func didTapLoginButton() {
-        let webViewViewController = WebViewViewController()
+        let authHelper = AuthHelper() // Оставьте создание AuthHelper здесь, если он используется только в этом методе
+
+        let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+        let webViewViewController = WebViewViewController(authHelper: authHelper)
+
+        webViewViewController.presenter = webViewPresenter
         webViewViewController.delegate = self
         webViewViewController.modalPresentationStyle = .fullScreen
-        present(webViewViewController, animated: true, completion: nil)
+
+        // Загрузка URL через WebViewPresenter
+        webViewViewController.setRequest(authHelper.authRequest())
+        webViewViewController.load()
+        
+        self.present(webViewViewController, animated: true, completion: nil)
     }
 }
 // MARK: - WebViewViewControllerDelegate
+// это выполнение функций вебвьюконтроллера, внутри ауфконтроллера. Ауфконтроллер выполняет действия в зависимости от того какие события произошли в вебвьюконтроллере. Конкретно здесь - это вотправка этого кода в вебвьюконтроллер или отмена авторизации в webViewViewControllerDidCancel
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        //_ vc: WebViewViewController - параметр, который говорит методу что надо обращаться к экземпляру класса вебвьюконтроллера. (этот параметр нужен если в коде есть несколько контроллеров)
         delegate?.authViewController(self, didAuthenticateWithCode: code)
     }
-    
+    //метод отмены авторизации в вебвьюконтроллере
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
     }

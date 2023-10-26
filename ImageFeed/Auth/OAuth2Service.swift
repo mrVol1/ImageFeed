@@ -30,6 +30,7 @@ final class OAuth2Service {
             lastCode = code
             let request = authTokenRequest(code: code)
             
+            
             let fulfillCompletionOnMainThread: (Result<OAuthTokenResponseBody, Error>) -> Void = { [weak self] result in
                 DispatchQueue.main.async {
                     guard let self = self else { return }
@@ -52,7 +53,7 @@ final class OAuth2Service {
         }
     
     private func makeRequest(code: String) -> URLRequest {
-        guard let url = AuthURL else { fatalError("Failed to create URL") }
+        guard let url = URL(string: authURLUrlString) else { fatalError("Failed to create URL") }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         return request
@@ -63,13 +64,13 @@ extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
+            + "?client_id=\(accessKeyKey)"
+            + "&&client_secret=\(secretKeyKey)"
+            + "&&redirect_uri=\(redirectURIUri)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",
-            baseURL: BaseURL!
+            baseURL: baseURLUrl
         )
     }
     struct OAuthTokenResponseBody: Decodable {
@@ -90,7 +91,7 @@ extension URLRequest {
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL = DefaultBaseURL
+        baseURL: URL = apiBaseURLUrl
     ) -> URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod

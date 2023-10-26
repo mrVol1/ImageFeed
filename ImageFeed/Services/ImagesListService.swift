@@ -26,11 +26,10 @@ final class ImagesListService {
         guard !isLoading else {
             return
         }
-        
         isLoading = true
         
         let nextPage = (lastLoadedPage ?? 0) + 1
-        guard let url = URL(string: "https://api.unsplash.com/photos?client_id=\(AccessKey)&page=\(self.currentPage)&per_page=10") else {
+        guard let url = URL(string: "https://api.unsplash.com/photos?client_id=\(accessKeyKey)&page=\(self.currentPage)&per_page=10") else {
             isLoading = false
             return
         }
@@ -48,7 +47,6 @@ final class ImagesListService {
             if let data = data {
                 if String(data: data, encoding: .utf8) != nil {
                 }
-                
                 DispatchQueue.main.async {
                     do {
                         let decoder = JSONDecoder()
@@ -66,12 +64,9 @@ final class ImagesListService {
                             self.lastLoadedPage = nextPage
                             self.currentPage += 1
                         }
-                        
                         NotificationCenter.default.post(name: ImagesListService.DidChangeNotification, object: self)
-                        
                     } catch {
                     }
-                    
                     self.isLoading = false
                 }
             }

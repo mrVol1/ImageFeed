@@ -32,7 +32,7 @@ final class ProfileService {
     private init() {}
     
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        let baseURL = DefaultBaseURL
+        let baseURL = apiBaseURLUrl
         let meURL = baseURL.appendingPathComponent("/me")
         
         var request = URLRequest(url: meURL)
